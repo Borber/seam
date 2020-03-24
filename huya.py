@@ -19,7 +19,7 @@ def get_real_url(rid):
         real_url = re.sub(r'_1200[\s\S]*.m3u', '.m3u', result[0])
     else:
         real_url = '未开播或直播间不存在'
-    return real_url
+    return "http:" + real_url + "8"
 
 
 # rid = input('请输入虎牙房间号：\n')

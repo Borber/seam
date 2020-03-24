@@ -3,6 +3,16 @@
     "index": [
         {
             "kind": "bilibili",
+            "name": "小饭",
+            "rid": "4629447"
+        },
+        {
+            "kind": "bilibili",
+            "name": "散人",
+            "rid": "1017"
+        },
+        {
+            "kind": "bilibili",
             "name": "FTM",
             "rid": "1314"
         },
@@ -10,6 +20,11 @@
             "kind": "bilibili",
             "name": "月野桃QuQ",
             "rid": "14524390"
+        },
+        {
+            "kind": "huya",
+            "name": "DX",
+            "rid": "585800"
         },
         {
             "kind": "douyu",
