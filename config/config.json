@@ -1,17 +1,20 @@
 {
-  "bilibili_cookie":"",
-  "index":
-   [
+    "bilibili_cookie": "",
+    "index": [
+        {
+            "kind": "bilibili",
+            "name": "FTM",
+            "rid": "1314"
+        },
         {
             "kind": "bilibili",
             "name": "月野桃QuQ",
             "rid": "14524390"
         },
-       {
+        {
             "kind": "douyu",
             "name": "走黯",
             "rid": "68318"
         }
-
-   ]
+    ]
 }

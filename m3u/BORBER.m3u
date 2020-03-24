@@ -1,5 +1,3 @@
 #EXTM3U
-#EXTINF:-1,月野桃QuQ---bilibili
-https://d1--cn-gotcha04.bilivideo.com/live-bvc/913131/live_19792072_4325853.flv?cdn=cn-gotcha04&expires=1585051489&len=0&oi=3663163658&pt=web&qn=10000&trid=587396c884e14a2cae03cce9fa0a7737&sigparams=cdn,expires,len,oi,pt,qn,trid&sign=561acb0fa29f75b6ff3fa60e72c16f6f&ptype=0
-#EXTINF:-1,走黯---douyu
-http://tx2play1.douyucdn.cn/live/68318rvgtWwqgxGh.flv?uuid=
+#EXTINF:-1,FTM---bilibili
+https://js.live-play.acgvideo.com/live-js/435894/live_436473455_62812040_4000.flv?wsSecret=dd0e87c45301d774aafd93278d79a16e&wsTime=1585057045&trid=678bb234b36e4ed196643ccfff8d2f03&pt=web&oi=3663163658&order=4&sig=no
