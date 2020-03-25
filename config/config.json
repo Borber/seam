@@ -22,9 +22,49 @@
             "rid": "14524390"
         },
         {
+            "kind": "bilibili",
+            "name": "iY12",
+            "rid": "757349"
+        },
+        {
+            "kind": "bilibili",
+            "name": "十安",
+            "rid": "21966614"
+        },
+        {
+            "kind": "douyu",
+            "name": "小TuanTuan",
+            "rid": "2222"
+        },
+        {
+            "kind": "douyu",
+            "name": "XunXunBaoBao",
+            "rid": "99999"
+        },
+        {
+            "kind": "douyu",
+            "name": "QieZi",
+            "rid": "9418"
+        },
+        {
+            "kind": "douyu",
+            "name": "PDD",
+            "rid": "101"
+        },
+        {
+            "kind": "douyu",
+            "name": "Xianmoumou",
+            "rid": "88080"
+        },
+        {
             "kind": "huya",
             "name": "DX",
             "rid": "585800"
+        },
+        {
+            "kind": "huya",
+            "name": "Guai",
+            "rid": "347444"
         },
         {
             "kind": "douyu",
