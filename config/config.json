@@ -1,7 +1,7 @@
 {
     "bilibili_cookie": "",
     "index": [
-        {
+                {
             "kind": "bilibili",
             "name": "小饭",
             "rid": "4629447"
@@ -20,6 +20,11 @@
             "kind": "bilibili",
             "name": "陆夫人",
             "rid": "115"
+        },
+        {
+            "kind": "bilibili",
+            "name": "TIS@怪话直播",
+            "rid": "21142805"
         },
         {
             "kind": "bilibili",
