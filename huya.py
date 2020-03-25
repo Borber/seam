@@ -1,5 +1,5 @@
 # 获取虎牙直播的真实流媒体地址。
-# 修复 虎牙 
+# 修复 虎牙
 
 
 import requests
@@ -18,11 +18,13 @@ def get_real_url(rid):
     if result:
         real_url = result[0]
         real_url = re.sub(r'_1200[\s\S]*.m3u', '.m3u', result[0])
+        if real_url.startswith("//"):
+            real_url = "https" + real_url
     else:
         real_url = '未开播或直播间不存在'
-    return "http:" + real_url + "8"
+    return real_url
 
 
-# rid = input('请输入虎牙房间号：\n')
-# real_url = get_real_url(rid)
-# print('该直播间源地址为：\n' + real_url)
+rid = input('请输入虎牙房间号：\n')
+real_url = get_real_url(rid)
+print('该直播间源地址为：\n' + real_url)
