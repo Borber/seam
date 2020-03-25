@@ -8,8 +8,23 @@
         },
         {
             "kind": "bilibili",
+            "name": "JiuOpai",
+            "rid": "21746557"
+        },
+        {
+            "kind": "bilibili",
             "name": "散人",
             "rid": "1017"
+        },
+        {
+            "kind": "bilibili",
+            "name": "LuFuRen",
+            "rid": "115"
+        },
+        {
+            "kind": "bilibili",
+            "name": "Still in heaven",
+            "rid": "10126"
         },
         {
             "kind": "bilibili",
