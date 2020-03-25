@@ -20,6 +20,8 @@ def get_real_url(rid):
         real_url = re.sub(r'_1200[\s\S]*.m3u', '.m3u', result[0])
         if real_url.startswith("//"):
             real_url = "https" + real_url
+        if real_url.endswith("m3u"):
+            real_url = real_url + "8"
     else:
         real_url = '未开播或直播间不存在'
     return real_url
