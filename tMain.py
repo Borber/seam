@@ -4,7 +4,7 @@ import json
 
 def get_m3u():
     m3u = "#EXTM3U\r\n"
-    with open("config/config.json", "r") as load_f:
+    with open("config/config.json", "r", encoding="utf-8") as load_f:
         load_dict = json.load(load_f)
         length = len(load_dict["index"])
         index_json = load_dict["index"]
