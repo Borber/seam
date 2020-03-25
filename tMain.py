@@ -4,7 +4,8 @@ import json
 
 def get_m3u():
     m3u = "#EXTM3U\r\n"
-    with open("config/config.json", "r", encoding="utf-8") as load_f:
+
+    with open("config/config.json", "r", encoding='utf-8') as load_f:
         load_dict = json.load(load_f)
         length = len(load_dict["index"])
         index_json = load_dict["index"]
@@ -12,7 +13,7 @@ def get_m3u():
             url = all_url(index_json[i]["kind"], index_json[i]["rid"])
             if url.startswith("http"):
                 m3u = m3u + "#EXTINF:-1," + index_json[i]["name"] + "---" + index_json[i]["kind"] + "\r\n" + url + "\r\n"
-    with open("m3u/BORBER.m3u", "w") as f:
+    with open("m3u/BORBER.m3u", "w", encoding="utf-8") as f:
         f.write(m3u)
 
 

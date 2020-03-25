@@ -19,7 +19,7 @@ def get_real_rid(rid):
 
 
 def get_real_url(rid):
-    with open("config/config.json", "r") as load_f:
+    with open("config/config.json", "r", encoding="utf-8") as load_f:
         load_dict = json.load(load_f)
         cookie = load_dict["bilibili_cookie"]
 
