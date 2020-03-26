@@ -21,7 +21,7 @@ def get_m3u():
             # 清屏
             os.system('cls')
             # 显示
-            pnotic = "[{}/{}]".format(i, length) + notic
+            pnotic = "[{}/{}]".format(i, length-1) + notic
             print(pnotic)
 
     with open("m3u/BORBER.m3u", "w", encoding="utf-8") as f:

@@ -1,5 +1,5 @@
 {
-    "bilibili_cookie": "rpdid=|(JYYJuYJY)|0J'ul)kYlRk~l; CURRENT_FNVAL=16; _uuid=921EE32F-A177-65D3-A62B-4CA6A25790C381828infoc; buvid3=B18946DA-0411-42A8-A2E4-FF2CC91EFFB1155816infoc; LIVE_BUVID=AUTO6015826542856648; DedeUserID=25519540; DedeUserID__ckMd5=f7572dc2edc3ba2a; SESSDATA=d8a465d2%2C1585246434%2C22c65321; bili_jct=0485c7fa7b5db8624e99e16042e69766; sid=9oo7zajy; balh_=kodou; balh_upos_server=kodou; balh_remove_pre_ad=Y; Hm_lvt_8a6e55dbd2870f0f5bc9194cddf32a02=1583370770,1583370771,1583737160,1583737163; CURRENT_QUALITY=116; INTVER=1; _dfcaptcha=12a6ba2c7b85d48f36dad7b54163c964; PVID=26",
+    "bilibili_cookie": "",
     "index": [
                 {
             "kind": "bilibili",

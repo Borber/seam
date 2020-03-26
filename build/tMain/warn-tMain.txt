@@ -14,7 +14,7 @@ Types if import:
 IMPORTANT: Do NOT post this list to the issue-tracker. Use it as a basis for
            yourself tracking down the missing module. Thanks!
 
-missing module named org - imported by copy (optional)
+missing module named 'org.python' - imported by copy (optional), xml.sax (delayed, conditional)
 missing module named _frozen_importlib_external - imported by importlib._bootstrap (delayed), importlib (optional), importlib.abc (optional), zipimport (top-level)
 excluded module named _frozen_importlib - imported by importlib (optional), importlib.abc (optional), zipimport (top-level)
 missing module named urllib.getproxies_environment - imported by urllib (conditional), requests.compat (conditional)
@@ -45,7 +45,7 @@ missing module named multiprocessing.BufferTooShort - imported by multiprocessin
 missing module named multiprocessing.AuthenticationError - imported by multiprocessing (top-level), multiprocessing.connection (top-level)
 missing module named asyncio.DefaultEventLoopPolicy - imported by asyncio (delayed, conditional), asyncio.events (delayed, conditional)
 missing module named readline - imported by cmd (delayed, conditional, optional), code (delayed, conditional, optional), pdb (delayed, optional)
-missing module named 'org.python' - imported by pickle (optional), xml.sax (delayed, conditional)
+missing module named org - imported by pickle (optional)
 missing module named posix - imported by os (conditional, optional), shutil (conditional)
 missing module named grp - imported by shutil (optional), tarfile (optional), pathlib (delayed)
 missing module named pwd - imported by posixpath (delayed, conditional), shutil (optional), tarfile (optional), pathlib (delayed, conditional, optional), http.server (delayed, optional), webbrowser (delayed), netrc (delayed, conditional), getpass (delayed), distutils.util (delayed, conditional, optional)
