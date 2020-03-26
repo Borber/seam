@@ -27,6 +27,7 @@ def get_m3u():
     with open("m3u/BORBER.m3u", "w", encoding="utf-8") as f:
         f.write(m3u)
 
+
 if __name__ == '__main__':
     get_m3u()
     print("按任意键退出, 前往 m3u 目录 查看 m3u 播放目录")

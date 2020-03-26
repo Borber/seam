@@ -4,6 +4,8 @@
 
 #### 基于项目: https://github.com/wbt5/real-url 
 
+###  视频教程: https://www.bilibili.com/video/BV1m74111785
+
 #### 交流群组: https://t.me/SBtream
 
 #### 计划改进:
