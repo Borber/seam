@@ -146,7 +146,7 @@ class MainFrame(QWidget):
             delbtn=cstmBtn("×",self)
             delbtn.setStyle("#EEE","#EEE","#EEE","18px","black","red")
             delbtn.clicked.connect(self.dele)
-            self.grid.setRowMinimumHeight(self.set_num,32)
+            # self.grid.setRowMinimumHeight(self.set_num,32)
             self.grid.addWidget(delbtn,self.set_num,2*3)
             self.args.append((delbtn,))
             self.save_num+=1
