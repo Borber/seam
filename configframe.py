@@ -5,7 +5,8 @@ import json
 import sys
 from os import path,_exit
 import traceback
-
+import sip
+import copy
 class cstmBtn(QPushButton):
     def __init__(self,string,parent):
         super().__init__(string,parent)
@@ -14,21 +15,26 @@ class cstmBtn(QPushButton):
         # self.setWindowFlags(Qt.FramelessWindowHint)
         # self.setText('''<div>'''+self.caption+r'''</div>''')
         self.resize(35,25)
-    def setStyle(self,normal,hover,pressed,fontsize):
-        self.setStyleSheet("QPushButton{{border-style:none;color:white;font-size:{fontsize};background:{normal};}}QPushButton:hover{{background:{hover};}}QPushButton:pressed{{background:{pressed};}}".format(normal=normal,hover=hover,pressed=pressed,fontsize=fontsize))
+    def setStyle(self,normal,hover,pressed,fontsize,fontcolor,fonthover=""):
+        '''if fonthover not provided it equals to fontcolor'''
+        if fonthover=="":
+            fonthover=fontcolor
+        self.setStyleSheet("QPushButton{{border-style:none;font-family:'Microsoft YaHei UI';color:{fontcolor};font-size:{fontsize};background:{normal};}}QPushButton:hover{{background:{hover};color:{fonthover};}}QPushButton:pressed{{background:{pressed};}}".format(normal=normal,hover=hover,pressed=pressed,fontsize=fontsize,fontcolor=fontcolor,fonthover=fonthover))
 
 class MainFrame(QWidget):
     '''啦啦啦啦啦
     '''
     def __init__(self):
         super().__init__()
+        self.mousePressStatus=False
         self.initUI()
     def initUI(self):
         # 窗口大小位置标题
-        self.resize(640,320)
+        self.resize(640,360)
         self.move ((app.desktop().width() - self.width())/2,(app.desktop().height() - self.height())/2)
         self.setWindowTitle('SBtream Config')
         self.setWindowFlags(Qt.FramelessWindowHint)
+        self.setStyleSheet("QWidget{font-family:'Microsoft YaHei UI'}")
         
         # 标题栏
         self.topbar=QLabel(self) 
@@ -37,19 +43,19 @@ class MainFrame(QWidget):
 
         # 设置面板
         self.panel=QLabel(self) 
-        self.panel.resize(640,320-25)
-        self.panel.move(0,25)
+        self.panel.resize(640,360-24)
+        self.panel.move(0,24)
         self.panel.setStyleSheet("QLabel{border:1px solid #222222;}")
 
         # 关闭按钮
         self.closebtn=cstmBtn("×",self)
-        self.closebtn.setStyle("#222222","#ff0000","#e10000","18px")
-        self.closebtn.move(605,0)
+        self.closebtn.setStyle("#222222","#ff0000","#e10000","24px","white")
+        self.closebtn.move(604,0)
 
         # 最小化按钮
         self.minimize=cstmBtn("—",self)
-        self.minimize.setStyle("#222222","#666666","#666666","14px")
-        self.minimize.move(570,0)
+        self.minimize.setStyle("#222222","#666666","#666666","12px","white")
+        self.minimize.move(569,0)
 
         # 标题
         self.title=QLabel(self.topbar)
@@ -74,14 +80,14 @@ class MainFrame(QWidget):
 
         # 滚动条
         sca=QScrollArea(self.panel)
-        sca.resize(640-2,320-25-2)
+        sca.resize(640-2,360-25-2-48)
         sca.move(1,1)
-        sca.setStyleSheet("QScrollArea{border:none;}")
+        sca.setStyleSheet("QScrollArea{border:none;padding-top:10px;}")
         sca.setWidget(self.innerpanel)
 
         #布局
         innercontents=QVBoxLayout()
-        innercontents.setContentsMargins(20,20,20,20)
+        innercontents.setContentsMargins(20,0,20,0)
         self.grid=QGridLayout()
         buttoncontents=QHBoxLayout()
         bilicontents=QHBoxLayout()
@@ -89,12 +95,14 @@ class MainFrame(QWidget):
         table=QWidget(self.innerpanel)
         table.setLayout(self.grid)
         bili.setLayout(bilicontents)
-        button=QWidget(self.innerpanel)
+        button=QWidget(self)
+        button.move(1,360-1-48)
+        button.resize(640-2,48)
         button.setLayout(buttoncontents)
+        
         innercontents.addWidget(bili)
         innercontents.addWidget(table)
-        # innercontents.addItem(QSpacerItem(0,280,QSizePolicy.Minimum,QSizePolicy.Minimum))
-        innercontents.addWidget(button)
+        innercontents.addItem(QSpacerItem(0,280,QSizePolicy.Minimum,QSizePolicy.Expanding))
         self.innerpanel.setLayout(innercontents)
         
         #bili
@@ -125,10 +133,26 @@ class MainFrame(QWidget):
                 inputbox.setTextMargins(0,0,25,0)
             inputbox.setFixedHeight(25)
             inputbox.setStyleSheet("QLineEdit{font-size:12px;}")
-            self.args.append(inputbox)
+            self.args.append((label,inputbox))
             self.grid.addWidget(inputbox,position[0],2*position[1]+1)
             self.grid.addWidget(label,position[0],2*position[1])
+
+
+        def addn(values=False):
+            if values==False:
+                values=[""]*len(self.set_names)
+            for i in range(len(self.set_names)):
+                addsettings(self.set_names[i],values[i],[self.set_num,i])
+            delbtn=cstmBtn("×",self)
+            delbtn.setStyle("#EEE","#EEE","#EEE","18px","black","red")
+            delbtn.clicked.connect(self.dele)
+            self.grid.setRowMinimumHeight(self.set_num,32)
+            self.grid.addWidget(delbtn,self.set_num,2*3)
+            self.args.append((delbtn,))
             self.save_num+=1
+            self.set_num+=1
+                    # 调整内容页大小
+            self.innerpanel.resize(620,max(32*self.save_num+50,360-25-2-58))
 
         #grid 设置项
         self.grid.setVerticalSpacing(10)
@@ -137,44 +161,52 @@ class MainFrame(QWidget):
         self.set_names=["name","kind","rid"] ## 如需新增设置字段修改此处即可
         ## 如果新增了支持平台，需要在下面的列表里加入
         self.all_kind=["bilibili","chushou","douyin","douyu","egame","huajiao","huomao","huya","iqiyi","kuaishou","kugou","longzhu","now","pps","v6cn","wangyicc","xigua","yingke","yizhibo","yy","zhanqi"]
-        positons=[(i,j) for i in range(self.set_num) for j in range(len(self.set_names))]
-        names=self.set_names*len(load_dict["index"])
-        values=[each[i]  for each in load_dict["index"] for i in ["name","kind","rid"]]
-        for name,value,position in zip(names,values, positons):
-            addsettings(name,value,position)
-
+        for each in load_dict["index"]:
+            addn([each[i] for i in self.set_names])
+        
         
 
         # 新建按钮
-        self.starter=cstmBtn("新增设置项",button)
-        self.starter.setStyleSheet("QPushButton{border:none;font-family:wildings;font-size:12px;border-radius: 5px;color:white;background:#888888;}QPushButton:hover{background:#1f96ff}")
-        self.starter.setFixedSize(96,32)
-        self.starter.clicked.connect(lambda:[addsettings(self.set_names[i],"",[self.set_num,i]) for i in range(len(self.set_names))])
-        buttoncontents.addWidget(self.starter)
+        self.new=cstmBtn("新增设置项",button)
+        self.new.setStyleSheet("QPushButton{border:none;font-family:'Microsoft YaHei UI Light';font-size:12px;border-radius: 5px;color:white;background:#888888;}QPushButton:hover{background:#1f96ff}")
+        self.new.setFixedSize(96,32)
+        self.new.clicked.connect(addn)
+        buttoncontents.addWidget(self.new)
 
         # 保存按钮
         self.starter=cstmBtn("保存设置",button)
-        self.starter.setStyleSheet("QPushButton{border:none;font-family:wildings;font-size:12px;border-radius: 5px;color:white;background:#888888;}QPushButton:hover{background:#1f96ff}")
+        self.starter.setStyleSheet("QPushButton{border:none;font-family:'Microsoft YaHei UI Light';font-size:12px;border-radius: 5px;color:white;background:#888888;}QPushButton:hover{background:#1f96ff}")
         self.starter.setFixedSize(96,32)
         self.starter.clicked.connect(self.save)
         buttoncontents.addWidget(self.starter)
 
         # 调整内容页大小
-        self.innerpanel.resize(620,max(32*(len(load_dict["index"])+1)+36,320-25-2))
+        self.innerpanel.resize(620,max(30*len(load_dict["index"])+45,360-25-2-58))
         
         # 显示
         self.show()
-    
+        print(self.innerpanel.height())
+    def dele(self):
+        ids=self.args.index((self.sender(),))
+        for i in range( ids,ids-4,-1) :
+            for j in range(len(self.args[i])):
+                self.grid.removeWidget(self.args[i][j])
+                sip.delete(self.args[i][j])
+            self.args.pop(i)
+        self.save_num-=1
+                            # 调整内容页大小
+        self.innerpanel.resize(620,max(32*self.save_num+36,360-25-2-58))
     def save(self):
         save_dict=dict()
         save_dict["bilibili_cookie"]=self.binputbox.text()
         save_dict["index"]=[]
-        for i in range(self.save_num//3):
+        for i in range(self.save_num):
             temp_dict=dict()
-            for j in range(3):
-                try:temp_dict[self.set_names[j]]=self.args[i*3+j].text()
+            for j in range(4):
+                if j==3:continue
+                try:temp_dict[self.set_names[j]]=self.args[i*4+j][1].text()
                 except:
-                    temp_dict[self.set_names[j]]=self.args[i*3+j].currentText()
+                    temp_dict[self.set_names[j]]=self.args[i*4+j][1].currentText()
             save_dict["index"].append(temp_dict)
         with open("config/config.json", "w", encoding='utf-8') as fp:
             try:json.dump(save_dict,fp)
