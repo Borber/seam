@@ -7,6 +7,7 @@ from os import path,_exit
 import traceback
 import sip
 import copy
+from tMain import get_m3u
 class cstmBtn(QPushButton):
     def __init__(self,string,parent):
         super().__init__(string,parent)
@@ -165,6 +166,7 @@ class MainFrame(QWidget):
             addn([each[i] for i in self.set_names])
         
         
+        
 
         # 新建按钮
         self.new=cstmBtn("新增设置项",button)
@@ -179,6 +181,14 @@ class MainFrame(QWidget):
         self.starter.setFixedSize(96,32)
         self.starter.clicked.connect(self.save)
         buttoncontents.addWidget(self.starter)
+
+        # 保存按钮
+        self.run=cstmBtn("一键获取",button)
+        self.run.setStyleSheet("QPushButton{border:none;font-family:'Microsoft YaHei UI Light';font-size:12px;border-radius: 5px;color:white;background:#888888;}QPushButton:hover{background:#1f96ff}")
+        self.run.setFixedSize(96,32)
+        self.run.clicked.connect(self.runner)
+        buttoncontents.addWidget(self.run)
+
 
         # 调整内容页大小
         self.innerpanel.resize(620,max(30*len(load_dict["index"])+45,360-25-2-58))
@@ -196,6 +206,10 @@ class MainFrame(QWidget):
         self.save_num-=1
                             # 调整内容页大小
         self.innerpanel.resize(620,max(32*self.save_num+36,360-25-2-58))
+    def runner(self):
+        try:QMessageBox(self).question(self,"获取成功",get_m3u())
+        except:
+            QMessageBox(self).critical(self,"获取失败",traceback.format_exc())
     def save(self):
         save_dict=dict()
         save_dict["bilibili_cookie"]=self.binputbox.text()
@@ -223,7 +237,6 @@ class MainFrame(QWidget):
             event.accept()
         else:
             event.ignore()
-        
     def mousePressEvent(self,event):
         '''If you move the widget as a result of the mouse event, use the global position returned by globalPos() to avoid a shaking motion. ——From Qt helper
         '''
