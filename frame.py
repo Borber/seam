@@ -207,7 +207,7 @@ class MainFrame(QWidget):
                             # 调整内容页大小
         self.innerpanel.resize(620,max(32*self.save_num+36,360-25-2-58))
     def runner(self):
-        try:QMessageBox(self).question(self,"获取成功",get_m3u())
+        try:QMessageBox(self).information(self,"获取成功",get_m3u())
         except:
             QMessageBox(self).critical(self,"获取失败",traceback.format_exc())
     def save(self):
@@ -229,14 +229,6 @@ class MainFrame(QWidget):
                 pass
             else:
                 QMessageBox(self).information(self,"信息","<h1>保存成功</h1>")
-    def closebtnEvent(self,event):
-        tip=QMessageBox(self).question(self,"退出？","确认退出？")
-        # print(tip.button)
-        # print(tip)
-        if tip==QMessageBox.Yes:
-            event.accept()
-        else:
-            event.ignore()
     def mousePressEvent(self,event):
         '''If you move the widget as a result of the mouse event, use the global position returned by globalPos() to avoid a shaking motion. ——From Qt helper
         '''
