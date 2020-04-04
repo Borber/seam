@@ -23,9 +23,12 @@ def get_m3u():
             # 显示
             pnotic = "[{}/{}]".format(i, length-1) + notic
             print(pnotic)
+    
 
     with open("m3u/BORBER.m3u", "w", encoding="utf-8") as f:
         f.write(m3u)
+    
+    return notic
 
 
 if __name__ == '__main__':
