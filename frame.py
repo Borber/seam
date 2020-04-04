@@ -207,7 +207,7 @@ class MainFrame(QWidget):
                             # 调整内容页大小
         self.innerpanel.resize(620,max(32*self.save_num+36,360-25-2-58))
     def runner(self):
-        try:QMessageBox(self).information(self,"获取成功",get_m3u())
+        try:QMessageBox(self).information(self,"获取成功",get_m3u()+"\r\n\r\n前往 m3u 目录 查看 m3u 播放目录")
         except:
             QMessageBox(self).critical(self,"获取失败",traceback.format_exc())
     def save(self):
