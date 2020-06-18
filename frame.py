@@ -5,7 +5,8 @@ import json
 import sys
 from os import path,_exit
 import traceback
-import sip
+# import sip linux下使用这个
+from PyQt5 import sip # Windows下使用这个
 import copy
 from tMain import get_m3u
 class cstmBtn(QPushButton):
