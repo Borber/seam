@@ -49,7 +49,6 @@
 
 配置config 于 根目录 config 文件夹 下
 
-
 ##1.如果 软件直接报错 请直接运行 py文件 tMain.py 或者 自己本地 用 pyinstaller 打包一次 即可
 
 1. 直播源:
@@ -90,7 +89,23 @@
 
 直接下载 release 里的压缩包 解压即可食用 
 
+## 新增图形化界面
 
+
+
+![image-20200618150715295](README.assets/image-20200618150715295.png) 
+
+![image-20200618150740493](README.assets/image-20200618150740493.png)
+
+![image-20200618151002730](README.assets/image-20200618151002730.png)
+
+
+
+
+
+
+
+## 原json配置
 
 配置示例
 
