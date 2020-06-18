@@ -1,6 +1,6 @@
 ### 一键获取直播平台的真实流媒体地址（直播源），可在PotPlayer、VLC、flv.js等播放器中播放的 m3u 播放列表。 
 
-### SBtream Version 0.0.2-b
+### SBtream Version 0.0.3
 
 #### 基于项目: https://github.com/wbt5/real-url 
 
