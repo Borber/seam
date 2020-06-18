@@ -22,9 +22,12 @@ def get_real_url(rid):
             real_url = "https:" + real_url
         if real_url.endswith("m3u"):
             real_url = real_url + "8"
+        if "v-replay" in real_url:
+            real_url = real_url + "重播中"
         if "hls" in real_url:
             real_url = "https://aldirect.rtmp.huya.com/backsrc/" + real_url.rsplit("/", 1)[1]
-        real_url = real_url.rsplit("_", 1)[0]+"_8000.m3u8"
+        if not real_url.endswith("重播中"):
+            real_url = real_url.rsplit("_", 1)[0]+"_8000.m3u8"
     else:
         real_url = '未开播或直播间不存在'
     return real_url

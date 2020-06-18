@@ -1,105 +1,40 @@
 {
     "bilibili_cookie": "",
     "index": [
-                {
-            "kind": "bilibili",
-            "name": "小饭",
-            "rid": "4629447"
-        },
         {
-            "kind": "bilibili",
-            "name": "酒奶奶",
-            "rid": "21746557"
-        },
-        {
-            "kind": "bilibili",
-            "name": "逍遥散人",
-            "rid": "1017"
-        },
-        {
-            "kind": "bilibili",
-            "name": "陆夫人",
-            "rid": "115"
-        },
-        {
-            "kind": "bilibili",
-            "name": "TIS@怪话直播",
-            "rid": "21142805"
-        },
-        {
-            "kind": "bilibili",
-            "name": "尚在天宫EX",
-            "rid": "10126"
-        },
-        {
-            "kind": "bilibili",
-            "name": "小熊茉莉",
-            "rid": "177"
-        },
-        {
-            "kind": "bilibili",
-            "name": "可乐",
-            "rid": "114"
-        },
-        {
-            "kind": "bilibili",
-            "name": "冯提莫",
-            "rid": "1314"
-        },
-        {
-            "kind": "bilibili",
-            "name": "月野桃QuQ",
-            "rid": "14524390"
-        },
-        {
-            "kind": "bilibili",
-            "name": "i御十二",
-            "rid": "757349"
-        },
-        {
-            "kind": "bilibili",
-            "name": "十安",
-            "rid": "21966614"
-        },
-        {
-            "kind": "douyu",
-            "name": "小团团",
-            "rid": "2222"
-        },
-        {
-            "kind": "douyu",
-            "name": "旭旭宝宝",
-            "rid": "99999"
-        },
-        {
-            "kind": "douyu",
-            "name": "茄子",
-            "rid": "9418"
-        },
-        {
-            "kind": "douyu",
-            "name": "PDD",
-            "rid": "101"
-        },
-        {
-            "kind": "douyu",
-            "name": "仙某某",
-            "rid": "88080"
-        },
-        {
+            "name": "\u59ff\u6001",
             "kind": "huya",
-            "name": "大熊",
-            "rid": "585800"
+            "rid": "333003"
         },
         {
+            "name": "\u5f20\u5927\u4ed9",
             "kind": "huya",
-            "name": "乖",
-            "rid": "347444"
+            "rid": "688"
         },
         {
+            "name": "\u795e\u8d85",
+            "kind": "huya",
+            "rid": "102411"
+        },
+        {
+            "name": "LPL\u864e\u7259\u53f0",
+            "kind": "huya",
+            "rid": "660000"
+        },
+        {
+            "name": "LPL4K",
+            "kind": "huya",
+            "rid": "18524915"
+        },
+        {
+            "name": "LCK",
+            "kind": "huya",
+            "rid": "660001"
+        },
+        {
+            "name": "\u91d1\u5495\u5495",
             "kind": "douyu",
-            "name": "走黯",
-            "rid": "68318"
+            "rid": "252140"
         }
     ]
 }
