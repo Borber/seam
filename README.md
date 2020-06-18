@@ -31,11 +31,11 @@
 
 - [ ]  打包 为可执行文件
 
-- [ ]  可视化界面
+- [x]  可视化界面 (注: linux下可能需要修改 frame.py 详情见源码 )
 
-- [ ] 可视化添加关注主播 -> config.json
+- [x] 可视化添加关注主播 -> config.json
 
-- [ ]  可视化批量查询主播是否在播
+- [x]  可视化批量查询主播是否在播
 
   
 
@@ -103,3 +103,8 @@
 m3u 文件生成于 根目录下 m3u文件夹中
 
 ![image-20200324200419324](README.assets/image-20200324200419324.png)
+
+# 感谢名单
+
+**[CrystalRays](https://github.com/CrystalRays)**  UI界面
+
