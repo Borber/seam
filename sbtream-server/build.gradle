@@ -10,9 +10,16 @@ configurations {
     }
 }
 
+repositories {
+    mavenLocal()
+    mavenCentral()
+    maven { url 'https://maven.enaium.cn' }
+}
+
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'com.github.Enaium:BullPlugin:1.0.1'
+    implementation 'cn.enaium:bullplugin:1.0.1'
+    implementation project(':sbtream-api')
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'

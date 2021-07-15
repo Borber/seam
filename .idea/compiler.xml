@@ -12,6 +12,13 @@
         <module name="SBtream.sbtream-server.main" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel target="1.8" />
+    <bytecodeTargetLevel target="1.8">
+      <module name="sbtream-server" target="14" />
+      <module name="sbtream-server.main" target="14" />
+      <module name="sbtream-server.SBtream" target="14" />
+      <module name="sbtream-server.SBtream.main" target="14" />
+      <module name="sbtream-server.SBtream.test" target="14" />
+      <module name="sbtream-server.test" target="14" />
+    </bytecodeTargetLevel>
   </component>
 </project>
