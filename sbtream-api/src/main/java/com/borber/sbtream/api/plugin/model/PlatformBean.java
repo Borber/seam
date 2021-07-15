@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 /**
  * @ClassName PlatformBean
  * @Description 直播平台插件的相关信息
@@ -14,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PlatformBean {
+public class PlatformBean implements Serializable {
     /**
      * 平台代号
      * 1. 尽量使用官网地址的简写
@@ -26,13 +28,17 @@ public class PlatformBean {
      */
     private String name;
     /**
-     * 直播平台的官网
+     * 直播平台的官网 直接 url/{rid} 作为直播间地址
      */
     private String url;
     /**
      * 直播平台图标
      */
     private String icon;
+    /**
+     * 是否需要 Cookies 来获取最高清的资源
+     */
+    private Boolean needCookie;
     /**
      * 维护人的名字
      */

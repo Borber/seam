@@ -1,7 +1,6 @@
 package com.borber.sbtream.server.util;
 
 import com.borber.sbtream.server.constans.SBtreamConfigConstans;
-import com.sun.istack.internal.NotNull;
 
 import javax.annotation.Resource;
 import java.io.*;
@@ -26,7 +25,7 @@ public class FileUtil {
      * @Param [path]
      * @return int
      **/
-    public int getNumberOfJar(@NotNull String path){
+    public int getNumberOfJar(String path){
         List<String> fileList = getAllJar();
         if (fileList == null) {
             return 0;
@@ -52,7 +51,7 @@ public class FileUtil {
      * @Param [path, fix, suffix]
      * @return java.util.List<java.lang.String>
      **/
-    public static List<String> getAllFileWithFix(@NotNull String path,String fix,boolean suffix){
+    public static List<String> getAllFileWithFix(String path,String fix,boolean suffix){
         File[] tempList = getAllFiles(path);
         if (tempList == null) {
             return null;
@@ -77,7 +76,7 @@ public class FileUtil {
      * @Param [path]
      * @return java.io.File[]
      **/
-    public static File[] getAllFiles(@NotNull String path){
+    public static File[] getAllFiles(String path){
         File file = new File(path);
         return file.listFiles();
     }
@@ -88,7 +87,7 @@ public class FileUtil {
      * @Date  2021/6/27 20:14
      * @Param [path, json]
      **/
-    public static void saveFile(@NotNull String path, @NotNull String data) throws IOException {
+    public static void saveFile(String path, String data) throws IOException {
         File file = new File(path);
         FileOutputStream fop = new FileOutputStream(file);
         OutputStreamWriter writer = new OutputStreamWriter(fop, StandardCharsets.UTF_8);
@@ -104,7 +103,7 @@ public class FileUtil {
      * @Param [path]
      * @return java.lang.String
      **/
-    public static String loadFile(@NotNull String path) throws IOException {
+    public static String loadFile(String path) throws IOException {
         File file = new File(path);
         FileInputStream fip = new FileInputStream(file);
         InputStreamReader reader = new InputStreamReader(fip);
