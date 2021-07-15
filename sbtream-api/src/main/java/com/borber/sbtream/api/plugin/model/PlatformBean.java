@@ -30,6 +30,10 @@ public class PlatformBean {
      */
     private String url;
     /**
+     * 直播平台图标
+     */
+    private String icon;
+    /**
      * 维护人的名字
      */
     private String mMan;
