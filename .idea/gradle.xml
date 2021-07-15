@@ -10,6 +10,17 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/sbtream-api" />
+            <option value="$PROJECT_DIR$/sbtream-server" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="distributionType" value="DEFAULT_WRAPPED" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/sbtream-server" />
+        <option name="gradleJvm" value="adopt-openjdk-14" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/sbtream-server" />
           </set>
         </option>
       </GradleProjectSettings>

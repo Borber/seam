@@ -16,6 +16,7 @@ subprojects {
     repositories {
         mavenLocal()
         mavenCentral()
+        maven { url 'https://jitpack.io' }
     }
     dependencies {
         implementation 'org.jetbrains:annotations:20.1.0'
