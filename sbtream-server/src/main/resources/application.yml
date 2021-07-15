@@ -1,1 +1,10 @@
+server:
+  port: 8080
+
+sbtream:
+  plugin:
+    path: plugins
+  data:
+    json:
+      setting: json/setting.json
 

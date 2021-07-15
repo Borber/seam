@@ -13,12 +13,12 @@ configurations {
 repositories {
     mavenLocal()
     mavenCentral()
-    maven { url 'https://maven.enaium.cn' }
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'cn.enaium:bullplugin:1.0.1'
+    implementation 'com.github.Borber:BullPlugin:1.0.2'
     implementation project(':sbtream-api')
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
