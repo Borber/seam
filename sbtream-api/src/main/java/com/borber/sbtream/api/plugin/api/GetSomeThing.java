@@ -1,8 +1,5 @@
 package com.borber.sbtream.api.plugin.api;
 
-import com.borber.sbtream.api.plugin.model.PlatformBean;
-import com.borber.sbtream.api.plugin.model.UrlBean;
-import com.borber.sbtream.api.plugin.response.BaseResponse;
 
 /**
  * @ClassName GetSomeThing
@@ -17,26 +14,26 @@ public interface GetSomeThing {
      * @Author Borber
      * @Date 2021/7/15 上午11:28
      * @Param []
-     * @return com.borber.sbtream.api.plugin.response.BaseResponse<com.borber.sbtream.api.plugin.model.PlatformBean,java.lang.Object>
+     * @return String 但是必须是 BaseResponse<PlatformBean, Object> 的 序列化字符串
      **/
-    BaseResponse<PlatformBean,Object> getMetaData();
+    String getMetaData();
     
     /**
      * 通过房间号获取真实直播地址
      * @Author Borber
      * @Date 2021/7/15 下午10:57
      * @Param [rid]
-     * @return com.borber.sbtream.api.plugin.response.BaseResponse<com.borber.sbtream.api.plugin.model.UrlBean,java.lang.Object>
+     * @return String 但是必须是 BaseResponse<UrlBean, Object> 的 序列化字符串
      **/
-    BaseResponse<UrlBean,Object> getRealUrl(String rid);
+    String getRealUrl(String rid);
 
     /**
      * 通过房间号获取真实直播地址  如果是需要 Cookies 来获取最高清的的方法 请实现这个方法
      * @Author Borber
      * @Date 2021/7/15 下午10:54
      * @Param [rid, cookies]
-     * @return com.borber.sbtream.api.plugin.response.BaseResponse<com.borber.sbtream.api.plugin.model.UrlBean,java.lang.Object>
+     * @return String 但是必须是 BaseResponse<UrlBean, Object> 的 序列化字符串
      **/
-    BaseResponse<UrlBean,Object> getRealUrl(String rid, String cookies);
+    String getRealUrl(String rid, String cookies);
 
 }
