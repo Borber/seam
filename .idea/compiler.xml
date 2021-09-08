@@ -5,7 +5,7 @@
       <profile name="Gradle Imported" enabled="true">
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.20/lombok-1.18.20.jar" />
+          <entry name="$PROJECT_DIR$/../m2/repository/org/projectlombok/lombok/1.18.20/lombok-1.18.20.jar" />
         </processorPath>
         <module name="SBtream.sbtream-api.main" />
         <module name="SBtream.sbtream-api.test" />
