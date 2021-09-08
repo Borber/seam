@@ -8,7 +8,7 @@ package com.borber.sbtream.api.plugin.api;
  * @Date 2021/7/15 上午10:47
  * @Version 0.0.1
  **/
-public interface GetSomeThing {
+public interface Api {
     /**
      * 获取直播平台元数据
      * @Author Borber
