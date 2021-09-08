@@ -36,4 +36,14 @@ public interface Api {
      **/
     String getRealUrl(String rid, String cookies);
 
+    /**
+     *
+     * 通过cookies发送弹幕, 返回是否成功
+     * @Author Borber
+     * @Date  2021/09/08 下午03:50
+     * @Param
+     * @return String 但是必须是 BaseResponse<Boolean, Object> 的 序列化字符串
+     */
+    String sendDanmaku(String str, String cookies);
+
 }
