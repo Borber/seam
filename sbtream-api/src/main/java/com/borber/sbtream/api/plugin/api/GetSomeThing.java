@@ -14,7 +14,7 @@ public interface GetSomeThing {
      * @Author Borber
      * @Date 2021/7/15 上午11:28
      * @Param []
-     * @return String 但是必须是 BaseResponse<PlatformBean, Object> 的 序列化字符串
+     * @return String 但是必须是 BaseResponse<PlatformDTO, Object> 的 序列化字符串
      **/
     String getMetaData();
     
@@ -23,7 +23,7 @@ public interface GetSomeThing {
      * @Author Borber
      * @Date 2021/7/15 下午10:57
      * @Param [rid]
-     * @return String 但是必须是 BaseResponse<UrlBean, Object> 的 序列化字符串
+     * @return String 但是必须是 BaseResponse<UrlDTO, Object> 的 序列化字符串
      **/
     String getRealUrl(String rid);
 
@@ -32,7 +32,7 @@ public interface GetSomeThing {
      * @Author Borber
      * @Date 2021/7/15 下午10:54
      * @Param [rid, cookies]
-     * @return String 但是必须是 BaseResponse<UrlBean, Object> 的 序列化字符串
+     * @return String 但是必须是 BaseResponse<UrlDTO, Object> 的 序列化字符串
      **/
     String getRealUrl(String rid, String cookies);
 

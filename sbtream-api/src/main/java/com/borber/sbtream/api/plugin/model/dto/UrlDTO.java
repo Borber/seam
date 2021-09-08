@@ -1,4 +1,4 @@
-package com.borber.sbtream.api.plugin.model;
+package com.borber.sbtream.api.plugin.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,7 +16,7 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UrlBean implements Serializable {
+public class UrlDTO implements Serializable {
     /**
      * 直播源地址
      */

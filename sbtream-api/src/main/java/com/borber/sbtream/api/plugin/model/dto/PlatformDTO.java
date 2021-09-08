@@ -1,4 +1,4 @@
-package com.borber.sbtream.api.plugin.model;
+package com.borber.sbtream.api.plugin.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,7 +16,7 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PlatformBean implements Serializable {
+public class PlatformDTO implements Serializable {
     /**
      * 平台代号
      * 1. 尽量使用官网地址的简写
