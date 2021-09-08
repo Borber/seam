@@ -17,18 +17,9 @@ public interface Api {
      * @return String 但是必须是 BaseResponse<PlatformDTO, Object> 的 序列化字符串
      **/
     String getMetaData();
-    
-    /**
-     * 通过房间号获取真实直播地址
-     * @Author Borber
-     * @Date 2021/7/15 下午10:57
-     * @Param [rid]
-     * @return String 但是必须是 BaseResponse<UrlDTO, Object> 的 序列化字符串
-     **/
-    String getRealUrl(String rid);
 
     /**
-     * 通过房间号获取真实直播地址  如果是需要 Cookies 来获取最高清的的方法 请实现这个方法
+     * 通过房间号获取真实直播地址  如果是需要 Cookies 来获取即使用, 如果不需要则忽略 cookies 变量
      * @Author Borber
      * @Date 2021/7/15 下午10:54
      * @Param [rid, cookies]
