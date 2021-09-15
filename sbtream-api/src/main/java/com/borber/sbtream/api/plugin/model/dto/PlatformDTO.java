@@ -59,4 +59,9 @@ public class PlatformDTO implements Serializable {
      * 当前版本
      */
     private String version;
+
+    /**
+     * 如果平台支持弹幕, 请返回弹幕限制, 格式为 20-200 下限-上限
+     */
+    private String danmakuLimit;
 }
