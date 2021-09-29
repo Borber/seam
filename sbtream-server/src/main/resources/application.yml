@@ -36,13 +36,9 @@ spring:
 #mybatis-plus配置
 mybatis-plus:
   #配置Mapper映射文件
-  mapper-locations: classpath:/mybatis/mappers/*.xml
+  mapper-locations: classpath:mapper/*.xml
   # 配置Mybatis数据返回类型别名（默认别名为类名）
-  # type-aliases-package: com.borber.server.pojo
-  configuration:
-    # 自动驼峰命名
-    map-underscore-to-camel-case: true
-    cache-enabled: false
+  type-aliases-package: com.borber.sbtream.server.model.entity
 
 #配置控制台打印日志Debug
 logging:
