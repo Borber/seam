@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.borber.sbtream.server.mapper.PlatformMapper">
+
+    <resultMap id="BaseResultMap" type="com.borber.sbtream.server.model.entity.PlatformDO">
+            <id property="platformId" column="platform_id" jdbcType="VARCHAR"/>
+            <result property="pluginId" column="plugin_id" jdbcType="VARCHAR"/>
+            <result property="platformName" column="platform_name" jdbcType="VARCHAR"/>
+            <result property="platformIcon" column="platform_icon" jdbcType="VARCHAR"/>
+            <result property="platformCode" column="platform_code" jdbcType="VARCHAR"/>
+            <result property="platformSite" column="platform_site" jdbcType="VARCHAR"/>
+            <result property="platformApiLink" column="platform_api_link" jdbcType="VARCHAR"/>
+            <result property="gethdCookiesRequired" column="getHD_cookies_required" jdbcType="BOOLEAN"/>
+            <result property="officialRecordProvided" column="official_record_provided" jdbcType="BOOLEAN"/>
+            <result property="officialRecordUrl" column="official_record_url" jdbcType="VARCHAR"/>
+            <result property="platformCreateTime" column="platform_create_time" jdbcType="TIMESTAMP"/>
+            <result property="platformModifyTime" column="platform_modify_time" jdbcType="TIMESTAMP"/>
+            <result property="platformFounderId" column="platform_founder_id" jdbcType="VARCHAR"/>
+            <result property="platformModifierId" column="platform_modifier_id" jdbcType="VARCHAR"/>
+            <result property="platformDisabled" column="platform_disabled" jdbcType="BOOLEAN"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        platform_id,plugin_id,platform_name,
+        platform_icon,platform_code,platform_site,
+        platform_api_link,getHD_cookies_required,official_record_provided,
+        official_record_url,platform_create_time,platform_modify_time,
+        platform_founder_id,platform_modifier_id,platform_disabled
+    </sql>
+</mapper>

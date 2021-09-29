@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.borber.sbtream.server.mapper.UserMapper">
+
+    <resultMap id="BaseResultMap" type="com.borber.sbtream.server.model.entity.UserDO">
+            <id property="userId" column="user_id" jdbcType="VARCHAR"/>
+            <result property="userUname" column="user_uname" jdbcType="VARCHAR"/>
+            <result property="userPasswd" column="user_passwd" jdbcType="VARCHAR"/>
+            <result property="userMailbox" column="user_mailbox" jdbcType="VARCHAR"/>
+            <result property="autoRecordAble" column="auto_record_able" jdbcType="BOOLEAN"/>
+            <result property="anchorNotificationAble" column="anchor_notification_able" jdbcType="BOOLEAN"/>
+            <result property="userCreateTime" column="user_create_time" jdbcType="TIMESTAMP"/>
+            <result property="userModifyTime" column="user_modify_time" jdbcType="TIMESTAMP"/>
+            <result property="userFounderId" column="user_founder_id" jdbcType="VARCHAR"/>
+            <result property="userModifierId" column="user_modifier_id" jdbcType="VARCHAR"/>
+            <result property="userDisabled" column="user_disabled" jdbcType="BOOLEAN"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        user_id,user_uname,user_passwd,
+        user_mailbox,auto_record_able,anchor_notification_able,
+        user_create_time,user_modify_time,user_founder_id,
+        user_modifier_id,user_disabled
+    </sql>
+</mapper>
