@@ -3,6 +3,9 @@ package com.borber.sbtream.server.controller;
 import com.borber.sbtream.api.plugin.response.BaseResponse;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * @author BORBER
+ */
 @RestController
 @RequestMapping("/api/v1")
 public class SBtreamController {

@@ -1,5 +1,5 @@
 plugins {
-    id 'org.springframework.boot' version '2.5.4'
+    id 'org.springframework.boot' version '2.5.5'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
 }
@@ -10,14 +10,8 @@ configurations {
     }
 }
 
-repositories {
-    mavenLocal()
-    mavenCentral()
-    maven { url 'https://jitpack.io' }
-}
-
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-web:2.5.4'
+    implementation 'org.springframework.boot:spring-boot-starter-web:2.5.5'
 //  数据库相关
     implementation group: 'com.baomidou', name: 'mybatis-plus-boot-starter', version: '3.4.3.4'
     implementation group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '2.7.4'
@@ -26,9 +20,13 @@ dependencies {
     implementation project(':sbtream-api')
     compileOnly 'org.projectlombok:lombok:1.18.20'
     annotationProcessor 'org.projectlombok:lombok:1.18.20'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test:2.5.4'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test:2.5.5'
 }
 
 test {
     useJUnitPlatform()
+}
+
+repositories {
+    mavenCentral()
 }

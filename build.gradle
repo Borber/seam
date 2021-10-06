@@ -17,5 +17,6 @@ subprojects {
         mavenLocal()
         mavenCentral()
         maven { url 'https://maven.enaium.cn' }
+        maven { url 'https://jitpack.io' }
     }
 }
