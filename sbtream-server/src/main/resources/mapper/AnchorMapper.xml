@@ -9,8 +9,8 @@
             <result property="pfId" column="pf_id" jdbcType="VARCHAR"/>
             <result property="anchorName" column="anchor_name" jdbcType="VARCHAR"/>
             <result property="anchorIconUrl" column="anchor_icon_url" jdbcType="VARCHAR"/>
-            <result property="anchorRoomcode" column="anchor_roomCode" jdbcType="VARCHAR"/>
-            <result property="anchorRoomname" column="anchor_roomName" jdbcType="VARCHAR"/>
+            <result property="anchorRoomCode" column="anchor_roomCode" jdbcType="VARCHAR"/>
+            <result property="anchorRoomName" column="anchor_roomName" jdbcType="VARCHAR"/>
             <result property="liveType" column="live_type" jdbcType="VARCHAR"/>
             <result property="nameComment" column="name_comment" jdbcType="VARCHAR"/>
             <result property="commentDetails" column="comment_details" jdbcType="VARCHAR"/>

@@ -37,14 +37,18 @@ public class AnchorDO implements Serializable {
     private String anchorIconUrl;
 
     /**
+     * 直播封面
+     */
+
+    /**
      * 主播房间号
      */
-    private String anchorRoomcode;
+    private String anchorRoomCode;
 
     /**
      * 直播间名称
      */
-    private String anchorRoomname;
+    private String anchorRoomName;
 
     /**
      * 直播类型 (可以类型, 也可以是具体的游戏, 项目)
@@ -110,8 +114,8 @@ public class AnchorDO implements Serializable {
             && (this.getPfId() == null ? other.getPfId() == null : this.getPfId().equals(other.getPfId()))
             && (this.getAnchorName() == null ? other.getAnchorName() == null : this.getAnchorName().equals(other.getAnchorName()))
             && (this.getAnchorIconUrl() == null ? other.getAnchorIconUrl() == null : this.getAnchorIconUrl().equals(other.getAnchorIconUrl()))
-            && (this.getAnchorRoomcode() == null ? other.getAnchorRoomcode() == null : this.getAnchorRoomcode().equals(other.getAnchorRoomcode()))
-            && (this.getAnchorRoomname() == null ? other.getAnchorRoomname() == null : this.getAnchorRoomname().equals(other.getAnchorRoomname()))
+            && (this.getAnchorRoomCode() == null ? other.getAnchorRoomCode() == null : this.getAnchorRoomCode().equals(other.getAnchorRoomCode()))
+            && (this.getAnchorRoomName() == null ? other.getAnchorRoomName() == null : this.getAnchorRoomName().equals(other.getAnchorRoomName()))
             && (this.getLiveType() == null ? other.getLiveType() == null : this.getLiveType().equals(other.getLiveType()))
             && (this.getNameComment() == null ? other.getNameComment() == null : this.getNameComment().equals(other.getNameComment()))
             && (this.getCommentDetails() == null ? other.getCommentDetails() == null : this.getCommentDetails().equals(other.getCommentDetails()))
@@ -131,8 +135,8 @@ public class AnchorDO implements Serializable {
         result = prime * result + ((getPfId() == null) ? 0 : getPfId().hashCode());
         result = prime * result + ((getAnchorName() == null) ? 0 : getAnchorName().hashCode());
         result = prime * result + ((getAnchorIconUrl() == null) ? 0 : getAnchorIconUrl().hashCode());
-        result = prime * result + ((getAnchorRoomcode() == null) ? 0 : getAnchorRoomcode().hashCode());
-        result = prime * result + ((getAnchorRoomname() == null) ? 0 : getAnchorRoomname().hashCode());
+        result = prime * result + ((getAnchorRoomCode() == null) ? 0 : getAnchorRoomCode().hashCode());
+        result = prime * result + ((getAnchorRoomName() == null) ? 0 : getAnchorRoomName().hashCode());
         result = prime * result + ((getLiveType() == null) ? 0 : getLiveType().hashCode());
         result = prime * result + ((getNameComment() == null) ? 0 : getNameComment().hashCode());
         result = prime * result + ((getCommentDetails() == null) ? 0 : getCommentDetails().hashCode());
@@ -155,8 +159,8 @@ public class AnchorDO implements Serializable {
         sb.append(", pfId=").append(pfId);
         sb.append(", anchorName=").append(anchorName);
         sb.append(", anchorIconUrl=").append(anchorIconUrl);
-        sb.append(", anchorRoomcode=").append(anchorRoomcode);
-        sb.append(", anchorRoomname=").append(anchorRoomname);
+        sb.append(", anchorRoomcode=").append(anchorRoomCode);
+        sb.append(", anchorRoomname=").append(anchorRoomName);
         sb.append(", liveType=").append(liveType);
         sb.append(", nameComment=").append(nameComment);
         sb.append(", commentDetails=").append(commentDetails);
