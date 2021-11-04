@@ -8,6 +8,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.borber.sbtream.server.constans.SBtreamConfigConstans.PLUGINS_PATH;
+
 /**
  * @ClassName FileUtil
  * @Description TODO
@@ -16,8 +18,7 @@ import java.util.List;
  * @Version 0.0.1
  **/
 public class FileUtil {
-    @Resource
-    SBtreamConfigConstans sBtreamConfigConstans;
+
     /**
      * @Author Borber
      * @Description 获取 指定路径下 jar 文件 的数量
@@ -41,7 +42,7 @@ public class FileUtil {
      * @return java.util.List<java.lang.String>
      **/
     public List<String> getAllJar(){
-        return getAllFileWithFix(sBtreamConfigConstans.getPLUGINS_PATH(),"jar",true);
+        return getAllFileWithFix(PLUGINS_PATH,"jar",true);
     }
 
     /**

@@ -12,10 +12,12 @@ import org.springframework.stereotype.Component;
  * @Version 0.0.1
  **/
 @Component
-@Getter
 public class SBtreamConfigConstans {
     @Value("${sbtream.plugin.path}")
-    private String PLUGINS_PATH;
+    public static String PLUGINS_PATH;
     @Value("${sbtream.data.json.setting}")
-    private String SETTING_PATH;
+    public static String SETTING_PATH;
+
+    public static final String BASE_API_URL = "/api/v1";
+    public static final String USER_API_URL = BASE_API_URL + "/user";
 }
