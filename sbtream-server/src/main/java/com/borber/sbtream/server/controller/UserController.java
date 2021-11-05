@@ -1,6 +1,7 @@
 package com.borber.sbtream.server.controller;
 
 import com.borber.sbtream.api.plugin.response.BaseResponse;
+import com.borber.sbtream.server.conf.annotation.PassToken;
 import com.borber.sbtream.server.model.vo.UserVO;
 import com.borber.sbtream.server.service.UserService;
 import org.springframework.validation.annotation.Validated;
@@ -19,17 +20,20 @@ public class UserController {
     @Resource
     UserService userService;
     // 登陆接口
+
+    @PassToken
     @PostMapping("login")
     public BaseResponse login(@RequestBody @Validated UserVO vo){
-        return null;
+        return BaseResponse.success(userService.login(vo));
     }
 
     // 注册接口
 
+    @PassToken
     @PostMapping("register")
     public BaseResponse register(@RequestBody @Validated UserVO vo){
         userService.addUser(vo);
-        return BaseResponse.success("");
+        return BaseResponse.success("注册成功");
     }
 
 }

@@ -5,4 +5,3 @@ spring:
     url: jdbc:mariadb://182.92.2.76:3306/sbtream?characterEncoding=UTF-8&useSSL=false
     username: root
     password: 666666
-

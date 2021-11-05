@@ -1,5 +1,5 @@
 plugins {
-    id 'org.springframework.boot' version '2.5.5'
+    id 'org.springframework.boot' version '2.5.6'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
 }
@@ -11,18 +11,19 @@ configurations {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-web:2.5.5'
+    implementation 'org.springframework.boot:spring-boot-starter-web:2.5.6'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc:2.5.6'
+
 //  数据库相关
-    implementation group: 'com.baomidou', name: 'mybatis-plus-boot-starter', version: '3.4.3.4'
-    implementation group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '2.7.4'
-    implementation group: 'com.alibaba', name: 'druid-spring-boot-starter', version: '1.2.6'
+    implementation 'com.baomidou:mybatis-plus-boot-starter:3.4.3.4'
+    implementation 'org.mariadb.jdbc:mariadb-java-client:2.7.4'
     implementation 'com.github.Borber:BullPlugin:1.0.2'
     implementation 'cn.hutool:hutool-all:5.7.15'
     implementation 'javax.validation:validation-api:2.0.1.Final'
     implementation project(':sbtream-api')
     compileOnly 'org.projectlombok:lombok:1.18.22'
     annotationProcessor 'org.projectlombok:lombok:1.18.22'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test:2.5.5'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test:2.5.6'
 }
 
 test {

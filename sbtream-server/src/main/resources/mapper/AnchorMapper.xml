@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.borber.sbtream.server.mapper.AnchorMapper">
+
+    <resultMap id="BaseResultMap" type="com.borber.sbtream.server.model.entity.AnchorDO">
+            <id property="id" column="id" jdbcType="VARCHAR"/>
+            <result property="pfId" column="pf_id" jdbcType="VARCHAR"/>
+            <result property="name" column="name" jdbcType="VARCHAR"/>
+            <result property="iconUrl" column="icon_url" jdbcType="VARCHAR"/>
+            <result property="roomcode" column="roomCode" jdbcType="VARCHAR"/>
+            <result property="roomname" column="roomName" jdbcType="VARCHAR"/>
+            <result property="liveType" column="live_type" jdbcType="VARCHAR"/>
+            <result property="nameComment" column="name_comment" jdbcType="VARCHAR"/>
+            <result property="commentDetails" column="comment_details" jdbcType="VARCHAR"/>
+            <result property="autoRecordAble" column="auto_record_able" jdbcType="BOOLEAN"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="modifyTime" column="modify_time" jdbcType="TIMESTAMP"/>
+            <result property="disabled" column="disabled" jdbcType="BOOLEAN"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,pf_id,name,
+        icon_url,roomCode,roomName,
+        live_type,name_comment,comment_details,
+        auto_record_able,create_time,modify_time,
+        disabled
+    </sql>
+</mapper>

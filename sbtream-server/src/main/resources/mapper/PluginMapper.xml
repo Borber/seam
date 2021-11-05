@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.borber.sbtream.server.mapper.PluginMapper">
+
+    <resultMap id="BaseResultMap" type="com.borber.sbtream.server.model.entity.PluginDO">
+            <id property="id" column="id" jdbcType="VARCHAR"/>
+            <result property="officialWebsite" column="official_website" jdbcType="VARCHAR"/>
+            <result property="updateUrl" column="update_url" jdbcType="VARCHAR"/>
+            <result property="maintainerName" column="maintainer_name" jdbcType="VARCHAR"/>
+            <result property="maintainerEmail" column="maintainer_email" jdbcType="VARCHAR"/>
+            <result property="announcementInformation" column="announcement_information" jdbcType="VARCHAR"/>
+            <result property="version" column="version" jdbcType="VARCHAR"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="modificationTime" column="modification_time" jdbcType="TIMESTAMP"/>
+            <result property="disabled" column="disabled" jdbcType="BOOLEAN"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,official_website,update_url,
+        maintainer_name,maintainer_email,announcement_information,
+        version,create_time,modification_time,
+        disabled
+    </sql>
+</mapper>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.borber.sbtream.server.mapper.RecordHistoryMapper">
+
+    <resultMap id="BaseResultMap" type="com.borber.sbtream.server.model.entity.RecordHistoryDO">
+            <id property="id" column="id" jdbcType="VARCHAR"/>
+            <result property="anchorId" column="anchor_id" jdbcType="VARCHAR"/>
+            <result property="playbackhistoryUrl" column="playbackHistory_url" jdbcType="VARCHAR"/>
+            <result property="barragefileUrl" column="barrageFile_url" jdbcType="VARCHAR"/>
+            <result property="livestreamTitle" column="liveStream_title" jdbcType="VARCHAR"/>
+            <result property="viewed" column="viewed" jdbcType="BOOLEAN"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="modificationTime" column="modification_time" jdbcType="TIMESTAMP"/>
+            <result property="disabled" column="disabled" jdbcType="BOOLEAN"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,anchor_id,playbackHistory_url,
+        barrageFile_url,liveStream_title,viewed,
+        create_time,modification_time,disabled
+    </sql>
+</mapper>

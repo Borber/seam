@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.borber.sbtream.server.mapper.AdminMapper">
+
+    <resultMap id="BaseResultMap" type="com.borber.sbtream.server.model.entity.AdminDO">
+            <id property="id" column="id" jdbcType="VARCHAR"/>
+            <result property="uname" column="uname" jdbcType="VARCHAR"/>
+            <result property="passwd" column="passwd" jdbcType="VARCHAR"/>
+            <result property="mailbox" column="mailbox" jdbcType="VARCHAR"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="modifyTime" column="modify_time" jdbcType="TIMESTAMP"/>
+            <result property="disabled" column="disabled" jdbcType="BOOLEAN"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,uname,passwd,
+        mailbox,create_time,modify_time,
+        disabled
+    </sql>
+</mapper>
