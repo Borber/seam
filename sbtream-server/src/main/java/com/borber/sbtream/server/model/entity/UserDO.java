@@ -1,20 +1,18 @@
 package com.borber.sbtream.server.model.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
-
-import java.io.Serializable;
-import java.util.Date;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
  * 用户及设置表
+ * @author BORBER
  * @TableName user
  */
-
+@EqualsAndHashCode(callSuper = true)
 @TableName(value ="user")
 @Data
-public class UserDO implements Serializable {
+public class UserDO extends BaseDO {
     /**
      * 用户id
      */
@@ -35,23 +33,6 @@ public class UserDO implements Serializable {
      * 用户邮箱
      */
     private String mail;
-
-    /**
-     * Creation time
-     */
-    @TableField(fill = FieldFill.INSERT)
-    private Date createTime;
-    /**
-     * Update time
-     */
-    @TableField(fill = FieldFill.INSERT_UPDATE)
-    private Date modifyTime;
-    /**
-     * 逻辑删除
-     */
-    @TableLogic
-    @TableField(fill = FieldFill.INSERT)
-    private Boolean disabled;
 
     @TableField(exist = false)
     private static final long serialVersionUID = -49616122763188379L;

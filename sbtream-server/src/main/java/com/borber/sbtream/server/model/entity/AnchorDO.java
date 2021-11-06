@@ -4,23 +4,22 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
+
 import java.io.Serializable;
 import java.util.Date;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 /**
  * 主播表
  * @TableName anchor
  */
-@EqualsAndHashCode(callSuper = true)
 @TableName(value ="anchor")
 @Data
-public class AnchorDO extends BaseDO {
+public class AnchorDO implements Serializable {
     /**
      * 主播id
      */
-    @TableId
+    @TableId(type= IdType.ASSIGN_UUID)
     private String id;
 
     /**
@@ -66,7 +65,22 @@ public class AnchorDO extends BaseDO {
     /**
      * 是否自动录播：默认0为否，1为是
      */
-    private Boolean autoRecordAble;
+    private Byte autoRecordAble;
+
+    /**
+     * 创建时间
+     */
+    private Date createTime;
+
+    /**
+     * 更新时间
+     */
+    private Date updateTime;
+
+    /**
+     * 
+     */
+    private Byte disable;
 
     @TableField(exist = false)
     private static final long serialVersionUID = -49616122763188379L;

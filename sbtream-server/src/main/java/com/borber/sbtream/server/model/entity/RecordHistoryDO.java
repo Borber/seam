@@ -4,23 +4,22 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
+
 import java.io.Serializable;
 import java.util.Date;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 /**
  * 录播历史表
  * @TableName record_history
  */
-@EqualsAndHashCode(callSuper = true)
 @TableName(value ="record_history")
 @Data
-public class RecordHistoryDO extends BaseDO {
+public class RecordHistoryDO implements Serializable {
     /**
      * 自增
      */
-    @TableId
+    @TableId(type= IdType.ASSIGN_UUID)
     private String id;
 
     /**
@@ -46,8 +45,22 @@ public class RecordHistoryDO extends BaseDO {
     /**
      * 是否观看过，0表示没看过，1表示看过，默认值为0
      */
-    private Boolean viewed;
+    private Byte viewed;
 
+    /**
+     * 创建时间
+     */
+    private Date createTime;
+
+    /**
+     * 更新时间
+     */
+    private Date updateTime;
+
+    /**
+     * 
+     */
+    private Byte disable;
 
     @TableField(exist = false)
     private static final long serialVersionUID = -49616122763188379L;

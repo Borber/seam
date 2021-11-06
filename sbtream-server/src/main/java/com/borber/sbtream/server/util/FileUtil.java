@@ -1,14 +1,9 @@
 package com.borber.sbtream.server.util;
 
-import com.borber.sbtream.server.constans.SBtreamConfigConstans;
-
-import javax.annotation.Resource;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.borber.sbtream.server.constans.SBtreamConfigConstans.PLUGINS_PATH;
 
 /**
  * @ClassName FileUtil
@@ -27,7 +22,7 @@ public class FileUtil {
      * @return int
      **/
     public int getNumberOfJar(String path){
-        List<String> fileList = getAllJar();
+        List<String> fileList = getAllJar(path);
         if (fileList == null) {
             return 0;
         }
@@ -41,8 +36,8 @@ public class FileUtil {
      * @Param [path]
      * @return java.util.List<java.lang.String>
      **/
-    public List<String> getAllJar(){
-        return getAllFileWithFix(PLUGINS_PATH,"jar",true);
+    public List<String> getAllJar(String path){
+        return getAllFileWithFix(path,"jar",true);
     }
 
     /**

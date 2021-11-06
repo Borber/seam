@@ -12,19 +12,19 @@
             <result property="code" column="code" jdbcType="VARCHAR"/>
             <result property="site" column="site" jdbcType="VARCHAR"/>
             <result property="apiLink" column="api_link" jdbcType="VARCHAR"/>
-            <result property="gethdCookiesRequired" column="getHD_cookies_required" jdbcType="BOOLEAN"/>
-            <result property="officialRecordProvided" column="official_record_provided" jdbcType="BOOLEAN"/>
+            <result property="gethdCookiesRequired" column="getHD_cookies_required" jdbcType="TINYINT"/>
+            <result property="officialRecordProvided" column="official_record_provided" jdbcType="TINYINT"/>
             <result property="officialRecordUrl" column="official_record_url" jdbcType="VARCHAR"/>
             <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
-            <result property="modifyTime" column="modify_time" jdbcType="TIMESTAMP"/>
-            <result property="disabled" column="disabled" jdbcType="BOOLEAN"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+            <result property="disable" column="disable" jdbcType="TINYINT"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         id,plugin_id,name,
         icon,code,site,
         api_link,getHD_cookies_required,official_record_provided,
-        official_record_url,create_time,modify_time,
-        disabled
+        official_record_url,create_time,update_time,
+        disable
     </sql>
 </mapper>

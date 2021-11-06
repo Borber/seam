@@ -8,15 +8,15 @@
             <id property="id" column="id" jdbcType="VARCHAR"/>
             <result property="userId" column="user_id" jdbcType="VARCHAR"/>
             <result property="anchorId" column="anchor_id" jdbcType="VARCHAR"/>
-            <result property="autoRecordAble" column="auto_record_able" jdbcType="BOOLEAN"/>
+            <result property="autoRecordAble" column="auto_record_able" jdbcType="TINYINT"/>
             <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
-            <result property="modifyTime" column="modify_time" jdbcType="TIMESTAMP"/>
-            <result property="disabled" column="disabled" jdbcType="BOOLEAN"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+            <result property="disable" column="disable" jdbcType="TINYINT"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         id,user_id,anchor_id,
-        auto_record_able,create_time,modify_time,
-        disabled
+        auto_record_able,create_time,update_time,
+        disable
     </sql>
 </mapper>

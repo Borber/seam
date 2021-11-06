@@ -4,23 +4,22 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
+
 import java.io.Serializable;
 import java.util.Date;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 /**
  * cookies表
  * @TableName cookie
  */
-@EqualsAndHashCode(callSuper = true)
 @TableName(value ="cookie")
 @Data
-public class CookieDO extends BaseDO {
+public class CookieDO implements Serializable {
     /**
      * 自增
      */
-    @TableId
+    @TableId(type= IdType.ASSIGN_UUID)
     private String id;
 
     /**
@@ -37,6 +36,21 @@ public class CookieDO extends BaseDO {
      * cookie值
      */
     private String cookieValue;
+
+    /**
+     * 创建时间
+     */
+    private Date createTime;
+
+    /**
+     * 更新时间
+     */
+    private Date updateTime;
+
+    /**
+     * 
+     */
+    private Byte disable;
 
     @TableField(exist = false)
     private static final long serialVersionUID = -49616122763188379L;

@@ -10,13 +10,13 @@
             <result property="platformId" column="platform_id" jdbcType="VARCHAR"/>
             <result property="cookieValue" column="cookie_value" jdbcType="VARCHAR"/>
             <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
-            <result property="modificationTime" column="modification_time" jdbcType="TIMESTAMP"/>
-            <result property="disabled" column="disabled" jdbcType="BOOLEAN"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+            <result property="disable" column="disable" jdbcType="TINYINT"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         id,user_id,platform_id,
-        cookie_value,create_time,modification_time,
-        disabled
+        cookie_value,create_time,update_time,
+        disable
     </sql>
 </mapper>

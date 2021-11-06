@@ -7,20 +7,20 @@
     <resultMap id="BaseResultMap" type="com.borber.sbtream.server.model.entity.PluginDO">
             <id property="id" column="id" jdbcType="VARCHAR"/>
             <result property="officialWebsite" column="official_website" jdbcType="VARCHAR"/>
-            <result property="updateUrl" column="update_url" jdbcType="VARCHAR"/>
-            <result property="maintainerName" column="maintainer_name" jdbcType="VARCHAR"/>
-            <result property="maintainerEmail" column="maintainer_email" jdbcType="VARCHAR"/>
-            <result property="announcementInformation" column="announcement_information" jdbcType="VARCHAR"/>
+            <result property="url" column="url" jdbcType="VARCHAR"/>
+            <result property="mName" column="m_name" jdbcType="VARCHAR"/>
+            <result property="mMail" column="m_mail" jdbcType="VARCHAR"/>
+            <result property="aInfo" column="a_info" jdbcType="VARCHAR"/>
             <result property="version" column="version" jdbcType="VARCHAR"/>
             <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
-            <result property="modificationTime" column="modification_time" jdbcType="TIMESTAMP"/>
-            <result property="disabled" column="disabled" jdbcType="BOOLEAN"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+            <result property="disable" column="disable" jdbcType="TINYINT"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,official_website,update_url,
-        maintainer_name,maintainer_email,announcement_information,
-        version,create_time,modification_time,
-        disabled
+        id,official_website,url,
+        m_name,m_mail,a_info,
+        version,create_time,update_time,
+        disable
     </sql>
 </mapper>

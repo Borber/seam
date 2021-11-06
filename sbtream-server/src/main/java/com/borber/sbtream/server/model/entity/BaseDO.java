@@ -8,22 +8,25 @@ import lombok.Data;
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * @author BORBER
+ */
 @Data
 public class BaseDO implements Serializable {
-    /**
-     * Creation time
-     */
-    @TableField(fill = FieldFill.INSERT)
-    private Date createTime;
-    /**
-     * Update time
-     */
-    @TableField(fill = FieldFill.INSERT_UPDATE)
-    private Date modifyTime;
-    /**
-     * 逻辑删除
-     */
-    @TableLogic
-    @TableField(fill = FieldFill.INSERT)
-    private Boolean disabled;
+        /**
+         * Creation time
+         */
+        @TableField(fill = FieldFill.INSERT)
+        private Date createTime;
+        /**
+         * Update time
+         */
+        @TableField(fill = FieldFill.INSERT_UPDATE)
+        private Date updateTime;
+        /**
+         * 逻辑删除
+         */
+        @TableLogic
+        @TableField(fill = FieldFill.INSERT)
+        private Boolean disable;
 }

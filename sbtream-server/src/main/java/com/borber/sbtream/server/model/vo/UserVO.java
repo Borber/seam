@@ -1,6 +1,7 @@
 package com.borber.sbtream.server.model.vo;
 
 import lombok.Data;
+
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 

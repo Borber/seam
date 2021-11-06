@@ -3,29 +3,30 @@
   <component name="CompilerConfiguration">
     <annotationProcessing>
       <profile default="true" name="Default" enabled="true" />
-      <profile name="Gradle Imported" enabled="true">
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="false">
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.20/lombok-1.18.20.jar" />
-        </processorPath>
-        <module name="SBtream.sbtream-api.main" />
-        <module name="SBtream.sbtream-api.test" />
-      </profile>
-      <profile name="Gradle Imported" enabled="true">
-        <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="false">
-          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.22/9c08ea24c6eb714e2d6170e8122c069a0ba9aacf/lombok-1.18.22.jar" />
-        </processorPath>
-        <module name="SBtream.sbtream-server.main" />
+        <module name="sbtream-plugin" />
+        <module name="sbtream-server" />
+        <module name="sbtream-common" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel target="1.8">
-      <module name="sbtream-server" target="14" />
-      <module name="sbtream-server.main" target="14" />
-      <module name="sbtream-server.SBtream" target="14" />
-      <module name="sbtream-server.SBtream.main" target="14" />
-      <module name="sbtream-server.SBtream.test" target="14" />
-      <module name="sbtream-server.test" target="14" />
+    <bytecodeTargetLevel>
+      <module name="common" target="8" />
+      <module name="SBtream" target="1.8" />
+      <module name="sbtream-common" target="1.8" />
+      <module name="sbtream-plugin" target="1.8" />
+      <module name="sbtream-server" target="1.8" />
     </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="SBtream" options="-parameters" />
+      <module name="common" options="-parameters" />
+      <module name="sbtream-common" options="-parameters" />
+      <module name="sbtream-plugin" options="-parameters" />
+      <module name="sbtream-server" options="-parameters" />
+    </option>
   </component>
 </project>

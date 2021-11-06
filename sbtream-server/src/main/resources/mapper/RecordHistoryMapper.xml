@@ -10,15 +10,15 @@
             <result property="playbackhistoryUrl" column="playbackHistory_url" jdbcType="VARCHAR"/>
             <result property="barragefileUrl" column="barrageFile_url" jdbcType="VARCHAR"/>
             <result property="livestreamTitle" column="liveStream_title" jdbcType="VARCHAR"/>
-            <result property="viewed" column="viewed" jdbcType="BOOLEAN"/>
+            <result property="viewed" column="viewed" jdbcType="TINYINT"/>
             <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
-            <result property="modificationTime" column="modification_time" jdbcType="TIMESTAMP"/>
-            <result property="disabled" column="disabled" jdbcType="BOOLEAN"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+            <result property="disable" column="disable" jdbcType="TINYINT"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         id,anchor_id,playbackHistory_url,
         barrageFile_url,liveStream_title,viewed,
-        create_time,modification_time,disabled
+        create_time,update_time,disable
     </sql>
 </mapper>

@@ -2,26 +2,25 @@ package com.borber.sbtream.server.service.impl;
 
 import cn.hutool.jwt.JWT;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.borber.sbtream.server.model.dto.LoginDTO;
-import com.borber.sbtream.server.model.vo.UserVO;
-import com.borber.sbtream.server.model.entity.UserDO;
-import com.borber.sbtream.server.service.UserService;
 import com.borber.sbtream.server.mapper.UserMapper;
+import com.borber.sbtream.server.model.dto.LoginDTO;
+import com.borber.sbtream.server.model.entity.UserDO;
+import com.borber.sbtream.server.model.vo.UserVO;
+import com.borber.sbtream.server.service.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 /**
- *
- */
+* @author x
+* @description 针对表【user(用户及设置表)】的数据库操作Service实现
+* @createDate 2021-11-06 14:58:04
+*/
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO>
-    implements UserService{
+        implements UserService{
 
     @Resource
     UserMapper userMapper;
@@ -30,23 +29,22 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO>
     public void addUser(UserVO vo) {
         UserDO user = new UserDO();
         BeanUtils.copyProperties(vo,user);
+        System.out.println(user);
         userMapper.insert(user);
     }
 
     @Override
-    public UserDO getUserByID(String id) {
+    public UserDO getUserById(String id) {
         return userMapper.selectById(id);
     }
 
 
-
-    //生成签名
     @Override
     public LoginDTO login(UserVO vo) {
         LambdaQueryWrapper<UserDO> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(UserDO::getName, "BORBER");
+        queryWrapper.eq(UserDO::getName, "BORBER")
+                .eq(UserDO::getPasswd, vo.getPasswd());
         UserDO user = userMapper.selectOne(queryWrapper);
-//        UserDO user = userMapper.getUserByNAP(vo.getName(), vo.getPasswd());
         System.out.println(user);
         byte[] key = vo.getPasswd().getBytes();
         String token = JWT.create()

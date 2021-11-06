@@ -1,6 +1,8 @@
 package com.borber.sbtream.server.controller;
 
-import com.borber.sbtream.api.plugin.response.BaseResponse;
+
+
+import com.borber.sbtream.common.response.BaseResponse;
 import com.borber.sbtream.server.conf.annotation.PassToken;
 import com.borber.sbtream.server.model.vo.UserVO;
 import com.borber.sbtream.server.service.UserService;

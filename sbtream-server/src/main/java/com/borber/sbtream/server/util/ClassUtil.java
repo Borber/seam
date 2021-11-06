@@ -1,9 +1,7 @@
 package com.borber.sbtream.server.util;
 
-import com.borber.bullplugin.BullPlugin;
-import com.borber.sbtream.api.plugin.api.Api;
+//import com.borber.sbtream.api.plugin.api.Api;
 
-import java.io.File;
 
 /**
  * @ClassName ClassUtil
@@ -13,9 +11,9 @@ import java.io.File;
  * @Version 0.0.1
  **/
 public class ClassUtil {
-    public static Api getSomeThingFromJar(String path) throws Exception {
-        BullPlugin bullPlugin = new BullPlugin(new File(path));
-        // 因为约定只有一个插件接口类 所以直接获取第一个
-        return  (Api) bullPlugin.getPluginsFromJar().get(0).getDeclaredConstructor().newInstance();
-    }
+//    public static Api getSomeThingFromJar(String path) throws Exception {
+//        BullPlugin bullPlugin = new BullPlugin(new File(path));
+//        // 因为约定只有一个插件接口类 所以直接获取第一个
+//        return  (Api) bullPlugin.getPluginsFromJar().get(0).getDeclaredConstructor().newInstance();
+//    }
 }

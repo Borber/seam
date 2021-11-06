@@ -18,13 +18,13 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object object) throws Exception {
-        String token = httpServletRequest.getHeader("token");// 从 http 请求头中取出 token
         // 如果不是映射到方法直接通过
         if (!(object instanceof HandlerMethod)) {
             return true;
         }
         HandlerMethod handlerMethod = (HandlerMethod) object;
         Method method = handlerMethod.getMethod();
+        System.out.println(method);
         //检查是否有passtoken注释，有则跳过认证
         if (method.isAnnotationPresent(PassToken.class)) {
             PassToken passToken = method.getAnnotation(PassToken.class);
@@ -35,6 +35,8 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
             }
         }
         System.out.println("继续了");
+        // 从 http 请求头中取出 token
+        String token = httpServletRequest.getHeader("token");
         //检查有没有需要用户权限的注解
         // 执行认证
         if (token == null) {
@@ -43,7 +45,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
         // 获取 token 中的 user id
 
         String id = (String) JWT.of(token).getPayload("id");
-        UserDO user = userService.getUserByID(id);
+        UserDO user = userService.getUserById(id);
         if (user == null) {
             throw new RuntimeException("用户不存在，请重新登录");
         }

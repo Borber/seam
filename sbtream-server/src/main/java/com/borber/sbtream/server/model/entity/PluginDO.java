@@ -4,23 +4,22 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
+
 import java.io.Serializable;
 import java.util.Date;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 /**
  * 插件表
  * @TableName plugin
  */
-@EqualsAndHashCode(callSuper = true)
 @TableName(value ="plugin")
 @Data
-public class PluginDO extends BaseDO {
+public class PluginDO implements Serializable {
     /**
-     * 自增
+     * ID
      */
-    @TableId
+    @TableId(type= IdType.ASSIGN_UUID)
     private String id;
 
     /**
@@ -31,27 +30,42 @@ public class PluginDO extends BaseDO {
     /**
      * 插件更新地址
      */
-    private String updateUrl;
+    private String url;
 
     /**
      * 维护人名字
      */
-    private String maintainerName;
+    private String mName;
 
     /**
      * 维护人邮箱
      */
-    private String maintainerEmail;
+    private String mMail;
 
     /**
      * 公告信息
      */
-    private String announcementInformation;
+    private String aInfo;
 
     /**
      * 当前版本
      */
     private String version;
+
+    /**
+     * 创建时间
+     */
+    private Date createTime;
+
+    /**
+     * 更新时间
+     */
+    private Date updateTime;
+
+    /**
+     * 
+     */
+    private Byte disable;
 
     @TableField(exist = false)
     private static final long serialVersionUID = -49616122763188379L;

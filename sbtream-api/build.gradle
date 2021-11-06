@@ -1,9 +1,0 @@
-plugins {
-    id "io.freefair.lombok" version "6.0.0-m2"
-}
-
-version '0.0.2-SNAPSHOT'
-
-test {
-    useJUnitPlatform()
-}
