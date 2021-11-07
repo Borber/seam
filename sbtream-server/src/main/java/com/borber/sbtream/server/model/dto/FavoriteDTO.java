@@ -18,5 +18,5 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class FavoriteDTO implements Serializable {
-    List<PlatformDTO> platformDTO;
+    List<PlatformServiceDTO> platformDTO;
 }

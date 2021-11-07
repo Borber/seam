@@ -16,7 +16,11 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PlatformDTO implements Serializable {
+public class MetaDataDTO implements Serializable {
+    /**
+     * 插件id, 唯一标识插件, 建议为 32位UUID
+     */
+    private String id;
     /**
      * 平台代号
      * 1. 尽量使用官网地址的简写
@@ -31,6 +35,11 @@ public class PlatformDTO implements Serializable {
      * 直播平台的官网 直接 url/{rid} 作为直播间地址
      */
     private String url;
+
+    /**
+     * api链接
+     */
+    private String api;
     /**
      * 直播平台图标
      */
@@ -61,7 +70,9 @@ public class PlatformDTO implements Serializable {
     private String version;
 
     /**
-     * 如果平台支持弹幕, 请返回弹幕限制, 格式为 20-200 下限-上限
+     * 如果平台支持弹幕, 请返回弹幕限制, 下限/上限
      */
-    private String danmakuLimit;
+    private String danmakuMin;
+
+    private String danmakuMax;
 }

@@ -73,7 +73,7 @@ logging:
 
 sbtream:
   plugin:
-    path: plugins
+    path: plugin
   data:
     json:
       setting: json/setting.json

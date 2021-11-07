@@ -1,29 +1,21 @@
-package com.borber.sbtream.server.model.entity;
+package com.borber.sbtream.server.model.dto;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.util.List;
 
 /**
- * 平台表
- * @TableName platform
- */
-@EqualsAndHashCode(callSuper = true)
-@TableName(value ="platform")
+ * @ClassName PlatformDTO
+ * @Description 用于储存对应平台的所有关注主播
+ * @Author Borber
+ * @Date 2021/7/15 下午4:19
+ * @Version 0.0.1
+ **/
 @Data
-public class PlatformDO extends BaseDO {
-    /**
-     * 平台id
-     */
-    @TableId(type= IdType.ASSIGN_UUID)
-    private String id;
-
+public class PlatformServiceDTO implements Serializable {
     /**
      * 给平台提供支持的插件id号
      */
@@ -68,7 +60,4 @@ public class PlatformDO extends BaseDO {
      * 官方录播地址 (可能需要从插件中获取) 待定
      */
     private String officialRecordUrl;
-
-    @TableField(exist = false)
-    private static final long serialVersionUID = -49616122763188379L;
 }

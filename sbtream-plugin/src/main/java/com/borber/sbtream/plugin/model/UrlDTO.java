@@ -1,5 +1,6 @@
 package com.borber.sbtream.plugin.model;
 
+import com.borber.sbtream.plugin.constans.StatusType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,6 +18,15 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UrlDTO implements Serializable {
+    private String name;
+
+    private String headImg;
+
+    private String picture;
+    /**
+     * 官网地址
+     */
+    private String wurl;
     /**
      * 直播源地址
      */
@@ -25,5 +35,4 @@ public class UrlDTO implements Serializable {
      * 弹幕地址
      */
     private String durl;
-
 }

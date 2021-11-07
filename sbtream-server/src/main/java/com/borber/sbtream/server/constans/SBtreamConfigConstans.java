@@ -10,13 +10,12 @@ import org.springframework.stereotype.Component;
  * @Date 2021/7/15 下午5:34
  * @Version 0.0.1
  **/
-@Component
 public class SBtreamConfigConstans {
-    @Value("${sbtream.plugin.path}")
-    public String PLUGINS_PATH;
-    @Value("${sbtream.data.json.setting}")
-    public String SETTING_PATH;
-
+    public static final String PLUGINS_PATH = "plugin";
+    public static final String SETTING_PATH = "settings";
     public static final String BASE_API_URL = "/api/v1";
     public static final String USER_API_URL = BASE_API_URL + "/user";
+    public static final String PLATFORM_API_URL = BASE_API_URL + "/platform";
+    public static final String PLUGIN_API_URL = BASE_API_URL + "/plugin";
+    public static final String URL_API_TRL = BASE_API_URL + "/url";
 }

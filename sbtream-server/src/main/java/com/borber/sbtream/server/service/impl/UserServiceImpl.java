@@ -42,7 +42,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO>
     @Override
     public LoginDTO login(UserVO vo) {
         LambdaQueryWrapper<UserDO> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(UserDO::getName, "BORBER")
+        queryWrapper.eq(UserDO::getName, vo.getName())
                 .eq(UserDO::getPasswd, vo.getPasswd());
         UserDO user = userMapper.selectOne(queryWrapper);
         System.out.println(user);
