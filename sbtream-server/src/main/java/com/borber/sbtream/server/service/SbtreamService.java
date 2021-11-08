@@ -1,6 +1,6 @@
 package com.borber.sbtream.server.service;
 
-import com.borber.sbtream.plugin.model.UrlDTO;
+import com.borber.sbtream.plugin.model.DataDTO;
 
 /**
  * @author x
@@ -15,5 +15,5 @@ public interface SbtreamService {
      * @param pluginId 插件ID
      * @return 直播源地址
      */
-    UrlDTO getUrl(String pid, String rid, String pluginId, String cookies);
+    DataDTO getUrl(String pid, String rid, String pluginId, String cookies);
 }

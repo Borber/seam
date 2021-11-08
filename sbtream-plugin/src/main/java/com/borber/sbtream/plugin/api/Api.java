@@ -1,10 +1,8 @@
 package com.borber.sbtream.plugin.api;
 
 
-import com.borber.sbtream.common.response.BaseResponse;
-import com.borber.sbtream.plugin.annotations.Plugin;
 import com.borber.sbtream.plugin.model.MetaDataDTO;
-import com.borber.sbtream.plugin.model.UrlDTO;
+import com.borber.sbtream.plugin.model.DataDTO;
 
 /**
  * @ClassName GetSomeThing
@@ -31,7 +29,7 @@ public interface Api {
      * @param cookies 用户认证
      * @return String 但是必须是 BaseResponse<UrlDTO, Object> 的 序列化字符串
      **/
-    UrlDTO getUrl(String rid, String cookies);
+    DataDTO getUrl(String rid, String cookies);
 
     /**
      *

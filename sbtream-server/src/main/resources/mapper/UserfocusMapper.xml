@@ -2,21 +2,21 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.borber.sbtream.server.mapper.UserfocusRecordMapper">
+<mapper namespace="com.borber.sbtream.server.mapper.UserfocusMapper">
 
-    <resultMap id="BaseResultMap" type="com.borber.sbtream.server.model.entity.UserfocusRecordDO">
+    <resultMap id="BaseResultMap" type="com.borber.sbtream.server.model.entity.UserfocusDO">
             <id property="id" column="id" jdbcType="VARCHAR"/>
             <result property="userId" column="user_id" jdbcType="VARCHAR"/>
-            <result property="anchorId" column="anchor_id" jdbcType="VARCHAR"/>
-            <result property="autoRecordAble" column="auto_record_able" jdbcType="TINYINT"/>
+            <result property="pluginId" column="plugin_id" jdbcType="VARCHAR"/>
+            <result property="rid" column="rid" jdbcType="VARCHAR"/>
             <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
             <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
             <result property="disable" column="disable" jdbcType="TINYINT"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,user_id,anchor_id,
-        auto_record_able,create_time,update_time,
+        id,user_id,plugin_id,
+        rid,create_time,update_time,
         disable
     </sql>
 </mapper>

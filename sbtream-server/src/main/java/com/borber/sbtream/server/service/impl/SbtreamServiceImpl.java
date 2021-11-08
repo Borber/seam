@@ -2,7 +2,7 @@ package com.borber.sbtream.server.service.impl;
 
 import com.borber.sbtream.plugin.api.Api;
 import com.borber.sbtream.plugin.model.MetaDataDTO;
-import com.borber.sbtream.plugin.model.UrlDTO;
+import com.borber.sbtream.plugin.model.DataDTO;
 import com.borber.sbtream.server.service.SbtreamService;
 import com.borber.sbtream.server.util.PluginUtil;
 import org.springframework.stereotype.Service;
@@ -13,15 +13,14 @@ import java.util.ArrayList;
 @Service
 public class SbtreamServiceImpl implements SbtreamService {
 
-    @Resource
-    PluginUtil pluginUtil;
+    ArrayList<Api> plugins;
 
     @Override
-    public UrlDTO getUrl(String pid, String rid, String pluginId, String cookies) {
-        ArrayList<Api> plugins = new ArrayList<>();
+    public DataDTO getUrl(String pid, String rid, String pluginId, String cookies) {
         MetaDataDTO meta;
         try {
-            plugins = pluginUtil.getPlugins();
+            plugins = PluginUtil.getPlugins();
+            System.out.println(plugins);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -32,6 +31,6 @@ public class SbtreamServiceImpl implements SbtreamService {
                 return p.getUrl(rid,cookies);
             }
         }
-        return null;
+        return new DataDTO();
     }
 }

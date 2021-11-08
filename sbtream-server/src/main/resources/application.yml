@@ -1,6 +1,5 @@
 server:
   port: 31407
-
 spring:
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
@@ -53,6 +52,11 @@ spring:
         #deny: 192.168.1.100
   autoconfigure:
     exclude: com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure
+  servlet:
+    multipart:
+      enabled: true
+      file-size-threshold: 0
+      max-file-size: 100MB
 
 #mybatis-plus配置
 mybatis-plus:
@@ -73,7 +77,7 @@ logging:
 
 sbtream:
   plugin:
-    path: plugin
+    path: ./plugin
   data:
     json:
       setting: json/setting.json

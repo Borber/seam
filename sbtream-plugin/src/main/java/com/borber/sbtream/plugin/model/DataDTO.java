@@ -17,12 +17,25 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UrlDTO implements Serializable {
-    private String name;
+public class DataDTO implements Serializable {
+    /**
+     * 直播间标题
+     */
+    private String title;
+    /**
+     * 直播间封面
+     */
+    private String cover;
 
+    /**
+     * 主播头像
+     */
     private String headImg;
 
-    private String picture;
+    /**
+     * 主播
+     */
+    private String name;
     /**
      * 官网地址
      */

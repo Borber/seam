@@ -5,9 +5,8 @@ import com.borber.sbtream.plugin.model.MetaDataDTO;
 import com.borber.sbtream.server.model.entity.PluginDO;
 import com.borber.sbtream.server.service.PluginService;
 import com.borber.sbtream.server.util.PluginUtil;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 
@@ -27,6 +26,11 @@ public class PluginController {
         return BaseResponse.success(pluginService.listPlugin());
     }
 
+    @PostMapping("upload")
+    public BaseResponse upload(@RequestParam("pluginJar") MultipartFile file){
+        System.out.println(file);
+        return pluginService.upload(file)?BaseResponse.success("上传成功"):BaseResponse.fail("-1","上传失败");
+    }
     @PostMapping("test")
     public BaseResponse test(){
         pluginService.testPlugin();

@@ -2,7 +2,7 @@ package com.borber.sbtream.server.controller;
 
 
 import com.borber.sbtream.common.response.BaseResponse;
-import com.borber.sbtream.plugin.model.UrlDTO;
+import com.borber.sbtream.plugin.model.DataDTO;
 import com.borber.sbtream.server.model.vo.UrlVO;
 import com.borber.sbtream.server.service.SbtreamService;
 import org.springframework.validation.annotation.Validated;
@@ -25,11 +25,11 @@ public class SBtreamController {
      */
     @PostMapping("/{pid}/{rid}")
     public BaseResponse getRealUrl(@PathVariable String pid, @PathVariable String rid, @RequestBody @Validated UrlVO vo){
-        UrlDTO urlDTO = service.getUrl(pid, rid, vo.getPluginId(), vo.getCookies());
-        if (urlDTO==null){
+        DataDTO dataDTO = service.getUrl(pid, rid, vo.getPluginId(), vo.getCookies());
+        if (dataDTO ==null){
             return BaseResponse.fail("-1","失败");
         }
-        return BaseResponse.success(urlDTO);
+        return BaseResponse.success(dataDTO);
     }
 
     /**

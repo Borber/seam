@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.borber.sbtream.common.response.BaseResponse;
 import com.borber.sbtream.plugin.model.MetaDataDTO;
 import com.borber.sbtream.server.model.entity.PluginDO;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -18,6 +19,8 @@ public interface PluginService extends IService<PluginDO> {
      */
 
     void addPlugin(PluginDO pluginDO);
+
+    Boolean upload(MultipartFile file);
 
     List<MetaDataDTO> listPlugin();
 

@@ -15,15 +15,10 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import static com.borber.sbtream.server.constans.SBtreamConfigConstans.PLUGINS_PATH;
 
-@Component
 public class PluginUtil {
-    private final File pluginPath;
 
-    public PluginUtil() {
-        this.pluginPath = new File(PLUGINS_PATH);
-    }
-
-    public ArrayList<Api> getPlugins() throws Exception {
+    public static ArrayList<Api> getPlugins() throws Exception {
+        File pluginPath =  new File(PLUGINS_PATH);
         if (!pluginPath.exists()) {
             throw new IOException("Path does not exist");
         }
@@ -55,6 +50,7 @@ public class PluginUtil {
                 }
             }
         }
+        System.out.println(plugins);
         return plugins;
     }
 }
