@@ -19,6 +19,10 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class DataDTO implements Serializable {
     /**
+     * 是否开播 0, 开播 -1 未开播
+     */
+    private Integer code;
+    /**
      * 直播间标题
      */
     private String title;
