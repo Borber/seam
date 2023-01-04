@@ -27,12 +27,12 @@ pub async fn get(rid: &str, client: &Client) -> Result<ShowType> {
                 let max = stream_info
                     .as_array()
                     .unwrap()
-                    .into_iter()
+                    .iter()
                     .map(|data| {
                         data["format"][0]["codec"][0]["accept_qn"]
                             .as_array()
                             .unwrap()
-                            .into_iter()
+                            .iter()
                             .map(|item| item.as_u64().unwrap())
                             .max()
                             .unwrap()
@@ -93,6 +93,6 @@ mod tests {
     #[tokio::test]
     async fn test_get_url() {
         let client = reqwest::Client::new();
-        println!("{:#?}", get("23897501", &client).await.unwrap());
+        println!("{:#?}", get("1785182", &client).await.unwrap());
     }
 }
