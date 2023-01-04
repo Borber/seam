@@ -22,16 +22,13 @@ async fn get(rid: &str, client: &Client) -> Result<ShowType> {
         None => {
             // 不报错的情况必然有结果返回 直接提取
             let result = resp.get("result").unwrap();
-            match result.get("liveState") {
+            match result.get("liveState").unwrap().to_string().as_str() {
                 // 开播状态
-                Some(state) => match state.to_string().as_str() {
-                    "1" => Ok(ShowType::On(vec![result
-                        .get("pullUrl")
-                        .unwrap()
-                        .to_string()])),
-                    _ => Ok(ShowType::Off),
-                },
-                None => Ok(ShowType::Off),
+                "1" => Ok(ShowType::On(vec![result
+                    .get("pullUrl")
+                    .unwrap()
+                    .to_string()])),
+                _ => Ok(ShowType::Off),
             }
         }
     }
@@ -43,6 +40,6 @@ mod tests {
     #[tokio::test]
     async fn test_get_url() {
         let client = reqwest::Client::new();
-        println!("{:#?}", get("935443", &client).await.unwrap());
+        println!("{:#?}", get("931221", &client).await.unwrap());
     }
 }
