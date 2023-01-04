@@ -7,7 +7,7 @@ const INIT_URL: &str = "https://api.live.bilibili.com/room/v1/Room/room_init";
 const URL: &str = "https://api.live.bilibili.com/xlive/web-room/v2/index/getRoomPlayInfo";
 const USER_AGENT: &str = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36 Edg/108.0.1462.54";
 
-async fn get(rid: &str, client: &Client) -> Result<ShowType> {
+pub async fn get(rid: &str, client: &Client) -> Result<ShowType> {
     let resp: serde_json::Value = client
         .get(INIT_URL)
         .header("User-Agent", USER_AGENT)
@@ -86,7 +86,7 @@ async fn get_stream_info(room_id: &str, client: &Client, qn: u64) -> Result<serd
 
 #[cfg(test)]
 mod tests {
-    use crate::show::bilibili::get;
+    use crate::live::bilibili::get;
     #[tokio::test]
     async fn test_get_url() {
         let client = reqwest::Client::new();

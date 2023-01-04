@@ -9,7 +9,7 @@ const URL: &str = "https://www.173.com/room/getVieoUrl";
 /// 艺气山直播
 ///
 /// https://www.173.com/
-async fn get(rid: &str, client: &Client) -> Result<ShowType> {
+pub async fn get(rid: &str, client: &Client) -> Result<ShowType> {
     let mut params = HashMap::new();
     params.insert("roomId", rid);
     let resp: serde_json::Value = client.post(URL).form(&params).send().await?.json().await?;
@@ -22,7 +22,7 @@ async fn get(rid: &str, client: &Client) -> Result<ShowType> {
 
 #[cfg(test)]
 mod tests {
-    use crate::show::yqs_173::get;
+    use crate::live::yqs_173::get;
     #[tokio::test]
     async fn test_get_url() {
         let client = reqwest::Client::new();

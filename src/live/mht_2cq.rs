@@ -9,7 +9,7 @@ const URL: &str = "https://www.2cq.com/proxy/room/room/info";
 /// 棉花糖直播
 ///
 /// https://www.2cq.com/
-async fn get(rid: &str, client: &Client) -> Result<ShowType> {
+pub async fn get(rid: &str, client: &Client) -> Result<ShowType> {
     let resp: serde_json::Value = client
         .get(URL)
         .query(&[("roomId", rid), ("appId", "1004")])
@@ -34,7 +34,7 @@ async fn get(rid: &str, client: &Client) -> Result<ShowType> {
 
 #[cfg(test)]
 mod tests {
-    use crate::show::mht_2cq::get;
+    use crate::live::mht_2cq::get;
     #[tokio::test]
     async fn test_get_url() {
         let client = reqwest::Client::new();
