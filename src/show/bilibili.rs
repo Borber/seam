@@ -44,7 +44,7 @@ async fn get(rid: &str, client: &Client) -> Result<ShowType> {
         .await?
         .json()
         .await?;
-    match resp.get("code").unwrap().to_string().parse::<u8>()? {
+    match resp.get("code").unwrap().to_string().parse::<usize>()? {
         0 => {
             match resp
                 .get("data")
@@ -52,7 +52,7 @@ async fn get(rid: &str, client: &Client) -> Result<ShowType> {
                 .get("live_status")
                 .unwrap()
                 .to_string()
-                .parse::<u8>()?
+                .parse::<usize>()?
             {
                 1 => {
                     let room_id = resp
@@ -61,9 +61,7 @@ async fn get(rid: &str, client: &Client) -> Result<ShowType> {
                         .get("room_id")
                         .unwrap()
                         .to_string();
-
                     let mut stream_info = get_stream_info(&room_id, client, 10000).await?;
-
                     let max = stream_info
                         .as_array()
                         .unwrap()

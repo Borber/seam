@@ -20,10 +20,11 @@ async fn get(rid: &str, client: &Client) -> Result<ShowType> {
         .await?
         .json()
         .await?;
+    println!("{:#?}", resp);
     let data = resp.get("data").unwrap();
     match data.get("status") {
-        Some(_) => match data.get("status").unwrap().to_string().as_str() {
-            "2" => Ok(ShowType::On(vec![data.get("url").unwrap().to_string()])),
+        Some(_) => match data.get("status").unwrap().to_string().parse::<usize>()? {
+            2 => Ok(ShowType::On(vec![data.get("url").unwrap().to_string()])),
             _ => Ok(ShowType::Off),
         },
         None => Ok(ShowType::Off),
@@ -36,6 +37,6 @@ mod tests {
     #[tokio::test]
     async fn test_get_url() {
         let client = reqwest::Client::new();
-        println!("{:#?}", get("8", &client).await.unwrap());
+        println!("{:#?}", get("97", &client).await.unwrap());
     }
 }
