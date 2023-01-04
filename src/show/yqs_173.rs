@@ -4,7 +4,6 @@ use anyhow::{Ok, Result};
 use reqwest::Client;
 use std::collections::HashMap;
 
-
 const URL: &str = "https://www.173.com/room/getVieoUrl";
 
 /// 艺气山直播
@@ -13,21 +12,11 @@ const URL: &str = "https://www.173.com/room/getVieoUrl";
 async fn get(rid: &str, client: &Client) -> Result<ShowType> {
     let mut params = HashMap::new();
     params.insert("roomId", rid);
-    let resp: serde_json::Value = client
-        .post(URL)
-        .form(&params)
-        .send()
-        .await?
-        .json()
-        .await?;
-    println!("{:#?}", resp);
-    let data = resp.get("data").unwrap();
-    match data.get("status") {
-        Some(_) => match data.get("status").unwrap().to_string().parse::<usize>()? {
-            2 => Ok(ShowType::On(vec![data.get("url").unwrap().to_string()])),
-            _ => Ok(ShowType::Off),
-        },
-        None => Ok(ShowType::Off),
+    let resp: serde_json::Value = client.post(URL).form(&params).send().await?.json().await?;
+    let data = &resp["data"];
+    match data["status"].to_string().parse::<usize>()? {
+        2 => Ok(ShowType::On(vec![data["url"].to_string()])),
+        _ => Ok(ShowType::Off),
     }
 }
 
@@ -37,6 +26,6 @@ mod tests {
     #[tokio::test]
     async fn test_get_url() {
         let client = reqwest::Client::new();
-        println!("{:#?}", get("97", &client).await.unwrap());
+        println!("{:#?}", get("96", &client).await.unwrap());
     }
 }

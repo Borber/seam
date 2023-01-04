@@ -2,6 +2,7 @@ use crate::modle::ShowType;
 
 use anyhow::{Ok, Result};
 use reqwest::Client;
+use serde_json::Value;
 
 const URL: &str = "https://www.2cq.com/proxy/room/room/info";
 
@@ -16,21 +17,18 @@ async fn get(rid: &str, client: &Client) -> Result<ShowType> {
         .await?
         .json()
         .await?;
-    match resp.get("errorMsg") {
-        // 房间不存在或其他错误
-        Some(msg) => Ok(ShowType::Error(msg.to_string())),
-        None => {
+    match &resp["errorMsg"] {
+        Value::Null => {
             // 不报错的情况必然有结果返回 直接提取
-            let result = resp.get("result").unwrap();
-            match result.get("liveState").unwrap().to_string().as_str() {
+            let result = &resp["result"];
+            match result["liveState"].to_string().parse::<usize>()? {
                 // 开播状态
-                "1" => Ok(ShowType::On(vec![result
-                    .get("pullUrl")
-                    .unwrap()
-                    .to_string()])),
+                1 => Ok(ShowType::On(vec![result["pullUrl"].to_string()])),
                 _ => Ok(ShowType::Off),
             }
         }
+        // 房间不存在或其他错误
+        msg => Ok(ShowType::Error(msg.to_string())),
     }
 }
 
@@ -40,6 +38,6 @@ mod tests {
     #[tokio::test]
     async fn test_get_url() {
         let client = reqwest::Client::new();
-        println!("{:#?}", get("931221", &client).await.unwrap());
+        println!("{:#?}", get("932055", &client).await.unwrap());
     }
 }
