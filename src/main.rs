@@ -22,10 +22,21 @@ enum Commands {
         /// 房间号
         rid: String,
     },
+    /// 获取抖音直播源地址
+    Dy {
+        /// 房间号
+        rid: String,
+    },
     /// 获取艺气山直播源地址
-    Yqs { rid: String },
+    Yqs {
+        /// 房间号
+        rid: String,
+    },
     /// 获取棉花糖直播源地址
-    Mht { rid: String },
+    Mht {
+        /// 房间号
+        rid: String,
+    },
 }
 
 #[tokio::main]
@@ -34,6 +45,7 @@ async fn main() -> Result<()> {
     let args = Cli::parse();
     match args.command {
         Commands::Bili { rid } => util::match_show_type(live::bilibili::get(&rid, &client).await?),
+        Commands::Dy { rid } => util::match_show_type(live::douyin::get(&rid, &client).await?),
         Commands::Yqs { rid } => util::match_show_type(live::yqs_173::get(&rid, &client).await?),
         Commands::Mht { rid } => util::match_show_type(live::mht_2cq::get(&rid, &client).await?),
     }
