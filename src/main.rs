@@ -9,7 +9,13 @@ use reqwest::Client;
 /// 获取直播源
 #[derive(Debug, Parser)] // requires `derive` feature
 #[command(name = "seam")]
-#[command(about = "获取直播源地址, 目前支持 bilibili, 艺气山, 棉花糖", long_about = None)]
+#[command(about ="
+________ _______ _______ _______
+|     __|    ___|   _   |   |   |
+|__     |    ___|       |       |
+|_______|_______|___|___|__|_|__|
+
+获取直播源地址, 目前支持 bilibili, 抖音, 艺气山, 棉花糖", long_about = None)]
 struct Cli {
     #[command(subcommand)]
     command: Commands,

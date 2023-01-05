@@ -9,6 +9,24 @@
 
 多平台直播源地址获取
 
+# 使用样例
+```bash
+❯ .\seam.exe bili 6
+https://url1
+
+https://url2
+
+https://url3
+
+https://url4
+
+https://url5
+
+https://url6
+```
+
+> 因为数据具有时效性, 所以具体链接使用 `url` 进行替换了
+
 # 下载
 
 # 路线
@@ -20,6 +38,14 @@
 - [x] cli
 - [ ] gui
 - [ ] mpv播放
+
+# 使用
+|平台|房间号位置|
+|:-:|:-:|
+|[B站](https://live.bilibili.com/)|`https://live.bilibili.com/<RID>`|
+|[抖音](https://live.douyin.com/)|`https://live.douyin.com/<RID>`|
+|[艺气山](https://www.173.com/)|`https://www.173.com/<RID>`|
+|[棉花糖](https://www.2cq.com/)|`https://www.2cq.com/<RID>`|
 
 
 
