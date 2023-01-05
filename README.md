@@ -14,10 +14,12 @@
 # 路线
 - [ ] 直播平台源地址获取
   - [x] [B站](https://live.bilibili.com/)
+  - [x] [抖音](https://live.douyin.com/)
   - [x] [艺气山](https://www.173.com/)
   - [x] [棉花糖](https://www.2cq.com/)
-- [x] cli 支持
-- [ ] gui 支持
+- [x] cli
+- [ ] gui
+- [ ] mpv播放
 
 
 
