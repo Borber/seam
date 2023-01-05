@@ -2,7 +2,7 @@ use crate::modle::ShowType;
 
 use anyhow::{Ok, Result};
 use regex::Regex;
-use reqwest::{header::HeaderMap, Client, Url};
+use reqwest::{header::HeaderMap, Client};
 use urlencoding::decode;
 
 /// 抖音直播
