@@ -29,16 +29,6 @@ https://url6
 
 # 下载
 
-# 路线
-- [ ] 直播平台源地址获取
-  - [x] [B站](https://live.bilibili.com/)
-  - [x] [抖音](https://live.douyin.com/)
-  - [x] [艺气山](https://www.173.com/)
-  - [x] [棉花糖](https://www.2cq.com/)
-- [x] cli
-- [ ] gui
-- [ ] mpv播放
-
 # 使用
 |平台|房间号位置|
 |:-:|:-:|
@@ -46,6 +36,17 @@ https://url6
 |[抖音](https://live.douyin.com/)|`https://live.douyin.com/<RID>`|
 |[艺气山](https://www.173.com/)|`https://www.173.com/<RID>`|
 |[棉花糖](https://www.2cq.com/)|`https://www.2cq.com/<RID>`|
+
+# 路线
+- [ ] 直播平台源地址获取
+  - [x] [B站](https://live.bilibili.com/)
+  - [x] [抖音](https://live.douyin.com/)
+  - [x] [艺气山](https://www.173.com/)
+  - [x] [棉花糖](https://www.2cq.com/)
+- [x] cli
+- [ ] 根据画质排序
+- [ ] gui
+- [ ] mpv播放
 
 
 
