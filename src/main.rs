@@ -3,7 +3,7 @@ mod modle;
 mod util;
 
 use anyhow::{Ok, Result};
-use clap::{Args, Parser, Subcommand, ValueEnum};
+use clap::{Parser, Subcommand};
 use reqwest::Client;
 
 /// 获取直播源
