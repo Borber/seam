@@ -27,11 +27,6 @@ https://url6
 
 > 因为数据具有时效性, 所以具体链接使用 `url` 进行替换
 
-# 下载
-[Release页](https://github.com/Borber/seam/releases/)
-
-蓝奏云
-
 # 使用
 |平台|房间号位置|
 |:-:|:-:|
@@ -49,6 +44,7 @@ https://url6
   - [x] [艺气山](https://www.173.com/)
   - [x] [棉花糖](https://www.2cq.com/)
 - [x] cli
+- [ ] CI 自动编译
 - [ ] 根据画质排序
 - [ ] gui
 - [ ] mpv播放
