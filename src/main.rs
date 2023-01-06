@@ -23,22 +23,27 @@ struct Cli {
 
 #[derive(Debug, Subcommand)]
 enum Commands {
-    /// 获取B站直播源地址
+    /// B站
     Bili {
         /// 房间号
         rid: String,
     },
-    /// 获取抖音直播源地址
+    /// 斗鱼
+    Douyu {
+        /// 房间号
+        rid: String,
+    },
+    /// 抖音
     Douyin {
         /// 房间号
         rid: String,
     },
-    /// 获取艺气山直播源地址
+    /// 艺气山
     Yqs {
         /// 房间号
         rid: String,
     },
-    /// 获取棉花糖直播源地址
+    /// 棉花糖
     Mht {
         /// 房间号
         rid: String,
@@ -50,6 +55,7 @@ async fn main() -> Result<()> {
     let args = Cli::parse();
     match args.command {
         Commands::Bili { rid } => util::match_show_type(live::bilibili::get(&rid).await?),
+        Commands::Douyu { rid } => util::match_show_type(live::douyu::get(&rid).await?),
         Commands::Douyin { rid } => util::match_show_type(live::douyin::get(&rid).await?),
         Commands::Yqs { rid } => util::match_show_type(live::yqs::get(&rid).await?),
         Commands::Mht { rid } => util::match_show_type(live::mht::get(&rid).await?),
