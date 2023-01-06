@@ -5,7 +5,6 @@ mod common;
 
 use anyhow::{Ok, Result};
 use clap::{Parser, Subcommand};
-use reqwest::Client;
 
 /// 获取直播源
 #[derive(Debug, Parser)] // requires `derive` feature

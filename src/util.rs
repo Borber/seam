@@ -1,6 +1,5 @@
 use crate::modle::ShowType;
 use md5::{Digest, Md5};
-use serde_json::json;
 
 pub fn match_show_type(t: ShowType) {
     match t {

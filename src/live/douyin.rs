@@ -24,7 +24,7 @@ pub async fn get(rid: &str) -> Result<ShowType> {
         .replace("</script>", "");
     let json = decode(&json_encode)?;
     let json: serde_json::Value = serde_json::from_str(&json)?;
-    println!("{:#?}", json["app"]["initialState"]["roomStore"]["roomInfo"]["room"]["stream_url"]);
+    // TODO: 修改是否开播判定
     Ok(ShowType::On(vec![Node {
         rate: "flv".to_string(),
         url: json["app"]["initialState"]["roomStore"]["roomInfo"]["room"]["stream_url"]
