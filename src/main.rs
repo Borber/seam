@@ -1,7 +1,7 @@
+mod common;
 mod live;
 mod modle;
 mod util;
-mod common;
 
 use anyhow::{Ok, Result};
 use clap::{Parser, Subcommand};
