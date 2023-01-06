@@ -37,7 +37,7 @@ async fn get_pre(rid: &str, dt: String) {
 
     let mut headers = HeaderMap::new();
     headers.insert("rid", rid.parse().unwrap());
-    headers.insert("time", "dt".parse().unwrap());
+    headers.insert("time", dt.parse().unwrap());
     headers.insert("auth", auth.parse().unwrap());
 
     let mut params = HashMap::new();
