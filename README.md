@@ -28,13 +28,15 @@ https://url6
 > 因为数据具有时效性, 所以具体链接使用 `url` 进行替换
 
 # 下载
-Release页
+[Release页](https://github.com/Borber/seam/releases/)
+
 蓝奏云
 
 # 使用
 |平台|房间号位置|
 |:-:|:-:|
 |[B站](https://live.bilibili.com/)|`https://live.bilibili.com/<RID>`|
+|[斗鱼](https://www.douyu.com/)|`https://www.douyu.com/<RID>` 或 `https://www.douyu.com/xx/xx?rid=<RID>`|
 |[抖音](https://live.douyin.com/)|`https://live.douyin.com/<RID>`|
 |[艺气山](https://www.173.com/)|`https://www.173.com/<RID>`|
 |[棉花糖](https://www.2cq.com/)|`https://www.2cq.com/<RID>`|
@@ -42,6 +44,7 @@ Release页
 # 路线
 - [ ] 直播平台源地址获取
   - [x] [B站](https://live.bilibili.com/)
+  - [x] [斗鱼](https://www.douyu.com/)
   - [x] [抖音](https://live.douyin.com/)
   - [x] [艺气山](https://www.173.com/)
   - [x] [棉花糖](https://www.2cq.com/)
