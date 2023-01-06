@@ -1,7 +1,9 @@
-use crate::modle::ShowType;
+use crate::{
+    common::CLIENT,
+    modle::{Node, ShowType},
+};
 
 use anyhow::{Ok, Result};
-use reqwest::Client;
 use serde_json::Value;
 
 const URL: &str = "https://www.2cq.com/proxy/room/room/info";
@@ -9,8 +11,8 @@ const URL: &str = "https://www.2cq.com/proxy/room/room/info";
 /// 棉花糖直播
 ///
 /// https://www.2cq.com/
-pub async fn get(rid: &str, client: &Client) -> Result<ShowType> {
-    let resp: serde_json::Value = client
+pub async fn get(rid: &str) -> Result<ShowType> {
+    let resp: serde_json::Value = CLIENT
         .get(URL)
         .query(&[("roomId", rid), ("appId", "1004")])
         .send()
@@ -23,7 +25,10 @@ pub async fn get(rid: &str, client: &Client) -> Result<ShowType> {
             let result = &resp["result"];
             match result["liveState"].to_string().parse::<usize>()? {
                 // 开播状态
-                1 => Ok(ShowType::On(vec![result["pullUrl"].to_string()])),
+                1 => Ok(ShowType::On(vec![Node {
+                    rate: "清晰度".to_string(),
+                    url: result["pullUrl"].to_string(),
+                }])),
                 _ => Ok(ShowType::Off),
             }
         }
@@ -34,10 +39,11 @@ pub async fn get(rid: &str, client: &Client) -> Result<ShowType> {
 
 #[cfg(test)]
 mod tests {
-    use crate::live::mht_2cq::get;
+    use crate::live::mht::get;
+    use crate::util::match_show_type;
+
     #[tokio::test]
     async fn test_get_url() {
-        let client = reqwest::Client::new();
-        println!("{:#?}", get("932055", &client).await.unwrap());
+        match_show_type(get("932055").await.unwrap());
     }
 }

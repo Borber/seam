@@ -1,7 +1,9 @@
-use crate::modle::ShowType;
+use crate::{
+    common::CLIENT,
+    modle::{Node, ShowType},
+};
 
 use anyhow::{Ok, Result};
-use reqwest::Client;
 
 const INIT_URL: &str = "https://api.live.bilibili.com/room/v1/Room/room_init";
 const URL: &str = "https://api.live.bilibili.com/xlive/web-room/v2/index/getRoomPlayInfo";
@@ -10,8 +12,8 @@ const USER_AGENT: &str = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/
 /// bilibili直播
 ///
 /// https://live.bilibili.com/
-pub async fn get(rid: &str, client: &Client) -> Result<ShowType> {
-    let resp: serde_json::Value = client
+pub async fn get(rid: &str) -> Result<ShowType> {
+    let resp: serde_json::Value = CLIENT
         .get(INIT_URL)
         .header("User-Agent", USER_AGENT)
         .query(&[("id", rid)])
@@ -23,7 +25,7 @@ pub async fn get(rid: &str, client: &Client) -> Result<ShowType> {
         0 => match resp["data"]["live_status"].to_string().parse::<usize>()? {
             1 => {
                 let room_id = resp["data"]["room_id"].to_string();
-                let mut stream_info = get_stream_info(&room_id, client, 10000).await?;
+                let mut stream_info = get_stream_info(&room_id, 10000).await?;
                 let max = stream_info
                     .as_array()
                     .unwrap()
@@ -40,7 +42,7 @@ pub async fn get(rid: &str, client: &Client) -> Result<ShowType> {
                     .max()
                     .unwrap();
                 if max != 10000 {
-                    stream_info = get_stream_info(&room_id, client, max).await?;
+                    stream_info = get_stream_info(&room_id, max).await?;
                 }
                 let mut stream_urls = vec![];
                 for obj in stream_info.as_array().unwrap() {
@@ -50,10 +52,11 @@ pub async fn get(rid: &str, client: &Client) -> Result<ShowType> {
                             for url_info in codec["url_info"].as_array().unwrap() {
                                 let host = url_info["host"].to_string();
                                 let extra = url_info["extra"].to_string();
-                                stream_urls.push(
-                                    format!("{}{}{}", host, base_url.clone(), extra)
+                                stream_urls.push(Node {
+                                    rate: "清晰度".to_string(),
+                                    url: format!("{}{}{}", host, base_url.clone(), extra)
                                         .replace("\"", ""),
-                                );
+                                });
                             }
                         }
                     }
@@ -67,8 +70,8 @@ pub async fn get(rid: &str, client: &Client) -> Result<ShowType> {
 }
 
 /// 通过真实房间号获取直播源信息
-async fn get_stream_info(room_id: &str, client: &Client, qn: u64) -> Result<serde_json::Value> {
-    Ok(client
+async fn get_stream_info(room_id: &str, qn: u64) -> Result<serde_json::Value> {
+    Ok(CLIENT
         .get(URL)
         .header("User-Agent", USER_AGENT)
         .query(&[
@@ -90,9 +93,10 @@ async fn get_stream_info(room_id: &str, client: &Client, qn: u64) -> Result<serd
 #[cfg(test)]
 mod tests {
     use crate::live::bilibili::get;
+    use crate::util::match_show_type;
+
     #[tokio::test]
     async fn test_get_url() {
-        let client = reqwest::Client::new();
-        println!("{:#?}", get("1785182", &client).await.unwrap());
+        match_show_type(get("1785182").await.unwrap());
     }
 }

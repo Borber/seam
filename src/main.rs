@@ -1,6 +1,7 @@
 mod live;
 mod modle;
 mod util;
+mod common;
 
 use anyhow::{Ok, Result};
 use clap::{Parser, Subcommand};
@@ -47,13 +48,12 @@ enum Commands {
 
 #[tokio::main]
 async fn main() -> Result<()> {
-    let client = Client::new();
     let args = Cli::parse();
     match args.command {
-        Commands::Bili { rid } => util::match_show_type(live::bilibili::get(&rid, &client).await?),
-        Commands::Douyin { rid } => util::match_show_type(live::douyin::get(&rid, &client).await?),
-        Commands::Yqs { rid } => util::match_show_type(live::yqs_173::get(&rid, &client).await?),
-        Commands::Mht { rid } => util::match_show_type(live::mht_2cq::get(&rid, &client).await?),
+        Commands::Bili { rid } => util::match_show_type(live::bilibili::get(&rid).await?),
+        Commands::Douyin { rid } => util::match_show_type(live::douyin::get(&rid).await?),
+        Commands::Yqs { rid } => util::match_show_type(live::yqs::get(&rid).await?),
+        Commands::Mht { rid } => util::match_show_type(live::mht::get(&rid).await?),
     }
     Ok(())
 }

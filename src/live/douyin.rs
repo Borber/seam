@@ -1,22 +1,19 @@
-use crate::modle::ShowType;
+use crate::{
+    common::CLIENT,
+    modle::{Node, ShowType},
+};
 
 use anyhow::{Ok, Result};
 use regex::Regex;
-use reqwest::{header::HeaderMap, Client};
 use urlencoding::decode;
 
 /// 抖音直播
 ///
 /// https://live.douyin.com/
-pub async fn get(rid: &str, client: &Client) -> Result<ShowType> {
-    let mut headers = HeaderMap::new();
-    headers.insert(
-        "cookie",
-        "__ac_nonce=063b59ce0001243a9217f;".parse().unwrap(),
-    );
-    let resp = client
+pub async fn get(rid: &str) -> Result<ShowType> {
+    let resp = CLIENT
         .get(format!("https://live.douyin.com/{}", rid))
-        .headers(headers)
+        .header("cookie", "__ac_nonce=063b59ce0001243a9217f;")
         .send()
         .await?;
     let resp_text = resp.text().await?;
@@ -27,20 +24,31 @@ pub async fn get(rid: &str, client: &Client) -> Result<ShowType> {
         .replace("</script>", "");
     let json = decode(&json_encode)?;
     let json: serde_json::Value = serde_json::from_str(&json)?;
-    Ok(ShowType::On(vec![json["app"]["initialState"]["roomStore"]
-        ["roomInfo"]["room"]["stream_url"]["flv_pull_url"]
-        ["FULL_HD1"]
-        .to_string()]))
+    println!("{:#?}", json["app"]["initialState"]["roomStore"]["roomInfo"]["room"]["stream_url"]);
+    Ok(ShowType::On(vec![Node {
+        rate: "flv".to_string(),
+        url: json["app"]["initialState"]["roomStore"]["roomInfo"]["room"]["stream_url"]
+            ["flv_pull_url"]["FULL_HD1"]
+            .to_string()
+            .trim_matches('"')
+            .to_string(),
+    },
+    Node {
+        rate: "hls".to_string(),
+        url: json["app"]["initialState"]["roomStore"]["roomInfo"]["room"]["stream_url"]
+            ["hls_pull_url"]
+            .to_string()
+            .trim_matches('"')
+            .to_string(),
+    }]))
 }
 
 #[cfg(test)]
 mod tests {
-    use reqwest::Client;
-
     use crate::live::douyin::get;
+    use crate::util::match_show_type;
     #[tokio::test]
     async fn test_get_url() {
-        let client = Client::new();
-        println!("{:#?}", get("228619203678", &client).await.unwrap());
+        match_show_type(get("228619203678").await.unwrap());
     }
 }
