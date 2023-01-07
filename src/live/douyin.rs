@@ -5,6 +5,7 @@ use crate::{
 
 use anyhow::{Ok, Result};
 use regex::Regex;
+use serde_json::Value;
 use urlencoding::decode;
 
 const URL: &str = "https://live.douyin.com/";
@@ -22,25 +23,33 @@ pub async fn get(rid: &str) -> Result<ShowType> {
     let re = Regex::new(r#"<script id="RENDER_DATA" type="application/json">([\s\S]*?)</script>"#)?;
     let json = decode(re.captures(&resp_text).unwrap().get(1).unwrap().as_str())?;
     let json: serde_json::Value = serde_json::from_str(&json)?;
-    // TODO: 添加是否开播判定
-    Ok(ShowType::On(vec![
-        Node {
-            rate: "flv".to_string(),
-            url: json["app"]["initialState"]["roomStore"]["roomInfo"]["room"]["stream_url"]
-                ["flv_pull_url"]["FULL_HD1"]
-                .to_string()
-                .trim_matches('"')
-                .to_string(),
+    let room_info = &json["app"]["initialState"]["roomStore"]["roomInfo"];
+    match room_info["anchor"] {
+        serde_json::Value::Null => Ok(ShowType::Error("直播间不存在".to_string())),
+        _ => match &room_info["room"]["stream_url"] {
+            Value::Null => Ok(ShowType::Off),
+            stream_url => Ok(ShowType::On(vec![
+                Node {
+                    rate: "蓝光_flv".to_string(),
+                    url: douyin_trim_value(&stream_url["flv_pull_url"]["FULL_HD1"]),
+                },
+                Node {
+                    rate: "蓝光_hls".to_string(),
+                    url: douyin_trim_value(&stream_url["hls_pull_url"]),
+                },
+            ])),
         },
-        Node {
-            rate: "hls".to_string(),
-            url: json["app"]["initialState"]["roomStore"]["roomInfo"]["room"]["stream_url"]
-                ["hls_pull_url"]
-                .to_string()
-                .trim_matches('"')
-                .to_string(),
-        },
-    ]))
+    }
+}
+
+/// 去除抖音返回链接的多余引号和暂时无用的参数简化链接
+fn douyin_trim_value(v: &Value) -> String {
+    v.to_string()
+        .trim_matches('"')
+        .split_once('?')
+        .unwrap()
+        .0
+        .to_owned()
 }
 
 #[cfg(test)]
