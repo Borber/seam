@@ -11,18 +11,16 @@
 
 # 使用样例
 ```bash
-❯ .\seam.exe bili 6
-https://url1
-
-https://url2
-
-https://url3
-
-https://url4
-
-https://url5
-
-https://url6
+❯ .\seam.exe douyu 88080
+[  {
+    "rate": "超清1",
+    "url": "http://url1"
+  },
+  {
+    "rate": "超清2",
+    "url": "http://url2"
+  }
+]
 ```
 
 > 因为数据具有时效性, 所以具体链接使用 `url` 进行替换
