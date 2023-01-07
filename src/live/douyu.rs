@@ -9,7 +9,7 @@ use chrono::prelude::*;
 use regex::Regex;
 use reqwest::header::HeaderMap;
 
-const URL: &str = "https://www.douyu.com/";
+// const URL: &str = "https://www.douyu.com/";
 const M_URL: &str = "https://m.douyu.com/";
 const PLAY_URL: &str = "https://playweb.douyucdn.cn/lapi/live/hlsH5Preview/";
 const CDN_1: &str = "http://akm-tct.douyucdn.cn/live/";
@@ -29,23 +29,24 @@ pub async fn get(rid: &str) -> Result<ShowType> {
         Some(key) => key,
         None => return Ok(ShowType::Off),
     };
-    Ok(ShowType::On(vec![Node{
-        rate: "超清1".to_string(),
-        url: format!("{CDN_1}{key}.flv"),
-    }, Node{
-        rate: "超清2".to_string(),
-        url: format!("{CDN_2}{key}.flv"),
-    }]))
+    Ok(ShowType::On(vec![
+        Node {
+            rate: "超清1".to_string(),
+            url: format!("{CDN_1}{key}.flv"),
+        },
+        Node {
+            rate: "超清2".to_string(),
+            url: format!("{CDN_2}{key}.flv"),
+        },
+    ]))
 }
 
 async fn real_rid(rid: &str) -> Option<String> {
     let resp = CLIENT.get(format!("{M_URL}{rid}")).send().await.unwrap();
     let text = resp.text().await.unwrap();
     let re = Regex::new(r#"rid":(\d{1,8}),"vipId"#).unwrap();
-    match re.captures(&text) {
-        Some(caps) => Some(caps.get(1).unwrap().as_str().to_owned()),
-        None => None,
-    }
+    re.captures(&text)
+        .map(|caps| caps.get(1).unwrap().as_str().to_owned())
 }
 async fn get_pre(rid: &str, dt: String) -> Option<String> {
     let url = format!("{PLAY_URL}{rid}");
@@ -72,8 +73,16 @@ async fn get_pre(rid: &str, dt: String) -> Option<String> {
         .unwrap();
     // 因为前面以及判断过直播间是否存在, 所以现在直接判断是否开播, 不做 102, 104 状态码的区分
     match resp["error"].to_string().parse::<usize>().unwrap() {
-        0 => Some(resp["data"]["rtmp_live"].to_string().trim_matches('"').split_once("_").unwrap().0.to_owned()),
-        _ => None
+        0 => Some(
+            resp["data"]["rtmp_live"]
+                .to_string()
+                .trim_matches('"')
+                .split_once('_')
+                .unwrap()
+                .0
+                .to_owned(),
+        ),
+        _ => None,
     }
 }
 

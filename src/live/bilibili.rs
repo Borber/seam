@@ -55,7 +55,7 @@ pub async fn get(rid: &str) -> Result<ShowType> {
                                 stream_urls.push(Node {
                                     rate: "清晰度".to_string(),
                                     url: format!("{}{}{}", host, base_url.clone(), extra)
-                                        .replace("\"", ""),
+                                        .replace('"', ""),
                                 });
                             }
                         }
