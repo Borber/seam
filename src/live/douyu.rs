@@ -71,17 +71,17 @@ async fn get_pre(rid: &str, dt: String) -> Option<String> {
         .json()
         .await
         .unwrap();
-    // 因为前面以及判断过直播间是否存在, 所以现在直接判断是否开播, 不做 102, 104 状态码的区分
+
+        // 因为前面以及判断过直播间是否存在, 所以现在直接判断是否开播, 不做 102, 104 状态码的区分
     match resp["error"].to_string().parse::<usize>().unwrap() {
-        0 => Some(
-            resp["data"]["rtmp_live"]
-                .to_string()
-                .trim_matches('"')
-                .split_once('_')
-                .unwrap()
-                .0
-                .to_owned(),
-        ),
+        0 => {
+            let rtmp_live = resp["data"]["rtmp_live"].to_string();
+            let key = rtmp_live.trim_matches('"').split_once('.').unwrap().0;
+            match key.split_once('_') {
+                Some((k, _)) => Some(k.to_owned()),
+                None => Some(key.to_owned()),
+            }
+        }
         _ => None,
     }
 }
@@ -93,6 +93,6 @@ mod tests {
 
     #[tokio::test]
     async fn test_get_url() {
-        match_show_type(get("88080").await.unwrap());
+        match_show_type(get("10726615").await.unwrap());
     }
 }
