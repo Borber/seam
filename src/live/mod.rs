@@ -3,3 +3,4 @@ pub mod douyin;
 pub mod douyu;
 pub mod mht;
 pub mod yqs;
+pub mod huya;
