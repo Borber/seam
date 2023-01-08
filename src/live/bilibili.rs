@@ -1,5 +1,5 @@
 use crate::{
-    common::CLIENT,
+    common::{CLIENT, USER_AGENT},
     modle::{Node, ShowType},
 };
 
@@ -7,7 +7,6 @@ use anyhow::{Ok, Result};
 
 const INIT_URL: &str = "https://api.live.bilibili.com/room/v1/Room/room_init";
 const URL: &str = "https://api.live.bilibili.com/xlive/web-room/v2/index/getRoomPlayInfo";
-const USER_AGENT: &str = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36 Edg/108.0.1462.54";
 
 /// bilibili直播
 ///
