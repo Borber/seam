@@ -46,13 +46,26 @@ pub async fn get(rid: &str) -> Result<ShowType> {
                 let mut stream_urls = vec![];
                 for obj in stream_info.as_array().unwrap() {
                     for format in obj["format"].as_array().unwrap() {
+                        let format_name = format["format_name"].to_string();
                         for codec in format["codec"].as_array().unwrap() {
+                            let quality_string = convert_qn_to_quality_string(
+                                codec["current_qn"].to_string().as_str(),
+                            );
                             let base_url = codec["base_url"].to_string();
-                            for url_info in codec["url_info"].as_array().unwrap() {
+                            for (idx, url_info) in
+                                codec["url_info"].as_array().unwrap().iter().enumerate()
+                            {
                                 let host = url_info["host"].to_string();
                                 let extra = url_info["extra"].to_string();
+                                let rate_info = format!(
+                                    "{}-{}{}",
+                                    format_name.clone(),
+                                    quality_string.clone(),
+                                    idx + 1
+                                )
+                                .replace('"', "");
                                 stream_urls.push(Node {
-                                    rate: "清晰度".to_string(),
+                                    rate: rate_info,
                                     url: format!("{}{}{}", host, base_url.clone(), extra)
                                         .replace('"', ""),
                                 });
@@ -87,6 +100,18 @@ async fn get_stream_info(room_id: &str, qn: u64) -> Result<serde_json::Value> {
         .json::<serde_json::Value>()
         .await?["data"]["playurl_info"]["playurl"]["stream"]
         .to_owned())
+}
+
+/// 转化current_qn至对应清晰度
+fn convert_qn_to_quality_string(qn: &str) -> String {
+    match qn {
+        "10000" => "原画".to_string(),
+        "400" => "蓝光".to_string(),
+        "250" => "超清".to_string(),
+        "150" => "高清".to_string(),
+        "80" => "流畅".to_string(),
+        _ => "未知画质".to_string(),
+    }
 }
 
 #[cfg(test)]
