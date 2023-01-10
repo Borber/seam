@@ -34,21 +34,21 @@ pub async fn get(rid: &str) -> Result<ShowType> {
         list => {
             for cdn in list {
                 nodes.push(Node {
-                    rate: format!("蓝光-{}-flv", cdn["sCdnType"].to_string().trim_matches('"')),
+                    rate: format!("蓝光-{}-flv", cdn["sCdnType"].as_str().unwrap()),
                     url: format!(
                         "{}/{}.flv?{}",
-                        cdn["sFlvUrl"].to_string().trim_matches('"'),
-                        cdn["sStreamName"].to_string().trim_matches('"'),
-                        cdn["sFlvAntiCode"].to_string().trim_matches('"')
+                        cdn["sFlvUrl"].as_str().unwrap(),
+                        cdn["sStreamName"].as_str().unwrap(),
+                        cdn["sFlvAntiCode"].as_str().unwrap()
                     ),
                 });
                 nodes.push(Node {
-                    rate: format!("蓝光-{}-hls", cdn["sCdnType"].to_string().trim_matches('"')),
+                    rate: format!("蓝光-{}-hls", cdn["sCdnType"].as_str().unwrap()),
                     url: format!(
                         "{}/{}.m3u8?{}",
-                        cdn["sHlsUrl"].to_string().trim_matches('"'),
-                        cdn["sStreamName"].to_string().trim_matches('"'),
-                        cdn["sHlsAntiCode"].to_string().trim_matches('"')
+                        cdn["sHlsUrl"].as_str().unwrap(),
+                        cdn["sStreamName"].as_str().unwrap(),
+                        cdn["sHlsAntiCode"].as_str().unwrap()
                     ),
                 });
             }

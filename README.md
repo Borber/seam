@@ -44,14 +44,19 @@
   - [x] [艺气山](https://www.173.com/)
   - [x] [棉花糖](https://www.2cq.com/)
 - [x] cli
+- [ ] 拆分子模块
 - [ ] CI 自动编译
 - [ ] 根据画质排序
 - [ ] gui
 - [ ] mpv播放
 
+# 说明
+
+1. 斗鱼平台动态js加密需要js运行时, 但相关依赖中quickjs计算出错, deno v8编译失败, 所以我自己写了个在线运行js的eval接口, 地址为 js.borber.top 部署在vercel,稍后会开源出来, 方便自部署. 可以查看源码, 并无窃取信息等恶意行为. 故而斗鱼链接的获取会稍慢一点
 
 
 # 感谢
 
 1. [wbt5/real-url](https://github.com/wbt5/real-url/)
 2. [banner](https://textkool.com/en/ascii-art-generator?hl=default&vl=default&font=Chunky&text=SEAM)
+3. [手把手教你破解斗鱼sign算法](https://zhuanlan.zhihu.com/p/107330805)
