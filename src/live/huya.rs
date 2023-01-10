@@ -25,10 +25,10 @@ pub async fn get(rid: &str) -> Result<ShowType> {
             return Ok(ShowType::Error("直播间不存在".to_string()));
         }
     };
-    let json: serde_json::Value = serde_json::from_str(&stream).unwrap();
+    let json: serde_json::Value = serde_json::from_str(stream).unwrap();
     let mut nodes = vec![];
     match json["data"][0]["gameStreamInfoList"].as_array().unwrap() {
-        list if list.len() == 0 => {
+        list if list.is_empty() => {
             return Ok(ShowType::Off);
         }
         list => {

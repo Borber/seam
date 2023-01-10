@@ -103,7 +103,7 @@ async fn douyu_do_js(rid: &str) -> Result<Value> {
 
     // 替换md5值避免js依赖
     let cb = format!("{rid}{DID}{dt}{v}");
-    let rb = md5(&cb.as_bytes());
+    let rb = md5(cb.as_bytes());
     let res = res.replace(
         "CryptoJS.MD5(cb).toString();",
         format!("\"{}\";", &rb).as_str(),
@@ -111,13 +111,13 @@ async fn douyu_do_js(rid: &str) -> Result<Value> {
 
     // 运行js获取签名值
     let sign = do_js(&res).await;
-    let sign = sign.rsplit_once("=").unwrap().1;
+    let sign = sign.rsplit_once('=').unwrap().1;
 
     let mut params = HashMap::new();
     params.insert("v", v);
     params.insert("did", DID);
     params.insert("tt", dt);
-    params.insert("sign", &sign);
+    params.insert("sign", sign);
 
     let json: serde_json::Value = CLIENT
         .post(format!("{PLAY_URL}{rid}"))
