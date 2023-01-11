@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- 支持快手直播源获取
 
 ## [0.1.5] - 2023-01-11
 
