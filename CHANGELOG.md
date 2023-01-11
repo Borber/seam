@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+
+## [0.1.4] - 2023-01-11
+
 ### Added
 
 - 添加全平台自动编译发布工作流
