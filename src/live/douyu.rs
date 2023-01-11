@@ -99,7 +99,7 @@ async fn douyu_do_js(rid: &str) -> Result<Value> {
 
     // 构建函数, 替换数值
     let res = res.replace("(function", "let ccc = function");
-    let res = res.replace(");;;;", format!("; ccc({rid}, \"{DID}\", {dt})").as_str());
+    let res = res.replace("rt;});", format!("rt;}}; ccc({rid}, \"{DID}\", {dt})").as_str());
 
     // 替换md5值避免js依赖
     let cb = format!("{rid}{DID}{dt}{v}");
@@ -109,8 +109,10 @@ async fn douyu_do_js(rid: &str) -> Result<Value> {
         format!("\"{}\";", &rb).as_str(),
     );
 
+    println!("{res}");
     // 运行js获取签名值
     let sign = do_js(&res).await;
+    println!("{sign}");
     let sign = sign.rsplit_once('=').unwrap().1;
 
     let mut params = HashMap::new();
