@@ -10,12 +10,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - 添加全平台自动编译发布工作流
+- 支持花椒直播源获取
 
 ### Changed
 
 - 后续tag将采用 vX.X.X 的格式
 
 ### Fixed
+
+- 修改代码格式
 
 
 ## [0.1.3] - 2023-01-9

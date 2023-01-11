@@ -43,6 +43,11 @@ enum Commands {
         /// 房间号
         rid: String,
     },
+    /// 花椒
+    Huajiao {
+        /// 房间号
+        rid: String,
+    },
     /// 艺气山
     Yqs {
         /// 房间号
@@ -63,6 +68,7 @@ async fn main() -> Result<()> {
         Commands::Douyu { rid } => util::match_show_type(live::douyu::get(&rid).await?),
         Commands::Douyin { rid } => util::match_show_type(live::douyin::get(&rid).await?),
         Commands::Huya { rid } => util::match_show_type(live::huya::get(&rid).await?),
+        Commands::Huajiao { rid } => util::match_show_type(live::huajiao::get(&rid).await?),
         Commands::Yqs { rid } => util::match_show_type(live::yqs::get(&rid).await?),
         Commands::Mht { rid } => util::match_show_type(live::mht::get(&rid).await?),
     }
