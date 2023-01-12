@@ -54,7 +54,7 @@ fn douyin_trim_value(v: &Value) -> String {
 
 #[cfg(test)]
 mod tests {
-    use crate::live::douyin::get;
+    use super::*;
     use crate::util::match_show_type;
     #[tokio::test]
     async fn test_get_url() {

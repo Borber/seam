@@ -116,7 +116,7 @@ fn convert_qn_to_quality_string(qn: &str) -> String {
 
 #[cfg(test)]
 mod tests {
-    use crate::live::bilibili::get;
+    use super::*;
     use crate::util::match_show_type;
 
     #[tokio::test]

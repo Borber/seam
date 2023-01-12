@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+
+
+## [0.1.7]
+
+### Added
+
+- 支持网易CC直播源获取
+
+### Changed
+
+- 使用 `super` 替代绝对位置
+
 ## [0.1.6]
 
 ### Added

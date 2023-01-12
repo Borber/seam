@@ -15,7 +15,7 @@ ________ _______ _______ _______
 |__     |    ___|       |       |
 |_______|_______|___|___|__|_|__|
 
-获取直播源地址, 目前支持 B站, 斗鱼, 抖音, 虎牙, 快手, 花椒, 艺气山, 棉花糖", long_about = None)]
+获取直播源地址, 目前支持 B站, 斗鱼, 抖音, 虎牙, 快手, 网易CC, 花椒, 艺气山, 棉花糖", long_about = None)]
 struct Cli {
     #[command(subcommand)]
     command: Commands,
@@ -48,6 +48,11 @@ enum Commands {
         /// 房间号
         rid: String,
     },
+    /// 网易CC
+    Cc {
+        /// 房间号
+        rid: String,
+    },
     /// 花椒
     Huajiao {
         /// 房间号
@@ -74,6 +79,7 @@ async fn main() -> Result<()> {
         Commands::Douyin { rid } => util::match_show_type(live::douyin::get(&rid).await?),
         Commands::Huya { rid } => util::match_show_type(live::huya::get(&rid).await?),
         Commands::Kuaishou { rid } => util::match_show_type(live::kuaishou::get(&rid).await?),
+        Commands::Cc { rid } => util::match_show_type(live::cc::get(&rid).await?),
         Commands::Huajiao { rid } => util::match_show_type(live::huajiao::get(&rid).await?),
         Commands::Yqs { rid } => util::match_show_type(live::yqs::get(&rid).await?),
         Commands::Mht { rid } => util::match_show_type(live::mht::get(&rid).await?),

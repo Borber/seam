@@ -39,7 +39,7 @@ pub async fn get(rid: &str) -> Result<ShowType> {
 
 #[cfg(test)]
 mod tests {
-    use crate::live::mht::get;
+    use super::*;
     use crate::util::match_show_type;
 
     #[tokio::test]

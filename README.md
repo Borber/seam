@@ -32,6 +32,8 @@
 |[斗鱼](https://www.douyu.com/)|`https://www.douyu.com/<RID>` 或 `https://www.douyu.com/xx/xx?rid=<RID>`|
 |[抖音](https://live.douyin.com/)|`https://live.douyin.com/<RID>`|
 |[虎牙](https://huya.com/)|`https://huya.com/<RID>`|
+|[快手](https://live.kuaishou.com/)|`https://live.kuaishou.com/u/<RID>`|
+|[CC](https://cc.163.com/)|`https://cc.163.com/<RID>`|
 |[花椒](https://www.huajiao.com/)|`https://www.huajiao.com/l/<RID>`|
 |[艺气山](https://www.173.com/)|`https://www.173.com/<RID>`|
 |[棉花糖](https://www.2cq.com/)|`https://www.2cq.com/<RID>`|
@@ -42,6 +44,8 @@
   - [x] [斗鱼](https://www.douyu.com/)
   - [x] [抖音](https://live.douyin.com/)
   - [x] [虎牙](https://huya.com/)
+  - [x] [快手](https://live.kuaishou.com/)
+  - [x] [CC](https://cc.163.com/)
   - [x] [花椒](https://www.huajiao.com/)
   - [x] [艺气山](https://www.173.com/)
   - [x] [棉花糖](https://www.2cq.com/)

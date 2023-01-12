@@ -27,7 +27,7 @@ pub async fn get(rid: &str) -> Result<ShowType> {
 
 #[cfg(test)]
 mod tests {
-    use crate::live::yqs::get;
+    use super::*;
     use crate::util::match_show_type;
 
     #[tokio::test]

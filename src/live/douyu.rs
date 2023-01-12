@@ -133,7 +133,7 @@ async fn douyu_do_js(rid: &str) -> Result<Value> {
 
 #[cfg(test)]
 mod tests {
-    use crate::live::douyu::get;
+    use super::*;
     use crate::util::match_show_type;
 
     #[tokio::test]
