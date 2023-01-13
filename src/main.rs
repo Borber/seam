@@ -1,4 +1,3 @@
-#[macro_use]
 mod declarative;
 
 mod common;
@@ -6,10 +5,9 @@ mod live;
 mod model;
 mod util;
 
-use crate::declarative::Commands;
-use anyhow::{Ok, Result};
+use crate::declarative::{Commands, get_source_url};
+use anyhow::Result;
 use clap::Parser;
-use paste::paste;
 
 /// 获取直播源
 #[derive(Debug, Parser)]
@@ -28,6 +26,5 @@ struct Cli {
 
 #[tokio::main]
 async fn main() -> Result<()> {
-    get_resource_impl!(Cli::parse().command; Bili, Douyu, Douyin, Huya, Kuaishou, Cc, Huajiao, Yqs, Mht);
-    Ok(())
+    get_source_url().await
 }
