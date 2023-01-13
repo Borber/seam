@@ -5,6 +5,7 @@ mod util;
 
 use anyhow::{Ok, Result};
 use clap::{Parser, Subcommand};
+use paste::paste;
 
 /// 获取直播源
 #[derive(Debug, Parser)] // requires `derive` feature
@@ -72,17 +73,24 @@ enum Commands {
 
 #[tokio::main]
 async fn main() -> Result<()> {
-    let args = Cli::parse();
-    match args.command {
-        Commands::Bili { rid } => util::match_show_type(live::bilibili::get(&rid).await?),
-        Commands::Douyu { rid } => util::match_show_type(live::douyu::get(&rid).await?),
-        Commands::Douyin { rid } => util::match_show_type(live::douyin::get(&rid).await?),
-        Commands::Huya { rid } => util::match_show_type(live::huya::get(&rid).await?),
-        Commands::Kuaishou { rid } => util::match_show_type(live::kuaishou::get(&rid).await?),
-        Commands::Cc { rid } => util::match_show_type(live::cc::get(&rid).await?),
-        Commands::Huajiao { rid } => util::match_show_type(live::huajiao::get(&rid).await?),
-        Commands::Yqs { rid } => util::match_show_type(live::yqs::get(&rid).await?),
-        Commands::Mht { rid } => util::match_show_type(live::mht::get(&rid).await?),
-    }
+    get_resource_impl!(Cli::parse().command; Bili, Douyu, Douyin, Huya, Kuaishou, Cc, Huajiao, Yqs, Mht);
     Ok(())
+}
+
+// 适配不同直播平台，获取直播源地址
+// 直白的实现方式，fmt以及具体放置位置有待reviewer决定以及优化
+// 使用方法：get_resource_impl!(args.command; Bili, Douyu, Douyin, Huya, Kuaishou, Cc, Huajiao, Yqs, Mht)
+#[macro_export]
+macro_rules! get_resource_impl {
+    ($args: expr; $($name: ident),*) => {
+        paste! {
+            match $args {
+                $(
+                    Commands::$name { rid } => {
+                        util::match_show_type(live::[<$name: lower>]::get(&rid).await?)
+                    }
+                )*
+            }
+        }
+    }
 }

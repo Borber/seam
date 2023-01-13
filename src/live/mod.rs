@@ -1,4 +1,4 @@
-pub mod bilibili;
+pub mod bili;
 pub mod douyin;
 pub mod douyu;
 pub mod huajiao;
