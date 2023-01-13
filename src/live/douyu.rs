@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 
-use crate::modle::Node;
-use crate::{common::CLIENT, modle::ShowType};
+use crate::model::Node;
+use crate::{common::CLIENT, model::ShowType};
 
 use crate::util::{do_js, md5};
 use anyhow::{Ok, Result};

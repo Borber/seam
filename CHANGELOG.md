@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## Changed
+
+- 引入宏简化代码 感谢 [@eweca-d](https://github.com/eweca-d)
+
+### Fixed
+
+- model 拼写错误修正
+
 
 
 ## [0.1.7]

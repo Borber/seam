@@ -1,6 +1,6 @@
 use crate::{
     common::{CLIENT, DO_JS_URL},
-    modle::ShowType,
+    model::ShowType,
 };
 use md5::{Digest, Md5};
 use serde_json::json;

@@ -3,7 +3,7 @@ use regex::Regex;
 
 use crate::{
     common::{CLIENT, USER_AGENT},
-    modle::{Node, ShowType},
+    model::{Node, ShowType},
 };
 
 const URL: &str = "https://live.kuaishou.com/u/";

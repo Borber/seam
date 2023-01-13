@@ -1,6 +1,6 @@
 use anyhow::{Ok, Result};
 use regex::Regex;
-use crate::{modle::{Node, ShowType}, common::CLIENT};
+use crate::{model::{Node, ShowType}, common::CLIENT};
 
 const URL: &str = "https://cc.163.com/";
 

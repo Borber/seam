@@ -1,6 +1,6 @@
 use crate::{
     common::CLIENT,
-    modle::{Node, ShowType},
+    model::{Node, ShowType},
 };
 
 use anyhow::{Ok, Result};
