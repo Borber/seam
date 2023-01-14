@@ -1,67 +1,40 @@
-use clap::Subcommand;
+use crate::{Cli, live, util};
+use anyhow::{Ok, Result};
+use clap::{Parser, Subcommand};
+use paste::paste;
 
-#[derive(Debug, Subcommand)]
-pub enum Commands {
-    /// B站
-    Bili {
-        /// 房间号
-        rid: String,
-    },
-    /// 斗鱼
-    Douyu {
-        /// 房间号
-        rid: String,
-    },
-    /// 抖音
-    Douyin {
-        /// 房间号
-        rid: String,
-    },
-    /// 虎牙
-    Huya {
-        /// 房间号
-        rid: String,
-    },
-    /// 快手
-    Kuaishou {
-        /// 房间号
-        rid: String,
-    },
-    /// 网易CC
-    Cc {
-        /// 房间号
-        rid: String,
-    },
-    /// 花椒
-    Huajiao {
-        /// 房间号
-        rid: String,
-    },
-    /// 艺气山
-    Yqs {
-        /// 房间号
-        rid: String,
-    },
-    /// 棉花糖
-    Mht {
-        /// 房间号
-        rid: String,
-    },
-}
+// 声明宏：获取直播源的command的实现
+macro_rules! get_source_url_command {
+    ($($name: ident), *) => {
 
-// 适配不同直播平台，获取直播源地址
-// 直白的实现方式，fmt以及具体放置位置有待reviewer决定以及优化
-// 使用方法：get_resource_impl!(args.command; Bili, Douyu, Douyin, Huya, Kuaishou, Cc, Huajiao, Yqs, Mht)
-macro_rules! get_resource_impl {
-    ($args: expr; $($name: ident),*) => {
-        paste! {
-            match $args {
-                $(
-                    Commands::$name { rid } => {
-                        util::match_show_type(live::[<$name: lower>]::get(&rid).await?)
-                    }
-                )*
-            }
+        #[derive(Debug, Subcommand)]
+        pub enum Commands {
+            $( 
+                /// 直播平台
+                $name {
+                    /// 房间号
+                    rid: String,
+                },
+            )*
         }
+
+        // 获取直播源的实现
+        pub async fn get_source_url() -> Result<()> {
+            paste! {
+                match Cli::parse().command {
+                    $(
+                        Commands::$name { rid } => {
+                            util::match_show_type(live::[<$name: lower>]::get(&rid).await?)
+                        }
+                    )*
+                }
+            }
+            Ok(())
+        }
+
     }
 }
+
+// 展开宏命令
+// 添加新的直播平台可以在括号末尾添加，并在live文件夹里添加对应的文件
+get_source_url_command!(Bili, Douyu, Douyin, Huya, Kuaishou, Cc, Huajiao, Yqs, Mht);
