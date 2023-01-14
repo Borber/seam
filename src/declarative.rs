@@ -1,4 +1,4 @@
-use crate::{Cli, live, util};
+use crate::{live, util, Cli};
 use anyhow::{Ok, Result};
 use clap::{Parser, Subcommand};
 use paste::paste;
@@ -9,8 +9,7 @@ macro_rules! get_source_url_command {
 
         #[derive(Debug, Subcommand)]
         pub enum Commands {
-            $( 
-                /// 直播平台
+            $(
                 $name {
                     /// 房间号
                     rid: String,
@@ -37,4 +36,4 @@ macro_rules! get_source_url_command {
 
 // 展开宏命令
 // 添加新的直播平台可以在括号末尾添加，并在live文件夹里添加对应的文件
-get_source_url_command!(Bili, Douyu, Douyin, Huya, Kuaishou, Cc, Huajiao, Yqs, Mht);
+get_source_url_command!(Bili, Douyu, Douyin, Huya, Kuaishou, Cc, Huajiao, Yqs, Mht, Afreeca);

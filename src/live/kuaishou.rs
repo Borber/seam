@@ -31,7 +31,7 @@ pub async fn get(rid: &str) -> Result<ShowType> {
     // TODO 更改其他逻辑 多用Null
     match &json["liveroom"]["liveStream"]["playUrls"][0]["adaptationSet"]["representation"] {
         serde_json::Value::Null => {
-            return Ok(ShowType::Off);
+            Ok(ShowType::Off)
         }
         reps => {
             let list = reps.as_array().unwrap();

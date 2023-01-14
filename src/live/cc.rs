@@ -18,7 +18,7 @@ pub async fn get(rid: &str) -> Result<ShowType> {
             return Ok(ShowType::Error("未找到直播间".to_string()));
         },
     };
-    let json: serde_json::Value = serde_json::from_str(&json)?;
+    let json: serde_json::Value = serde_json::from_str(json)?;
     let resolution = match &json["props"]["pageProps"]["roomInfoInitData"]["live"]["quickplay"]["resolution"] {
         serde_json::Value::Null => return Ok(ShowType::Off),
         v => v,

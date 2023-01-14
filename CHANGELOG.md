@@ -7,9 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## Changed
+## [0.1.8]
+
+### Added
+
+- 添加 afreeca 直播源获取
+
+### Changed
 
 - 引入宏简化代码 感谢 [@eweca-d](https://github.com/eweca-d)
+- 删除部分注释及说明信息
 
 ### Fixed
 

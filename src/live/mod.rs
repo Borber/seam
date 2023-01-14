@@ -7,3 +7,4 @@ pub mod kuaishou;
 pub mod mht;
 pub mod yqs;
 pub mod cc;
+pub mod afreeca;

@@ -5,7 +5,7 @@ mod live;
 mod model;
 mod util;
 
-use crate::declarative::{Commands, get_source_url};
+use crate::declarative::{get_source_url, Commands};
 use anyhow::Result;
 use clap::Parser;
 
@@ -16,9 +16,7 @@ use clap::Parser;
 ________ _______ _______ _______
 |     __|    ___|   _   |   |   |
 |__     |    ___|       |       |
-|_______|_______|___|___|__|_|__|
-
-获取直播源地址, 目前支持 B站, 斗鱼, 抖音, 虎牙, 快手, 网易CC, 花椒, 艺气山, 棉花糖", long_about = None)]
+|_______|_______|___|___|__|_|__|", long_about = None)]
 struct Cli {
     #[command(subcommand)]
     command: Commands,
