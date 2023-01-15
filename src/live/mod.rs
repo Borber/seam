@@ -8,3 +8,4 @@ pub mod mht;
 pub mod yqs;
 pub mod cc;
 pub mod afreeca;
+pub mod panda;

@@ -40,11 +40,8 @@
 |[afreeca](https://afreecatv.com/)|`https://bj.afreecatv.com/<RID>` 主播名字而非直播间号|
 
 # 路线
-- [x] 改进 CI 自动编译
-- [ ] 拆分子模块
-- [ ] gui
-- [ ] mpv播放
-- [ ] 是否一次性链接标识字段
+
+[seam](https://github.com/users/Borber/projects/4/views/1)
 
 # 说明
 
