@@ -3,6 +3,7 @@ mod declarative;
 mod common;
 mod live;
 mod model;
+mod danmu;
 mod util;
 
 use crate::declarative::{get_source_url, Commands};

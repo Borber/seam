@@ -1,4 +1,4 @@
-use crate::{live, util, Cli};
+use crate::{live, util, Cli, danmu::{self, Danmu}};
 use anyhow::{Ok, Result};
 use clap::{Parser, Subcommand};
 use paste::paste;
@@ -9,6 +9,11 @@ macro_rules! get_source_url_command {
 
         #[derive(Debug, Subcommand)]
         pub enum Commands {
+            /// 获取B站弹幕
+            Bilidanmu {
+                /// 房间号
+                rid: String
+            },
             $(
                 $name {
                     /// 房间号
@@ -21,6 +26,11 @@ macro_rules! get_source_url_command {
         pub async fn get_source_url() -> Result<()> {
             paste! {
                 match Cli::parse().command {
+                    Commands::Bilidanmu { rid } => {
+                        let room_id = live::bili::get_real_room_id(&rid).await.unwrap();
+                        let mut danmu_client = live::bili::BilibiliDanmuClient::new(&room_id);
+                        danmu_client.start(danmu::DanmuRecorder::Terminal).await?;
+                    },
                     $(
                         Commands::$name { rid } => {
                             util::match_show_type(live::[<$name: lower>]::get(&rid).await?)
