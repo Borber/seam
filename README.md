@@ -39,6 +39,7 @@
 |[棉花糖](https://www.2cq.com/)|`https://www.2cq.com/<RID>`|
 |[afreeca](https://afreecatv.com/)|`https://bj.afreecatv.com/<RID>` 主播名字而非直播间号|
 |[pandalive](https://www.pandalive.co.kr/)|`https://www.pandalive.co.kr/channel/<RID>` 主播名字而非直播间号|
+|[flex](https://www.flextv.co.kr/)|`https://www.flextv.co.kr/channels/<RID>` 主播名字而非直播间号|
 
 # 路线
 
