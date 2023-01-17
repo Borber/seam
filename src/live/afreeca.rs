@@ -5,7 +5,8 @@ use regex::Regex;
 
 use crate::{
     common::CLIENT,
-    model::{Node, ShowType},
+    model::ShowType,
+    util::parse_url,
 };
 
 const URL: &str = "https://play.afreecatv.com/";
@@ -45,19 +46,18 @@ pub async fn get(rid: &str) -> Result<ShowType> {
         .await?
         .json()
         .await?;
-    Ok(ShowType::On(vec![Node {
-        rate: "原画".to_string(),
-        url: format!("{CDN}{}", json["CHANNEL"]["AID"].as_str().unwrap()),
-    }]))
+    Ok(ShowType::On(vec![parse_url(format!(
+        "{CDN}{}",
+        json["CHANNEL"]["AID"].as_str().unwrap()
+    ))]))
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::util::match_show_type;
 
     #[tokio::test]
     async fn test_get() {
-        match_show_type(get("dasl8121").await.unwrap());
+        println!("{}", get("dasl8121").await.unwrap().to_string());
     }
 }

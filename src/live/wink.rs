@@ -2,17 +2,16 @@ use std::collections::HashMap;
 
 use anyhow::{Ok, Result};
 
-const URL: &str = "https://api.pandalive.co.kr/v1/live/play/";
+const URL: &str = "https://api.winktv.co.kr/v1/live/play";
 
 use crate::{
     common::CLIENT,
-    model::ShowType,
-    util::parse_url,
+    model::ShowType, util::parse_url,
 };
 
-/// pandalive
+/// winktv
 ///
-/// https://www.pandalive.co.kr/
+/// https://www.winktv.co.kr/
 pub async fn get(rid: &str) -> Result<ShowType> {
     let mut form = HashMap::new();
     form.insert("action", "watch");
@@ -24,9 +23,7 @@ pub async fn get(rid: &str) -> Result<ShowType> {
             let mut nodes = vec![];
             for item in ["hls", "hls2", "hls3", "rtmp"] {
                 if list.get(item).is_some() {
-                    nodes.push(parse_url(
-                        list[item][0]["url"].as_str().unwrap().to_string(),
-                    ));
+                    nodes.push(parse_url(list[item][0]["url"].as_str().unwrap().to_string()));
                 }
             }
             Ok(ShowType::On(nodes))
@@ -40,6 +37,6 @@ mod tests {
 
     #[tokio::test]
     async fn test_panda() {
-        println!("{}", get("wpsl1002").await.unwrap().to_string());
+        println!("{}", get("csp1208").await.unwrap().to_string());
     }
 }

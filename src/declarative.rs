@@ -1,4 +1,4 @@
-use crate::{live, util, Cli};
+use crate::{live, Cli};
 use anyhow::{Ok, Result};
 use clap::{Parser, Subcommand};
 use paste::paste;
@@ -23,7 +23,7 @@ macro_rules! get_source_url_command {
                 match Cli::parse().command {
                     $(
                         Commands::$name { rid } => {
-                            util::match_show_type(live::[<$name: lower>]::get(&rid).await?)
+                            println!("{}", live::[<$name: lower>]::get(&rid).await?.to_string());
                         }
                     )*
                 }
@@ -36,4 +36,6 @@ macro_rules! get_source_url_command {
 
 // 展开宏命令
 // 添加新的直播平台可以在括号末尾添加，并在live文件夹里添加对应的文件
-get_source_url_command!(Bili, Douyu, Douyin, Huya, Kuaishou, Cc, Huajiao, Yqs, Mht, Afreeca, Panda, Flex);
+get_source_url_command!(
+    Bili, Douyu, Douyin, Huya, Kuaishou, Cc, Huajiao, Yqs, Mht, Afreeca, Panda, Flex, Wink
+);

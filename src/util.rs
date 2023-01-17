@@ -1,19 +1,8 @@
 use crate::{
-    common::{CLIENT, DO_JS_URL},
-    model::ShowType,
+    common::{CLIENT, DO_JS_URL}, model::{Format, Node},
 };
 use md5::{Digest, Md5};
 use serde_json::json;
-
-pub fn match_show_type(t: ShowType) {
-    match t {
-        ShowType::On(nodes) => {
-            println!("{}", serde_json::to_string_pretty(&nodes).unwrap());
-        }
-        ShowType::Off => println!("未开播"),
-        ShowType::Error(msg) => println!("{msg}"),
-    }
-}
 
 /// 提取字符串md5值
 pub fn md5(data: &[u8]) -> String {
@@ -35,4 +24,21 @@ pub async fn do_js(js: &str) -> String {
         .text()
         .await
         .expect("msg2")
+}
+
+pub fn match_format(url: &str) -> Format {
+    if url.contains("m3u8") {
+        Format::M3U
+    } else if url.contains("flv") {
+        Format::FLV
+    } else {
+        Format::Other("unknown".to_owned())
+    }
+}
+
+pub fn parse_url(url: String) -> Node {
+    Node {
+        format: match_format(&url),
+        url: url.to_owned(),
+    }
 }

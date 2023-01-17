@@ -1,6 +1,6 @@
 use crate::{
     common::CLIENT,
-    model::{Node, ShowType},
+    model::ShowType, util::parse_url,
 };
 
 use anyhow::{Ok, Result};
@@ -29,14 +29,8 @@ pub async fn get(rid: &str) -> Result<ShowType> {
         _ => match &room_info["room"]["stream_url"] {
             Value::Null => Ok(ShowType::Off),
             stream_url => Ok(ShowType::On(vec![
-                Node {
-                    rate: "蓝光_flv".to_string(),
-                    url: douyin_trim_value(&stream_url["flv_pull_url"]["FULL_HD1"]),
-                },
-                Node {
-                    rate: "蓝光_hls".to_string(),
-                    url: douyin_trim_value(&stream_url["hls_pull_url"]),
-                },
+                parse_url(douyin_trim_value(&stream_url["flv_pull_url"]["FULL_HD1"])),
+                parse_url(douyin_trim_value(&stream_url["hls_pull_url"])),
             ])),
         },
     }
@@ -55,9 +49,9 @@ fn douyin_trim_value(v: &Value) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::util::match_show_type;
+
     #[tokio::test]
     async fn test_get_url() {
-        match_show_type(get("228619203678").await.unwrap());
+        println!("{}", get("228619203678").await.unwrap().to_string());
     }
 }

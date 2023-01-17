@@ -1,6 +1,7 @@
 use crate::{
     common::CLIENT,
-    model::{Node, ShowType},
+    model::ShowType,
+    util::parse_url,
 };
 
 use anyhow::{Ok, Result};
@@ -17,10 +18,7 @@ pub async fn get(rid: &str) -> Result<ShowType> {
     let resp: serde_json::Value = CLIENT.post(URL).form(&params).send().await?.json().await?;
     let data = &resp["data"];
     match data["status"].to_string().parse::<usize>()? {
-        2 => Ok(ShowType::On(vec![Node {
-            rate: "".to_string(),
-            url: data["url"].to_string(),
-        }])),
+        2 => Ok(ShowType::On(vec![parse_url(data["url"].to_string())])),
         _ => Ok(ShowType::Off),
     }
 }
@@ -28,10 +26,9 @@ pub async fn get(rid: &str) -> Result<ShowType> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::util::match_show_type;
 
     #[tokio::test]
     async fn test_get_url() {
-        match_show_type(get("96").await.unwrap());
+        println!("{}", get("96").await.unwrap().to_string());
     }
 }

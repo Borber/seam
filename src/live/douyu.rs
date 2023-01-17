@@ -1,9 +1,8 @@
 use std::collections::HashMap;
 
-use crate::model::Node;
 use crate::{common::CLIENT, model::ShowType};
 
-use crate::util::{do_js, md5};
+use crate::util::{do_js, md5, parse_url};
 use anyhow::{Ok, Result};
 use chrono::prelude::*;
 use regex::Regex;
@@ -34,14 +33,8 @@ pub async fn get(rid: &str) -> Result<ShowType> {
                 None => key,
             };
             Ok(ShowType::On(vec![
-                Node {
-                    rate: "超清1".to_string(),
-                    url: format!("{CDN_1}{key}.flv"),
-                },
-                Node {
-                    rate: "超清2".to_string(),
-                    url: format!("{CDN_2}{key}.flv"),
-                },
+                parse_url(format!("{CDN_1}{key}.flv")),
+                parse_url(format!("{CDN_2}{key}.flv")),
             ]))
         }
         _ => Ok(ShowType::Off),
@@ -134,10 +127,9 @@ async fn douyu_do_js(rid: &str) -> Result<Value> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::util::match_show_type;
 
     #[tokio::test]
     async fn test_get_url() {
-        match_show_type(get("33").await.unwrap());
+        println!("{}", get("33").await.unwrap().to_string());
     }
 }

@@ -3,7 +3,8 @@ use regex::Regex;
 
 use crate::{
     common::CLIENT,
-    model::{Node, ShowType},
+    model::ShowType,
+    util::parse_url,
 };
 
 const URL: &str = "https://www.huajiao.com/l/";
@@ -34,10 +35,9 @@ pub async fn get(rid: &str) -> Result<ShowType> {
         .as_str()
         .parse::<i32>()?
     {
-        0 => Ok(ShowType::On(vec![Node {
-            rate: "超清".to_owned(),
-            url: format!("https://{pl}-flv.live.huajiao.com/live_huajiao_v2/{sn}.m3u8"),
-        }])),
+        0 => Ok(ShowType::On(vec![parse_url(format!(
+            "https://{pl}-flv.live.huajiao.com/live_huajiao_v2/{sn}.m3u8"
+        ))])),
         _ => Ok(ShowType::Off),
     }
 }
@@ -45,10 +45,9 @@ pub async fn get(rid: &str) -> Result<ShowType> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::util::match_show_type;
 
     #[tokio::test]
     async fn test_get_url() {
-        match_show_type(get("337633032").await.unwrap());
+        println!("{}", get("337633032").await.unwrap().to_string());
     }
 }
