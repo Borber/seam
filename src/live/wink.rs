@@ -4,10 +4,7 @@ use anyhow::{Ok, Result};
 
 const URL: &str = "https://api.winktv.co.kr/v1/live/play";
 
-use crate::{
-    common::CLIENT,
-    model::ShowType, util::parse_url,
-};
+use crate::{common::CLIENT, model::ShowType, util::parse_url};
 
 /// winktv
 ///
@@ -23,7 +20,9 @@ pub async fn get(rid: &str) -> Result<ShowType> {
             let mut nodes = vec![];
             for item in ["hls", "hls2", "hls3", "rtmp"] {
                 if list.get(item).is_some() {
-                    nodes.push(parse_url(list[item][0]["url"].as_str().unwrap().to_string()));
+                    nodes.push(parse_url(
+                        list[item][0]["url"].as_str().unwrap().to_string(),
+                    ));
                 }
             }
             Ok(ShowType::On(nodes))
@@ -37,6 +36,6 @@ mod tests {
 
     #[tokio::test]
     async fn test_panda() {
-        println!("{}", get("csp1208").await.unwrap().to_string());
+        println!("{}", get("csp1208").await.unwrap());
     }
 }

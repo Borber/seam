@@ -3,11 +3,7 @@ use std::collections::HashMap;
 use anyhow::{Ok, Result};
 use regex::Regex;
 
-use crate::{
-    common::CLIENT,
-    model::ShowType,
-    util::parse_url,
-};
+use crate::{common::CLIENT, model::ShowType, util::parse_url};
 
 const URL: &str = "https://play.afreecatv.com/";
 const PLAY_URL: &str = "https://live.afreecatv.com/afreeca/player_live_api.php?bjid=";
@@ -58,6 +54,6 @@ mod tests {
 
     #[tokio::test]
     async fn test_get() {
-        println!("{}", get("dasl8121").await.unwrap().to_string());
+        println!("{}", get("dasl8121").await.unwrap());
     }
 }

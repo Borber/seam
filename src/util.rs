@@ -1,5 +1,6 @@
 use crate::{
-    common::{CLIENT, DO_JS_URL}, model::{Format, Node},
+    common::{CLIENT, DO_JS_URL},
+    model::{Format, Node},
 };
 use md5::{Digest, Md5};
 use serde_json::json;

@@ -1,8 +1,4 @@
-use crate::{
-    common::CLIENT,
-    model::ShowType,
-    util::parse_url,
-};
+use crate::{common::CLIENT, model::ShowType, util::parse_url};
 use anyhow::{Ok, Result};
 use regex::Regex;
 
@@ -52,6 +48,6 @@ mod tests {
 
     #[tokio::test]
     async fn test_get_url() {
-        println!("{}", get("361433").await.unwrap().to_string());
+        println!("{}", get("361433").await.unwrap());
     }
 }

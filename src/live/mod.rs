@@ -9,5 +9,5 @@ pub mod huya;
 pub mod kuaishou;
 pub mod mht;
 pub mod panda;
-pub mod yqs;
 pub mod wink;
+pub mod yqs;

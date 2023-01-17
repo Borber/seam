@@ -52,12 +52,8 @@ pub async fn get(rid: &str) -> Result<ShowType> {
                             for url_info in codec["url_info"].as_array().unwrap() {
                                 let host = url_info["host"].as_str().unwrap();
                                 let extra = url_info["extra"].as_str().unwrap();
-                                stream_urls.push(parse_url(format!(
-                                    "{}{}{}",
-                                    host,
-                                    base_url.clone(),
-                                    extra
-                                )));
+                                stream_urls
+                                    .push(parse_url(format!("{}{}{}", host, base_url, extra)));
                             }
                         }
                     }
@@ -97,6 +93,6 @@ mod tests {
 
     #[tokio::test]
     async fn test_get_url() {
-        println!("{}", get("23356199").await.unwrap().to_string());
+        println!("{}", get("23356199").await.unwrap());
     }
 }

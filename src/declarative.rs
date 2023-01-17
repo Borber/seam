@@ -23,7 +23,7 @@ macro_rules! get_source_url_command {
                 match Cli::parse().command {
                     $(
                         Commands::$name { rid } => {
-                            println!("{}", live::[<$name: lower>]::get(&rid).await?.to_string());
+                            println!("{}", live::[<$name: lower>]::get(&rid).await?);
                         }
                     )*
                 }

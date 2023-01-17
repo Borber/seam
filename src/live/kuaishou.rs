@@ -3,7 +3,8 @@ use regex::Regex;
 
 use crate::{
     common::{CLIENT, USER_AGENT},
-    model::ShowType, util::parse_url,
+    model::ShowType,
+    util::parse_url,
 };
 
 const URL: &str = "https://live.kuaishou.com/u/";
@@ -30,9 +31,7 @@ pub async fn get(rid: &str) -> Result<ShowType> {
     let json: serde_json::Value = serde_json::from_str(stream).unwrap();
     // TODO 更改其他逻辑 多用Null
     match &json["liveroom"]["liveStream"]["playUrls"][0]["adaptationSet"]["representation"] {
-        serde_json::Value::Null => {
-            Ok(ShowType::Off)
-        }
+        serde_json::Value::Null => Ok(ShowType::Off),
         reps => {
             let list = reps.as_array().unwrap();
             let url = list[list.len() - 1]["url"].as_str().unwrap();
@@ -47,6 +46,6 @@ mod tests {
 
     #[tokio::test]
     async fn test_kuaishou() {
-        println!("{}", get("3xgexgpig9gwwi2").await.unwrap().to_string());
+        println!("{}", get("3xgexgpig9gwwi2").await.unwrap());
     }
 }

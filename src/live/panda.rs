@@ -4,11 +4,7 @@ use anyhow::{Ok, Result};
 
 const URL: &str = "https://api.pandalive.co.kr/v1/live/play/";
 
-use crate::{
-    common::CLIENT,
-    model::ShowType,
-    util::parse_url,
-};
+use crate::{common::CLIENT, model::ShowType, util::parse_url};
 
 /// pandalive
 ///
@@ -40,6 +36,6 @@ mod tests {
 
     #[tokio::test]
     async fn test_panda() {
-        println!("{}", get("wpsl1002").await.unwrap().to_string());
+        println!("{}", get("wpsl1002").await.unwrap());
     }
 }

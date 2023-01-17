@@ -71,14 +71,13 @@ async fn douyu_do_js(rid: &str) -> Result<Value> {
     for cap in re.captures_iter(&text) {
         let script = cap.get(1).unwrap().as_str();
         let re2 = Regex::new("\"([0-9]{12})\"").unwrap();
-        match re2.captures(script){
+        match re2.captures(script) {
             Some(t_cap) => {
                 v = t_cap.get(1).unwrap().as_str();
                 func = script.to_owned();
-            },
+            }
             None => continue,
         }
-
     }
 
     // 将eval运行字符串更改为直接返回字符串
@@ -92,7 +91,10 @@ async fn douyu_do_js(rid: &str) -> Result<Value> {
 
     // 构建函数, 替换数值
     let res = res.replace("(function", "let ccc = function");
-    let res = res.replace("rt;});", format!("rt;}}; ccc({rid}, \"{DID}\", {dt})").as_str());
+    let res = res.replace(
+        "rt;});",
+        format!("rt;}}; ccc({rid}, \"{DID}\", {dt})").as_str(),
+    );
 
     // 替换md5值避免js依赖
     let cb = format!("{rid}{DID}{dt}{v}");
@@ -130,6 +132,6 @@ mod tests {
 
     #[tokio::test]
     async fn test_get_url() {
-        println!("{}", get("33").await.unwrap().to_string());
+        println!("{}", get("33").await.unwrap());
     }
 }

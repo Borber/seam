@@ -1,8 +1,4 @@
-use crate::{
-    common::CLIENT,
-    model::ShowType,
-    util::parse_url,
-};
+use crate::{common::CLIENT, model::ShowType, util::parse_url};
 
 use anyhow::{Ok, Result};
 use serde_json::Value;
@@ -41,6 +37,6 @@ mod tests {
 
     #[tokio::test]
     async fn test_get_url() {
-        println!("{}", get("932055").await.unwrap().to_string());
+        println!("{}", get("932055").await.unwrap());
     }
 }

@@ -1,11 +1,7 @@
 use anyhow::{Ok, Result};
 use regex::Regex;
 
-use crate::{
-    common::CLIENT,
-    model::ShowType,
-    util::parse_url,
-};
+use crate::{common::CLIENT, model::ShowType, util::parse_url};
 
 const URL: &str = "https://www.huajiao.com/l/";
 
@@ -48,6 +44,6 @@ mod tests {
 
     #[tokio::test]
     async fn test_get_url() {
-        println!("{}", get("337633032").await.unwrap().to_string());
+        println!("{}", get("337633032").await.unwrap());
     }
 }

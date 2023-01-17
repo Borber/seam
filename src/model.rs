@@ -1,3 +1,5 @@
+use std::fmt::{Display, Formatter, Result as FmtResult};
+
 use serde::{Serialize, Serializer};
 
 #[derive(Serialize, Debug)]
@@ -10,12 +12,12 @@ pub enum ShowType {
     Error(String),
 }
 
-impl ShowType {
-    pub fn to_string(&self) -> String {
+impl Display for ShowType {
+    fn fmt(&self, f: &mut Formatter<'_>) -> FmtResult {
         match self {
-            ShowType::On(nodes) => serde_json::to_string_pretty(&nodes).unwrap(),
-            ShowType::Off => "未开播".to_string(),
-            ShowType::Error(msg) => msg.to_owned(),
+            ShowType::On(nodes) => write!(f, "{}", serde_json::to_string_pretty(&nodes).unwrap()),
+            ShowType::Off => write!(f, "未开播"),
+            ShowType::Error(msg) => write!(f, "{}", msg),
         }
     }
 }
