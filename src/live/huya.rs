@@ -23,6 +23,7 @@ pub async fn get(rid: &str) -> Result<ShowType> {
         }
     };
     let json: serde_json::Value = serde_json::from_str(stream).unwrap();
+    println!("{}", json);
     let mut nodes = vec![];
     match json["data"][0]["gameStreamInfoList"].as_array().unwrap() {
         list if list.is_empty() => {
@@ -55,6 +56,6 @@ mod tests {
 
     #[tokio::test]
     async fn test_get_url() {
-        println!("{}", get("28328839").await.unwrap());
+        println!("{}", get("18757676").await.unwrap());
     }
 }
