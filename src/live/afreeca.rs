@@ -3,11 +3,13 @@ use std::collections::HashMap;
 use anyhow::{Ok, Result};
 use regex::Regex;
 
-use crate::{common::CLIENT, model::ShowType, util::parse_url};
+use crate::{common::CLIENT, model::ShowType, util::parse_url, default_danmu_client};
 
 const URL: &str = "https://play.afreecatv.com/";
 const PLAY_URL: &str = "https://live.afreecatv.com/afreeca/player_live_api.php?bjid=";
 const CDN: &str = "https://live-global-cdn-v02.afreecatv.com/live-stmc-32/auth_playlist.m3u8?aid=";
+
+default_danmu_client!(Afreeca);
 
 /// afreecatv直播
 ///

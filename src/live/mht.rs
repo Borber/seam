@@ -1,9 +1,11 @@
-use crate::{common::CLIENT, model::ShowType, util::parse_url};
+use crate::{common::CLIENT, model::ShowType, util::parse_url, default_danmu_client};
 
 use anyhow::{Ok, Result};
 use serde_json::Value;
 
 const URL: &str = "https://www.2cq.com/proxy/room/room/info";
+
+default_danmu_client!(Mht);
 
 /// 棉花糖直播
 ///

@@ -1,9 +1,11 @@
 use anyhow::{Ok, Result};
 use regex::Regex;
 
-use crate::{common::CLIENT, model::ShowType, util::parse_url};
+use crate::{common::CLIENT, model::ShowType, util::parse_url, default_danmu_client};
 
 const URL: &str = "https://www.huya.com/";
+
+default_danmu_client!(Huya);
 
 /// 虎牙直播
 ///

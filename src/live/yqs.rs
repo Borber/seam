@@ -1,9 +1,11 @@
-use crate::{common::CLIENT, model::ShowType, util::parse_url};
+use crate::{common::CLIENT, model::ShowType, util::parse_url, default_danmu_client};
 
 use anyhow::{Ok, Result};
 use std::collections::HashMap;
 
 const URL: &str = "https://www.173.com/room/getVieoUrl";
+
+default_danmu_client!(Yqs);
 
 /// 艺气山直播
 ///

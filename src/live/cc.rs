@@ -1,8 +1,10 @@
-use crate::{common::CLIENT, model::ShowType, util::parse_url};
+use crate::{common::CLIENT, model::ShowType, util::parse_url, default_danmu_client};
 use anyhow::{Ok, Result};
 use regex::Regex;
 
 const URL: &str = "https://cc.163.com/";
+
+default_danmu_client!(Cc);
 
 /// 网易CC直播
 ///

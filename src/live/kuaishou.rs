@@ -5,9 +5,12 @@ use crate::{
     common::{CLIENT, USER_AGENT},
     model::ShowType,
     util::parse_url,
+    default_danmu_client
 };
 
 const URL: &str = "https://live.kuaishou.com/u/";
+
+default_danmu_client!(Kuaishou);
 
 /// 快手直播
 ///
