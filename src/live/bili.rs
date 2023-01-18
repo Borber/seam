@@ -297,45 +297,13 @@ impl BiliDanmuClient {
 
                 if msg.get("msg_type").unwrap() == "danmu" {
                     // TODO: 可能panic，需要处理第二种情况: j.get("data").unwrap().get("uname").unwrap().as_str().unwrap().to_string();
-                    let name = j
-                        .get("info")
-                        .unwrap()
-                        .get(2)
-                        .unwrap()
-                        .get(1)
-                        .unwrap()
-                        .as_str()
-                        .unwrap()
-                        .trim()
-                        .to_string();
-                    let content = j
-                        .get("info")
-                        .unwrap()
-                        .get(1)
-                        .unwrap()
-                        .as_str()
-                        .unwrap()
-                        .trim()
-                        .to_string();
+                    let name = j["info"][2][1].as_str().unwrap().trim().to_string();
+                    let content = j["info"][1].as_str().unwrap().trim().to_string();
                     msg.insert("name".to_owned(), name);
                     msg.insert("content".to_owned(), content);
                 } else if msg.get("msg_type").unwrap() == "interactive_danmaku" {
-                    let name = j
-                        .get("data")
-                        .unwrap()
-                        .get("uname")
-                        .unwrap()
-                        .as_str()
-                        .unwrap()
-                        .to_string();
-                    let content = j
-                        .get("data")
-                        .unwrap()
-                        .get("msg")
-                        .unwrap()
-                        .as_str()
-                        .unwrap()
-                        .to_string();
+                    let name = j["data"]["uname"].as_str().unwrap().to_string();
+                    let content = j["data"]["msg"].as_str().unwrap().to_string();
                     msg.insert("name".to_owned(), name);
                     msg.insert("content".to_owned(), content);
                 } else {
