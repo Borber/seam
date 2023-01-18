@@ -17,6 +17,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Format 添加 rtmp 格式
+- 删除斗鱼, 虎牙多余打印信息
+
+### Fixed
+
+- 修复斗鱼, 虎牙平台直播源获取
 
 
 ## [0.1.11]
