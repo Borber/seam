@@ -1,22 +1,22 @@
 use crate::{
     common::{CLIENT, USER_AGENT},
+    danmu::{Danmu, DanmuRecorder},
     model::ShowType,
     util::parse_url,
-    danmu::{Danmu, DanmuRecorder}
 };
 
-use std::pin::Pin;
 use std::collections::HashMap;
+use std::pin::Pin;
 
 use anyhow::{anyhow, Ok, Result};
 use async_trait::async_trait;
-use futures_util::StreamExt;
-use tokio::net::TcpStream;
-use tokio_tungstenite::{MaybeTlsStream, WebSocketStream, tungstenite::protocol::Message};
 use futures_sink::Sink;
-use serde_json::json;
-use rand::Rng;
+use futures_util::StreamExt;
 use miniz_oxide::inflate::decompress_to_vec_zlib;
+use rand::Rng;
+use serde_json::json;
+use tokio::net::TcpStream;
+use tokio_tungstenite::{tungstenite::protocol::Message, MaybeTlsStream, WebSocketStream};
 
 const INIT_URL: &str = "https://api.live.bilibili.com/room/v1/Room/room_init";
 const URL: &str = "https://api.live.bilibili.com/xlive/web-room/v2/index/getRoomPlayInfo";
@@ -112,7 +112,6 @@ mod tests {
     }
 }
 
-
 /// 获取真实房间号
 pub async fn get_real_room_id(rid: &str) -> Result<String> {
     let resp: serde_json::Value = CLIENT
@@ -125,7 +124,7 @@ pub async fn get_real_room_id(rid: &str) -> Result<String> {
         .await?;
     match resp["code"].to_string().parse::<usize>()? {
         0 => Ok(resp["data"]["room_id"].to_string()),
-        _ => Err(anyhow!(resp["msg"].to_string()))
+        _ => Err(anyhow!(resp["msg"].to_string())),
     }
 }
 
@@ -140,7 +139,7 @@ impl<'a> BilibiliDanmuClient<'a> {
     pub fn new(room_id: &'a str) -> Self {
         Self {
             room_id,
-            websocket: None
+            websocket: None,
         }
     }
 
@@ -149,13 +148,21 @@ impl<'a> BilibiliDanmuClient<'a> {
         let mut reg_data = vec![];
 
         let room_id = room_id.parse::<i64>().unwrap();
-        let random_uid: u64 = rand::thread_rng().gen_range(100_000_000_000_000..300_000_000_000_000);
+        let random_uid: u64 =
+            rand::thread_rng().gen_range(100_000_000_000_000..300_000_000_000_000);
         let data = json!({
             "roomid": room_id,
             "uid": random_uid,
             "protover": 1
-        }).to_string();
-        let data = vec![(data.len() as i32 + 16).to_be_bytes().to_vec(), vec![0x00, 0x10, 0x00, 0x01], 7i32.to_be_bytes().to_vec(), 1i32.to_be_bytes().to_vec(), data.as_bytes().to_vec()];
+        })
+        .to_string();
+        let data = vec![
+            (data.len() as i32 + 16).to_be_bytes().to_vec(),
+            vec![0x00, 0x10, 0x00, 0x01],
+            7i32.to_be_bytes().to_vec(),
+            1i32.to_be_bytes().to_vec(),
+            data.as_bytes().to_vec(),
+        ];
         reg_data.push(data.concat());
         reg_data
     }
@@ -163,7 +170,7 @@ impl<'a> BilibiliDanmuClient<'a> {
     /// 初始化websocket
     async fn init_ws(&mut self) {
         let reg_datas = Self::get_ws_info(self.room_id);
-        let (mut ws, _)= tokio_tungstenite::connect_async(WSS_URL).await.unwrap();
+        let (mut ws, _) = tokio_tungstenite::connect_async(WSS_URL).await.unwrap();
         for data in reg_datas {
             Pin::new(&mut ws).start_send(Message::Binary(data)).unwrap();
         }
@@ -173,14 +180,16 @@ impl<'a> BilibiliDanmuClient<'a> {
     /// 心跳机制
     async fn heart_beat(&mut self) {
         if let Some(ws) = &mut self.websocket {
-            Pin::new(ws).start_send(Message::Binary(HEART_BEAT.as_bytes().to_vec())).unwrap();
+            Pin::new(ws)
+                .start_send(Message::Binary(HEART_BEAT.as_bytes().to_vec()))
+                .unwrap();
         } else {
             self.init_ws().await;
         }
     }
 
     /// 获取弹幕。
-    /// 
+    ///
     /// TODO: 考虑通过接收一个函数或传入DanmuRecorder来处理弹幕。
     async fn fetch_danmu(&mut self) {
         if let Some(ws) = &mut self.websocket {
@@ -189,7 +198,11 @@ impl<'a> BilibiliDanmuClient<'a> {
                     let data = message.unwrap().into_data();
                     for m in Self::decode_msg(&data).iter() {
                         if m.get("msg_type") == Some(&"danmu".to_string()) {
-                            println!("name: {:?}, content: {:?}", m.get("name").unwrap(), m.get("content").unwrap());
+                            println!(
+                                "name: {:?}, content: {:?}",
+                                m.get("name").unwrap(),
+                                m.get("content").unwrap()
+                            );
                         }
                     }
                 })
@@ -210,45 +223,49 @@ impl<'a> BilibiliDanmuClient<'a> {
         let mut dm_list = vec![];
         let mut ops = vec![];
         let mut msgs = vec![];
-        
+
         let mut sptr = 0;
         loop {
             let packet_len = u32::from_be_bytes(data[sptr..sptr + 4].try_into().unwrap());
             let ver = u16::from_be_bytes(data[sptr + 6..sptr + 8].try_into().unwrap());
-            let op = u32::from_be_bytes(data[sptr + 8.. sptr + 12].try_into().unwrap());
-    
+            let op = u32::from_be_bytes(data[sptr + 8..sptr + 12].try_into().unwrap());
+
             if data[sptr..].len() < packet_len as usize {
                 break;
             }
-    
-            if ver == 1 ||  ver == 0 {
+
+            if ver == 1 || ver == 0 {
                 ops.push(op);
                 dm_list.push(&data[sptr + 16..sptr + packet_len as usize]);
             } else if ver == 2 {
                 dm_list_compressed.push(&data[sptr + 16..sptr + packet_len as usize]);
             }
-    
+
             if data[sptr..].len() == packet_len as usize {
                 break;
             } else {
                 sptr += packet_len as usize;
             }
         }
-    
-        let dm_list_decompressed = dm_list_compressed.iter().map(|dm| decompress_to_vec_zlib(dm).unwrap()).collect::<Vec<_>>();
+
+        let dm_list_decompressed = dm_list_compressed
+            .iter()
+            .map(|dm| decompress_to_vec_zlib(dm).unwrap())
+            .collect::<Vec<_>>();
         for decompressed in dm_list_decompressed.iter() {
             let mut sptr = 0;
             loop {
-                let packet_len = u32::from_be_bytes(decompressed[sptr..sptr + 4].try_into().unwrap());
+                let packet_len =
+                    u32::from_be_bytes(decompressed[sptr..sptr + 4].try_into().unwrap());
                 let op = u32::from_be_bytes(decompressed[sptr + 8..sptr + 12].try_into().unwrap());
-    
+
                 if decompressed[sptr..].len() < packet_len as usize {
                     break;
                 }
-    
+
                 ops.push(op);
                 dm_list.push(&decompressed[sptr + 16..sptr + packet_len as usize]);
-    
+
                 if decompressed[sptr..].len() == packet_len as usize {
                     break;
                 } else {
@@ -256,15 +273,14 @@ impl<'a> BilibiliDanmuClient<'a> {
                 }
             }
         }
-    
+
         let mut msg_type_map = HashMap::new();
         msg_type_map.insert("SEND_GIFT", "gift");
         msg_type_map.insert("DANMU_MSG", "danmu");
         msg_type_map.insert("WELCOME", "enter");
         msg_type_map.insert("NOTICE_MSG", "broadcast");
         msg_type_map.insert("LIVE_INTERACTIVE_GAME", "interactive_danmaku");
-    
-    
+
         for (idx, &dm) in dm_list.iter().enumerate() {
             let mut msg = HashMap::new();
             if ops[idx] == 5 {
@@ -276,16 +292,48 @@ impl<'a> BilibiliDanmuClient<'a> {
                 } else {
                     msg.insert("msg_type".to_owned(), mapped_msg_type.to_owned());
                 }
-    
+
                 if msg.get("msg_type").unwrap() == "danmu" {
                     // TODO: 可能panic，需要处理第二种情况: j.get("data").unwrap().get("uname").unwrap().as_str().unwrap().to_string();
-                    let name = j.get("info").unwrap().get(2).unwrap().get(1).unwrap().as_str().unwrap().trim().to_string();
-                    let content = j.get("info").unwrap().get(1).unwrap().as_str().unwrap().trim().to_string();
+                    let name = j
+                        .get("info")
+                        .unwrap()
+                        .get(2)
+                        .unwrap()
+                        .get(1)
+                        .unwrap()
+                        .as_str()
+                        .unwrap()
+                        .trim()
+                        .to_string();
+                    let content = j
+                        .get("info")
+                        .unwrap()
+                        .get(1)
+                        .unwrap()
+                        .as_str()
+                        .unwrap()
+                        .trim()
+                        .to_string();
                     msg.insert("name".to_owned(), name);
                     msg.insert("content".to_owned(), content);
                 } else if msg.get("msg_type").unwrap() == "interactive_danmaku" {
-                    let name = j.get("data").unwrap().get("uname").unwrap().as_str().unwrap().to_string();
-                    let content = j.get("data").unwrap().get("msg").unwrap().as_str().unwrap().to_string();
+                    let name = j
+                        .get("data")
+                        .unwrap()
+                        .get("uname")
+                        .unwrap()
+                        .as_str()
+                        .unwrap()
+                        .to_string();
+                    let content = j
+                        .get("data")
+                        .unwrap()
+                        .get("msg")
+                        .unwrap()
+                        .as_str()
+                        .unwrap()
+                        .to_string();
                     msg.insert("name".to_owned(), name);
                     msg.insert("content".to_owned(), content);
                 } else {
@@ -293,12 +341,15 @@ impl<'a> BilibiliDanmuClient<'a> {
                 }
             } else {
                 msg.insert("msg_type".to_owned(), "other".to_owned());
-                msg.insert("content".to_owned(), String::from_utf8_lossy(dm).to_string());
+                msg.insert(
+                    "content".to_owned(),
+                    String::from_utf8_lossy(dm).to_string(),
+                );
                 msg.insert("name".to_owned(), "".to_owned());
             }
             msgs.push(msg);
         }
-    
+
         msgs
     }
 }
@@ -315,7 +366,11 @@ impl Danmu for BilibiliDanmuClient<'_> {
         let mut last_heart_beat_timestamp = std::time::Instant::now();
         // 逻辑较简单，因此将逻辑放在一个loop中，避免两个&mut self引用导致不得不使用Arc<Mutex>，导致性能下降
         loop {
-            if std::time::Instant::now().duration_since(last_heart_beat_timestamp).as_secs() >= HEART_BEAT_INTERVAL {
+            if std::time::Instant::now()
+                .duration_since(last_heart_beat_timestamp)
+                .as_secs()
+                >= HEART_BEAT_INTERVAL
+            {
                 self.heart_beat().await;
                 last_heart_beat_timestamp = std::time::Instant::now();
             } else {

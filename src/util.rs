@@ -32,11 +32,9 @@ pub fn match_format(url: &str) -> Format {
         Format::M3U
     } else if url.contains(".flv") {
         Format::FLV
-    }
-    else if url.contains("rtmp:") {
+    } else if url.contains("rtmp:") {
         Format::RTMP
-    }
-    else {
+    } else {
         Format::Other("unknown".to_owned())
     }
 }

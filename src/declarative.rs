@@ -1,4 +1,7 @@
-use crate::{live, Cli, danmu::{self, Danmu}};
+use crate::{
+    danmu::{self, Danmu},
+    live, Cli,
+};
 use anyhow::{Ok, Result};
 use clap::{Parser, Subcommand};
 use paste::paste;
