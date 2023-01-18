@@ -129,14 +129,16 @@ pub async fn get_real_room_id(rid: &str) -> Result<String> {
 }
 
 /// 获取直播弹幕服务
-pub struct BilibiliDanmuClient<'a> {
-    room_id: &'a str,
+pub struct BiliDanmuClient {
+    room_id: String,
     websocket: Option<WebSocketStream<MaybeTlsStream<TcpStream>>>,
 }
 
-impl<'a> BilibiliDanmuClient<'a> {
+impl BiliDanmuClient {
     /// 简单初始化的构造函数
-    pub fn new(room_id: &'a str) -> Self {
+    /// 传入rid
+    pub async fn new(rid: &str) -> Self {
+        let room_id = get_real_room_id(rid).await.unwrap();
         Self {
             room_id,
             websocket: None,
@@ -169,8 +171,8 @@ impl<'a> BilibiliDanmuClient<'a> {
 
     /// 初始化websocket
     async fn init_ws(&mut self) {
-        let reg_datas = Self::get_ws_info(self.room_id);
-        let (mut ws, _) = tokio_tungstenite::connect_async(WSS_URL).await.unwrap();
+        let reg_datas = Self::get_ws_info(&self.room_id);
+        let (mut ws, _)= tokio_tungstenite::connect_async(WSS_URL).await.unwrap();
         for data in reg_datas {
             Pin::new(&mut ws).start_send(Message::Binary(data)).unwrap();
         }
@@ -355,7 +357,7 @@ impl<'a> BilibiliDanmuClient<'a> {
 }
 
 #[async_trait]
-impl Danmu for BilibiliDanmuClient<'_> {
+impl Danmu for BiliDanmuClient {
     // TODO: 实现其他弹幕记录方式
     async fn start(&mut self, recorder: DanmuRecorder) -> Result<()> {
         if recorder != DanmuRecorder::Terminal {

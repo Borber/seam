@@ -1,4 +1,4 @@
-use crate::{common::CLIENT, model::ShowType, util::parse_url};
+use crate::{common::CLIENT, model::ShowType, util::parse_url, default_danmu_client};
 
 use anyhow::{Ok, Result};
 use regex::Regex;
@@ -6,6 +6,8 @@ use serde_json::Value;
 use urlencoding::decode;
 
 const URL: &str = "https://live.douyin.com/";
+
+default_danmu_client!(Douyin);
 
 /// 抖音直播
 ///

@@ -1,8 +1,10 @@
 use anyhow::{Ok, Result};
 
-use crate::{model::ShowType, common::CLIENT, util::parse_url};
+use crate::{model::ShowType, common::CLIENT, util::parse_url, default_danmu_client};
 
 const URL: &str = "https://now.qq.com/cgi-bin/now/web/room/get_live_room_url?platform=8&room_id=";
+
+default_danmu_client!(Now);
 
 /// NOW直播
 ///

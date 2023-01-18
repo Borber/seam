@@ -1,8 +1,10 @@
 use anyhow::{Ok, Result};
 
-use crate::{common::CLIENT, model::ShowType, util::parse_url};
+use crate::{common::CLIENT, model::ShowType, util::parse_url, default_danmu_client};
 
 const URL: &str = "https://api.flextv.co.kr/api/channels/rid/stream?option=all";
+
+default_danmu_client!(Flex);
 
 /// flextv
 ///

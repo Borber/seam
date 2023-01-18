@@ -4,7 +4,9 @@ use anyhow::{Ok, Result};
 
 const URL: &str = "https://api.pandalive.co.kr/v1/live/play/";
 
-use crate::{common::CLIENT, model::ShowType, util::parse_url};
+use crate::{common::CLIENT, model::ShowType, util::parse_url, default_danmu_client};
+
+default_danmu_client!(Panda);
 
 /// pandalive
 ///

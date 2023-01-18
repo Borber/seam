@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use crate::{common::CLIENT, model::ShowType};
+use crate::{common::CLIENT, model::ShowType, default_danmu_client};
 
 use crate::util::{do_js, md5, parse_url};
 use anyhow::{Ok, Result};
@@ -14,6 +14,8 @@ const PLAY_URL: &str = "https://www.douyu.com/lapi/live/getH5Play/";
 const CDN_1: &str = "http://akm-tct.douyucdn.cn/live/";
 const CDN_2: &str = "http://ws-tct.douyucdn.cn/live/";
 const DID: &str = "10000000000000000000000000001501";
+
+default_danmu_client!(Douyu);
 
 /// 斗鱼直播
 ///
