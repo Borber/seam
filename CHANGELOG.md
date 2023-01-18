@@ -7,6 +7,42 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+
+## [0.1.12]
+
+### Added
+
+- 添加 now 直播源获取
+
+### Changed
+
+- Format 添加 rtmp 格式
+- 删除斗鱼, 虎牙多余打印信息
+
+### Fixed
+
+- 修复斗鱼, 虎牙平台直播源获取
+
+
+## [0.1.11]
+
+### Added
+
+- 添加 winktv 直播源获取
+
+### Changed
+
+- 修改Node结构
+- 规范化 format 判定, 规范化输出方法
+- 简化代码
+
+
+## [0.1.10]
+
+### Added
+
+- 添加 flex 直播源获取
+
 ## [0.1.9]
 
 ### Added

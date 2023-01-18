@@ -3,7 +3,8 @@ use regex::Regex;
 
 use crate::{
     common::{CLIENT, USER_AGENT},
-    model::{Node, ShowType},
+    model::ShowType,
+    util::parse_url,
 };
 
 const URL: &str = "https://live.kuaishou.com/u/";
@@ -30,16 +31,11 @@ pub async fn get(rid: &str) -> Result<ShowType> {
     let json: serde_json::Value = serde_json::from_str(stream).unwrap();
     // TODO 更改其他逻辑 多用Null
     match &json["liveroom"]["liveStream"]["playUrls"][0]["adaptationSet"]["representation"] {
-        serde_json::Value::Null => {
-            Ok(ShowType::Off)
-        }
+        serde_json::Value::Null => Ok(ShowType::Off),
         reps => {
             let list = reps.as_array().unwrap();
             let url = list[list.len() - 1]["url"].as_str().unwrap();
-            Ok(ShowType::On(vec![Node {
-                rate: "蓝光8M".to_string(),
-                url: url.to_string(),
-            }]))
+            Ok(ShowType::On(vec![parse_url(url.to_string())]))
         }
     }
 }
@@ -47,10 +43,9 @@ pub async fn get(rid: &str) -> Result<ShowType> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::util::match_show_type;
 
     #[tokio::test]
     async fn test_kuaishou() {
-        match_show_type(get("3xgexgpig9gwwi2").await.unwrap());
+        println!("{}", get("3xgexgpig9gwwi2").await.unwrap());
     }
 }

@@ -1,7 +1,4 @@
-use crate::{
-    common::CLIENT,
-    model::{Node, ShowType},
-};
+use crate::{common::CLIENT, model::ShowType, util::parse_url};
 
 use anyhow::{Ok, Result};
 use serde_json::Value;
@@ -25,10 +22,7 @@ pub async fn get(rid: &str) -> Result<ShowType> {
             let result = &resp["result"];
             match result["liveState"].to_string().parse::<usize>()? {
                 // 开播状态
-                1 => Ok(ShowType::On(vec![Node {
-                    rate: "清晰度".to_string(),
-                    url: result["pullUrl"].to_string(),
-                }])),
+                1 => Ok(ShowType::On(vec![parse_url(result["pullUrl"].to_string())])),
                 _ => Ok(ShowType::Off),
             }
         }
@@ -40,10 +34,9 @@ pub async fn get(rid: &str) -> Result<ShowType> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::util::match_show_type;
 
     #[tokio::test]
     async fn test_get_url() {
-        match_show_type(get("932055").await.unwrap());
+        println!("{}", get("932055").await.unwrap());
     }
 }

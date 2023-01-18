@@ -1,10 +1,7 @@
 use anyhow::{Ok, Result};
 use regex::Regex;
 
-use crate::{
-    common::CLIENT,
-    model::{Node, ShowType},
-};
+use crate::{common::CLIENT, model::ShowType, util::parse_url};
 
 const URL: &str = "https://www.huya.com/";
 
@@ -26,6 +23,7 @@ pub async fn get(rid: &str) -> Result<ShowType> {
         }
     };
     let json: serde_json::Value = serde_json::from_str(stream).unwrap();
+    println!("{}", json);
     let mut nodes = vec![];
     match json["data"][0]["gameStreamInfoList"].as_array().unwrap() {
         list if list.is_empty() => {
@@ -33,24 +31,18 @@ pub async fn get(rid: &str) -> Result<ShowType> {
         }
         list => {
             for cdn in list {
-                nodes.push(Node {
-                    rate: format!("蓝光-{}-flv", cdn["sCdnType"].as_str().unwrap()),
-                    url: format!(
-                        "{}/{}.flv?{}",
-                        cdn["sFlvUrl"].as_str().unwrap(),
-                        cdn["sStreamName"].as_str().unwrap(),
-                        cdn["sFlvAntiCode"].as_str().unwrap()
-                    ),
-                });
-                nodes.push(Node {
-                    rate: format!("蓝光-{}-hls", cdn["sCdnType"].as_str().unwrap()),
-                    url: format!(
-                        "{}/{}.m3u8?{}",
-                        cdn["sHlsUrl"].as_str().unwrap(),
-                        cdn["sStreamName"].as_str().unwrap(),
-                        cdn["sHlsAntiCode"].as_str().unwrap()
-                    ),
-                });
+                nodes.push(parse_url(format!(
+                    "{}/{}.flv?{}",
+                    cdn["sFlvUrl"].as_str().unwrap(),
+                    cdn["sStreamName"].as_str().unwrap(),
+                    cdn["sFlvAntiCode"].as_str().unwrap()
+                )));
+                nodes.push(parse_url(format!(
+                    "{}/{}.m3u8?{}",
+                    cdn["sHlsUrl"].as_str().unwrap(),
+                    cdn["sStreamName"].as_str().unwrap(),
+                    cdn["sHlsAntiCode"].as_str().unwrap()
+                )));
             }
         }
     }
@@ -61,10 +53,9 @@ pub async fn get(rid: &str) -> Result<ShowType> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::util::match_show_type;
 
     #[tokio::test]
     async fn test_get_url() {
-        match_show_type(get("28328839").await.unwrap());
+        println!("{}", get("18757676").await.unwrap());
     }
 }

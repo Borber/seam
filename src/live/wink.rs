@@ -2,13 +2,13 @@ use std::collections::HashMap;
 
 use anyhow::{Ok, Result};
 
-const URL: &str = "https://api.pandalive.co.kr/v1/live/play/";
+const URL: &str = "https://api.winktv.co.kr/v1/live/play";
 
 use crate::{common::CLIENT, model::ShowType, util::parse_url};
 
-/// pandalive
+/// winktv
 ///
-/// https://www.pandalive.co.kr/
+/// https://www.winktv.co.kr/
 pub async fn get(rid: &str) -> Result<ShowType> {
     let mut form = HashMap::new();
     form.insert("action", "watch");
@@ -36,6 +36,6 @@ mod tests {
 
     #[tokio::test]
     async fn test_panda() {
-        println!("{}", get("wpsl1002").await.unwrap());
+        println!("{}", get("csp1208").await.unwrap());
     }
 }

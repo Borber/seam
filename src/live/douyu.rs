@@ -1,9 +1,8 @@
 use std::collections::HashMap;
 
-use crate::model::Node;
 use crate::{common::CLIENT, model::ShowType};
 
-use crate::util::{do_js, md5};
+use crate::util::{do_js, md5, parse_url};
 use anyhow::{Ok, Result};
 use chrono::prelude::*;
 use regex::Regex;
@@ -34,14 +33,8 @@ pub async fn get(rid: &str) -> Result<ShowType> {
                 None => key,
             };
             Ok(ShowType::On(vec![
-                Node {
-                    rate: "超清1".to_string(),
-                    url: format!("{CDN_1}{key}.flv"),
-                },
-                Node {
-                    rate: "超清2".to_string(),
-                    url: format!("{CDN_2}{key}.flv"),
-                },
+                parse_url(format!("{CDN_1}{key}.flv")),
+                parse_url(format!("{CDN_2}{key}.flv")),
             ]))
         }
         _ => Ok(ShowType::Off),
@@ -78,14 +71,13 @@ async fn douyu_do_js(rid: &str) -> Result<Value> {
     for cap in re.captures_iter(&text) {
         let script = cap.get(1).unwrap().as_str();
         let re2 = Regex::new("\"([0-9]{12})\"").unwrap();
-        match re2.captures(script){
+        match re2.captures(script) {
             Some(t_cap) => {
                 v = t_cap.get(1).unwrap().as_str();
                 func = script.to_owned();
-            },
+            }
             None => continue,
         }
-
     }
 
     // 将eval运行字符串更改为直接返回字符串
@@ -99,7 +91,10 @@ async fn douyu_do_js(rid: &str) -> Result<Value> {
 
     // 构建函数, 替换数值
     let res = res.replace("(function", "let ccc = function");
-    let res = res.replace("rt;});", format!("rt;}}; ccc({rid}, \"{DID}\", {dt})").as_str());
+    let res = res.replace(
+        "rt;})",
+        format!("rt;}}; ccc({rid}, \"{DID}\", {dt})").as_str(),
+    );
 
     // 替换md5值避免js依赖
     let cb = format!("{rid}{DID}{dt}{v}");
@@ -109,10 +104,8 @@ async fn douyu_do_js(rid: &str) -> Result<Value> {
         format!("\"{}\";", &rb).as_str(),
     );
 
-    println!("{res}");
     // 运行js获取签名值
     let sign = do_js(&res).await;
-    println!("{sign}");
     let sign = sign.rsplit_once('=').unwrap().1;
 
     let mut params = HashMap::new();
@@ -134,10 +127,9 @@ async fn douyu_do_js(rid: &str) -> Result<Value> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::util::match_show_type;
 
     #[tokio::test]
     async fn test_get_url() {
-        match_show_type(get("33").await.unwrap());
+        println!("{}", get("33").await.unwrap());
     }
 }
