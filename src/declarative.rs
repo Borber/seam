@@ -1,4 +1,7 @@
-use crate::{live, Cli, danmu::{self, Danmu}};
+use crate::{
+    danmu::{self, Danmu},
+    live, Cli,
+};
 use std::path::PathBuf;
 use anyhow::{Ok, Result};
 use clap::{Parser, Subcommand};
