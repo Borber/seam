@@ -172,7 +172,7 @@ impl BiliDanmuClient {
     /// 初始化websocket
     async fn init_ws(&mut self) {
         let reg_datas = Self::get_ws_info(&self.room_id);
-        let (mut ws, _)= tokio_tungstenite::connect_async(WSS_URL).await.unwrap();
+        let (mut ws, _) = tokio_tungstenite::connect_async(WSS_URL).await.unwrap();
         for data in reg_datas {
             Pin::new(&mut ws).start_send(Message::Binary(data)).unwrap();
         }

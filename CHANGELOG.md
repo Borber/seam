@@ -8,6 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+## [0.1.13]
+
+### Added
+
+- 添加 kk 直播源获取
+- 添加 千帆直播源获取
+- bili 直播弹幕获取-预览版
+
 ## [0.1.12]
 
 ### Added

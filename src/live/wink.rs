@@ -4,7 +4,7 @@ use anyhow::{Ok, Result};
 
 const URL: &str = "https://api.winktv.co.kr/v1/live/play";
 
-use crate::{common::CLIENT, model::ShowType, util::parse_url, default_danmu_client};
+use crate::{common::CLIENT, default_danmu_client, model::ShowType, util::parse_url};
 
 default_danmu_client!(Wink);
 

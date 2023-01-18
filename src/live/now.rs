@@ -1,6 +1,6 @@
 use anyhow::{Ok, Result};
 
-use crate::{model::ShowType, common::CLIENT, util::parse_url, default_danmu_client};
+use crate::{common::CLIENT, default_danmu_client, model::ShowType, util::parse_url};
 
 const URL: &str = "https://now.qq.com/cgi-bin/now/web/room/get_live_room_url?platform=8&room_id=";
 
@@ -10,7 +10,12 @@ default_danmu_client!(Now);
 ///
 /// https://now.qq.com/
 pub async fn get(rid: &str) -> Result<ShowType> {
-    let json: serde_json::Value = CLIENT.get(format!("{URL}{rid}")).send().await?.json().await?;
+    let json: serde_json::Value = CLIENT
+        .get(format!("{URL}{rid}"))
+        .send()
+        .await?
+        .json()
+        .await?;
     match &json["result"]["is_on_live"].as_bool().unwrap() {
         true => {
             let mut urls = vec![];
@@ -20,8 +25,8 @@ pub async fn get(rid: &str) -> Result<ShowType> {
                 }
             }
             Ok(ShowType::On(urls))
-        },
-        false => Ok(ShowType::Off)
+        }
+        false => Ok(ShowType::Off),
     }
 }
 

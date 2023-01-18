@@ -3,9 +3,9 @@ use regex::Regex;
 
 use crate::{
     common::{CLIENT, USER_AGENT},
+    default_danmu_client,
     model::ShowType,
     util::parse_url,
-    default_danmu_client
 };
 
 const URL: &str = "https://live.kuaishou.com/u/";

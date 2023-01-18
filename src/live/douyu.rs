@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use crate::{common::CLIENT, model::ShowType, default_danmu_client};
+use crate::{common::CLIENT, default_danmu_client, model::ShowType};
 
 use crate::util::{do_js, md5, parse_url};
 use anyhow::{Ok, Result};
