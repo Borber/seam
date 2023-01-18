@@ -37,5 +37,5 @@ macro_rules! get_source_url_command {
 // 展开宏命令
 // 添加新的直播平台可以在括号末尾添加，并在live文件夹里添加对应的文件
 get_source_url_command!(
-    Bili, Douyu, Douyin, Huya, Kuaishou, Cc, Huajiao, Yqs, Mht, Afreeca, Panda, Flex, Wink
+    Bili, Douyu, Douyin, Huya, Kuaishou, Cc, Huajiao, Yqs, Mht, Now, Afreeca, Panda, Flex, Wink
 );

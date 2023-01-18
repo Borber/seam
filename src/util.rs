@@ -28,11 +28,15 @@ pub async fn do_js(js: &str) -> String {
 }
 
 pub fn match_format(url: &str) -> Format {
-    if url.contains("m3u8") {
+    if url.contains(".m3u8") {
         Format::M3U
-    } else if url.contains("flv") {
+    } else if url.contains(".flv") {
         Format::FLV
-    } else {
+    }
+    else if url.contains("rtmp:") {
+        Format::RTMP
+    }
+    else {
         Format::Other("unknown".to_owned())
     }
 }

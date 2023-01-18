@@ -37,6 +37,7 @@
 |[花椒](https://www.huajiao.com/)|`https://www.huajiao.com/l/<RID>`|
 |[艺气山](https://www.173.com/)|`https://www.173.com/<RID>`|
 |[棉花糖](https://www.2cq.com/)|`https://www.2cq.com/<RID>`|
+|[Now直播](https://now.qq.com/)|`https://now.qq.com/pcweb/story.html?roomid=<RID>`|
 |[afreeca](https://afreecatv.com/)|`https://bj.afreecatv.com/<RID>` 主播名字而非直播间号|
 |[pandalive](https://www.pandalive.co.kr/)|`https://www.pandalive.co.kr/channel/<RID>` 主播名字而非直播间号|
 |[flex](https://www.flextv.co.kr/)|`https://www.flextv.co.kr/channels/<RID>` 主播名字而非直播间号|

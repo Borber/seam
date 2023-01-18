@@ -34,6 +34,7 @@ pub struct Node {
 pub enum Format {
     FLV,
     M3U,
+    RTMP,
     Other(String),
 }
 /// 自定义序列化方法
@@ -45,6 +46,7 @@ impl Serialize for Format {
         let str = match self {
             Format::FLV => "flv",
             Format::M3U => "m3u",
+            Format::RTMP => "rtmp",
             Format::Other(s) => s.as_str(),
         };
         serializer.serialize_str(str)

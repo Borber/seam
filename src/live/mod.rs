@@ -8,6 +8,7 @@ pub mod huajiao;
 pub mod huya;
 pub mod kuaishou;
 pub mod mht;
+pub mod now;
 pub mod panda;
 pub mod wink;
 pub mod yqs;
