@@ -1,22 +1,17 @@
 use crate::{
     common::{CLIENT, USER_AGENT},
-    danmu::{Danmu, DanmuRecorder},
+    danmu::{Danmu, DanmuRecorder, websocket_danmu_work_flow},
     model::ShowType,
     util::parse_url,
 };
 
 use std::collections::HashMap;
-use std::pin::Pin;
 
 use anyhow::{anyhow, Ok, Result};
 use async_trait::async_trait;
-use futures_sink::Sink;
-use futures_util::StreamExt;
 use miniz_oxide::inflate::decompress_to_vec_zlib;
 use rand::Rng;
 use serde_json::json;
-use tokio::net::TcpStream;
-use tokio_tungstenite::{tungstenite::protocol::Message, MaybeTlsStream, WebSocketStream};
 
 const INIT_URL: &str = "https://api.live.bilibili.com/room/v1/Room/room_init";
 const URL: &str = "https://api.live.bilibili.com/xlive/web-room/v2/index/getRoomPlayInfo";
@@ -128,25 +123,17 @@ pub async fn get_real_room_id(rid: &str) -> Result<String> {
     }
 }
 
-/// 获取直播弹幕服务
 pub struct BiliDanmuClient {
     room_id: String,
-    websocket: Option<WebSocketStream<MaybeTlsStream<TcpStream>>>,
 }
 
 impl BiliDanmuClient {
-    /// 简单初始化的构造函数
-    /// 传入rid
     pub async fn new(rid: &str) -> Self {
         let room_id = get_real_room_id(rid).await.unwrap();
-        Self {
-            room_id,
-            websocket: None,
-        }
+        Self { room_id }
     }
 
-    /// 生成websocket info
-    fn get_ws_info(room_id: &str) -> Vec<Vec<u8>> {
+    fn init_msg_generator(room_id: &str) -> Vec<Vec<u8>> {
         let mut reg_data = vec![];
 
         let room_id = room_id.parse::<i64>().unwrap();
@@ -169,56 +156,9 @@ impl BiliDanmuClient {
         reg_data
     }
 
-    /// 初始化websocket
-    async fn init_ws(&mut self) {
-        let reg_datas = Self::get_ws_info(&self.room_id);
-        let (mut ws, _) = tokio_tungstenite::connect_async(WSS_URL).await.unwrap();
-        for data in reg_datas {
-            Pin::new(&mut ws).start_send(Message::Binary(data)).unwrap();
-        }
-        self.websocket = Some(ws);
-    }
-
-    /// 心跳机制
-    async fn heart_beat(&mut self) {
-        if let Some(ws) = &mut self.websocket {
-            Pin::new(ws)
-                .start_send(Message::Binary(HEART_BEAT.as_bytes().to_vec()))
-                .unwrap();
-        } else {
-            self.init_ws().await;
-        }
-    }
-
-    /// 获取弹幕。
-    ///
-    /// TODO: 考虑通过接收一个函数或传入DanmuRecorder来处理弹幕。
-    async fn fetch_danmu(&mut self) {
-        if let Some(ws) = &mut self.websocket {
-            let ws_to_stdout = {
-                ws.for_each(|message| async {
-                    let data = message.unwrap().into_data();
-                    for m in Self::decode_msg(&data).iter() {
-                        if m.get("msg_type") == Some(&"danmu".to_string()) {
-                            println!(
-                                "name: {:?}, content: {:?}",
-                                m.get("name").unwrap(),
-                                m.get("content").unwrap()
-                            );
-                        }
-                    }
-                })
-            };
-            ws_to_stdout.await;
-        } else {
-            self.init_ws().await;
-        }
-    }
-
-    /// 解析websocket传回的弹幕信息。
-    fn decode_msg(data: &[u8]) -> Vec<HashMap<String, String>> {
+    fn decode_and_record_danmu(data: &[u8], recorder: &DanmuRecorder) -> Result<()> {
         if data.len() < 16 {
-            return vec![];
+            return Ok(());
         }
 
         let mut dm_list_compressed = vec![];
@@ -320,37 +260,46 @@ impl BiliDanmuClient {
             msgs.push(msg);
         }
 
-        msgs
+        if recorder == &DanmuRecorder::Terminal {
+            for m in msgs.iter() {
+                if m.get("msg_type") == Some(&"danmu".to_string()) {
+                    println!(
+                        "name: {:?}, content: {:?}",
+                        m.get("name").unwrap(),
+                        m.get("content").unwrap()
+                    );
+                }
+            }
+        }
+
+        Ok(())
     }
 }
 
 #[async_trait]
 impl Danmu for BiliDanmuClient {
-    // TODO: 实现其他弹幕记录方式
     async fn start(&mut self, recorder: DanmuRecorder) -> Result<()> {
-        if recorder != DanmuRecorder::Terminal {
-            return Err(anyhow!("Bilibili弹幕服务目前仅支持终端输出。"));
-        }
-
-        self.init_ws().await;
-        let mut last_heart_beat_timestamp = std::time::Instant::now();
-        // 逻辑较简单，因此将逻辑放在一个loop中，避免两个&mut self引用导致不得不使用Arc<Mutex>，导致性能下降
-        loop {
-            if std::time::Instant::now()
-                .duration_since(last_heart_beat_timestamp)
-                .as_secs()
-                >= HEART_BEAT_INTERVAL
-            {
-                self.heart_beat().await;
-                last_heart_beat_timestamp = std::time::Instant::now();
-            } else {
-                let sleep = tokio::time::sleep(tokio::time::Duration::from_millis(10));
-                tokio::pin!(sleep);
-                tokio::select! {
-                    _ = &mut sleep => {},
-                    _ = self.fetch_danmu() => {}
-                }
+        let recorder_checker = |recorder: &DanmuRecorder| {
+            if recorder != &DanmuRecorder::Terminal {
+                return Err(anyhow!("Bilibili弹幕服务目前仅支持终端输出。"));
             }
-        }
+            Ok(())
+        };
+
+        let heart_beat_msg_generator = || { HEART_BEAT.as_bytes().to_vec() };
+        let heart_beat_interval = HEART_BEAT_INTERVAL;
+
+        websocket_danmu_work_flow(
+            &self.room_id,
+            WSS_URL,
+            recorder,
+            recorder_checker,
+            Self::init_msg_generator,
+            heart_beat_msg_generator,
+            heart_beat_interval,
+            Self::decode_and_record_danmu
+        ).await?;
+
+        Ok(())
     }
 }
