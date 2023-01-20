@@ -1,7 +1,12 @@
 use anyhow::{Ok, Result};
 use regex::Regex;
 
-use crate::{common::CLIENT, default_danmu_client, model::ShowType, util::parse_url};
+use crate::{
+    common::CLIENT,
+    default_danmu_client,
+    model::{Detail, ShowType},
+    util::parse_url,
+};
 
 const URL: &str = "https://www.huya.com/";
 
@@ -48,8 +53,7 @@ pub async fn get(rid: &str) -> Result<ShowType> {
             }
         }
     }
-
-    Ok(ShowType::On(nodes))
+    Ok(ShowType::On(Detail::new("huya".to_owned(), nodes)))
 }
 
 #[cfg(test)]

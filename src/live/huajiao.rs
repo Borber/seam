@@ -1,7 +1,12 @@
 use anyhow::{Ok, Result};
 use regex::Regex;
 
-use crate::{common::CLIENT, default_danmu_client, model::ShowType, util::parse_url};
+use crate::{
+    common::CLIENT,
+    default_danmu_client,
+    model::{Detail, ShowType},
+    util::parse_url,
+};
 
 const URL: &str = "https://www.huajiao.com/l/";
 
@@ -33,9 +38,12 @@ pub async fn get(rid: &str) -> Result<ShowType> {
         .as_str()
         .parse::<i32>()?
     {
-        0 => Ok(ShowType::On(vec![parse_url(format!(
-            "https://{pl}-flv.live.huajiao.com/live_huajiao_v2/{sn}.m3u8"
-        ))])),
+        0 => {
+            let nodes = vec![parse_url(format!(
+                "https://{pl}-flv.live.huajiao.com/live_huajiao_v2/{sn}.m3u8"
+            ))];
+            Ok(ShowType::On(Detail::new("huajiao".to_owned(), nodes)))
+        }
         _ => Ok(ShowType::Off),
     }
 }

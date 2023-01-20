@@ -4,7 +4,7 @@ use regex::Regex;
 use crate::{
     common::{CLIENT, USER_AGENT},
     default_danmu_client,
-    model::ShowType,
+    model::{Detail, ShowType},
     util::parse_url,
 };
 
@@ -38,7 +38,8 @@ pub async fn get(rid: &str) -> Result<ShowType> {
         reps => {
             let list = reps.as_array().unwrap();
             let url = list[list.len() - 1]["url"].as_str().unwrap();
-            Ok(ShowType::On(vec![parse_url(url.to_string())]))
+            let nodes = vec![parse_url(url.to_string())];
+            Ok(ShowType::On(Detail::new("kuaishou".to_owned(), nodes)))
         }
     }
 }

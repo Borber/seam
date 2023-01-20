@@ -1,7 +1,7 @@
 use crate::{
     common::{CLIENT, USER_AGENT},
-    danmu::{Danmu, DanmuRecorder, websocket_danmu_work_flow},
-    model::ShowType,
+    danmu::{websocket_danmu_work_flow, Danmu, DanmuRecorder},
+    model::{Detail, ShowType},
     util::parse_url,
 };
 
@@ -11,9 +11,10 @@ use anyhow::{anyhow, Ok, Result};
 use async_trait::async_trait;
 use miniz_oxide::inflate::decompress_to_vec_zlib;
 use rand::Rng;
+use regex::Regex;
 use serde_json::json;
 
-const INIT_URL: &str = "https://api.live.bilibili.com/room/v1/Room/room_init";
+const INIT_URL: &str = "https://live.bilibili.com/";
 const URL: &str = "https://api.live.bilibili.com/xlive/web-room/v2/index/getRoomPlayInfo";
 const WSS_URL: &str = "wss://broadcastlv.chat.bilibili.com/sub";
 const HEART_BEAT: &str = "\x00\x00\x00\x1f\x00\x10\x00\x01\x00\x00\x00\x02\x00\x00\x00\x01\x5b\x6f\x62\x6a\x65\x63\x74\x20\x4f\x62\x6a\x65\x63\x74\x5d ";
@@ -23,18 +24,9 @@ const HEART_BEAT_INTERVAL: u64 = 60;
 ///
 /// https://live.bilibili.com/
 pub async fn get(rid: &str) -> Result<ShowType> {
-    let resp: serde_json::Value = CLIENT
-        .get(INIT_URL)
-        .header("User-Agent", USER_AGENT)
-        .query(&[("id", rid)])
-        .send()
-        .await?
-        .json()
-        .await?;
-    match resp["code"].to_string().parse::<usize>()? {
-        0 => match resp["data"]["live_status"].to_string().parse::<usize>()? {
+    match get_real_room_info(rid).await {
+        Some((live_status, room_id, title)) => match live_status {
             1 => {
-                let room_id = resp["data"]["room_id"].to_string();
                 let mut stream_info = get_stream_info(&room_id, 10000).await?;
                 let max = stream_info
                     .as_array()
@@ -54,7 +46,7 @@ pub async fn get(rid: &str) -> Result<ShowType> {
                 if max != 10000 {
                     stream_info = get_stream_info(&room_id, max).await?;
                 }
-                let mut stream_urls = vec![];
+                let mut nodes = vec![];
                 for obj in stream_info.as_array().unwrap() {
                     for format in obj["format"].as_array().unwrap() {
                         for codec in format["codec"].as_array().unwrap() {
@@ -62,17 +54,16 @@ pub async fn get(rid: &str) -> Result<ShowType> {
                             for url_info in codec["url_info"].as_array().unwrap() {
                                 let host = url_info["host"].as_str().unwrap();
                                 let extra = url_info["extra"].as_str().unwrap();
-                                stream_urls
-                                    .push(parse_url(format!("{}{}{}", host, base_url, extra)));
+                                nodes.push(parse_url(format!("{}{}{}", host, base_url, extra)));
                             }
                         }
                     }
                 }
-                Ok(ShowType::On(stream_urls))
+                Ok(ShowType::On(Detail::new(title, nodes)))
             }
             _ => Ok(ShowType::Off),
         },
-        _ => Ok(ShowType::Error(resp["msg"].to_string())),
+        None => return Ok(ShowType::Error("直播间不存在".to_owned())),
     }
 }
 
@@ -103,24 +94,33 @@ mod tests {
 
     #[tokio::test]
     async fn test_get_url() {
-        println!("{}", get("23356199").await.unwrap());
+        println!("{}", get("7777").await.unwrap());
     }
 }
 
-/// 获取真实房间号
-pub async fn get_real_room_id(rid: &str) -> Result<String> {
-    let resp: serde_json::Value = CLIENT
-        .get(INIT_URL)
+/// 获取直播间信息
+/// 返回值：( 直播状态,真实房间号, 直播间标题)
+pub async fn get_real_room_info(rid: &str) -> Option<(i32, String, String)> {
+    let resp = CLIENT
+        .get(format!("{INIT_URL}{rid}"))
         .header("User-Agent", USER_AGENT)
-        .query(&[("id", rid)])
         .send()
-        .await?
-        .json()
-        .await?;
-    match resp["code"].to_string().parse::<usize>()? {
-        0 => Ok(resp["data"]["room_id"].to_string()),
-        _ => Err(anyhow!(resp["msg"].to_string())),
-    }
+        .await
+        .unwrap()
+        .text()
+        .await
+        .unwrap();
+    let re = Regex::new(r#"<script>window.__NEPTUNE_IS_MY_WAIFU__=([\s\S]*?)</script>"#).unwrap();
+    let json = match re.captures(&resp) {
+        Some(cap) => cap.get(1).unwrap().as_str(),
+        None => return None,
+    };
+    let json: serde_json::Value = serde_json::from_str(json).unwrap();
+    let json = &json["roomInfoRes"]["data"]["room_info"];
+    let live_status = json["live_status"].to_string().parse::<i32>().unwrap();
+    let room_id = json["room_id"].as_i64().unwrap().to_string();
+    let title = json["title"].as_str().unwrap().to_owned();
+    return Some((live_status, room_id, title));
 }
 
 pub struct BiliDanmuClient {
@@ -129,7 +129,7 @@ pub struct BiliDanmuClient {
 
 impl BiliDanmuClient {
     pub async fn new(rid: &str) -> Self {
-        let room_id = get_real_room_id(rid).await.unwrap();
+        let (_, room_id, _) = get_real_room_info(rid).await.unwrap();
         Self { room_id }
     }
 
@@ -286,7 +286,7 @@ impl Danmu for BiliDanmuClient {
             Ok(())
         };
 
-        let heart_beat_msg_generator = || { HEART_BEAT.as_bytes().to_vec() };
+        let heart_beat_msg_generator = || HEART_BEAT.as_bytes().to_vec();
         let heart_beat_interval = HEART_BEAT_INTERVAL;
 
         websocket_danmu_work_flow(
@@ -297,8 +297,9 @@ impl Danmu for BiliDanmuClient {
             Self::init_msg_generator,
             heart_beat_msg_generator,
             heart_beat_interval,
-            Self::decode_and_record_danmu
-        ).await?;
+            Self::decode_and_record_danmu,
+        )
+        .await?;
 
         Ok(())
     }

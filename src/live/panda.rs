@@ -4,7 +4,12 @@ use anyhow::{Ok, Result};
 
 const URL: &str = "https://api.pandalive.co.kr/v1/live/play/";
 
-use crate::{common::CLIENT, default_danmu_client, model::ShowType, util::parse_url};
+use crate::{
+    common::CLIENT,
+    default_danmu_client,
+    model::{Detail, ShowType},
+    util::parse_url,
+};
 
 default_danmu_client!(Panda);
 
@@ -27,7 +32,7 @@ pub async fn get(rid: &str) -> Result<ShowType> {
                     ));
                 }
             }
-            Ok(ShowType::On(nodes))
+            Ok(ShowType::On(Detail::new("panda".to_owned(), nodes)))
         }
     }
 }

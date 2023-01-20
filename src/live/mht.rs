@@ -1,4 +1,9 @@
-use crate::{common::CLIENT, default_danmu_client, model::ShowType, util::parse_url};
+use crate::{
+    common::CLIENT,
+    default_danmu_client,
+    model::{Detail, ShowType},
+    util::parse_url,
+};
 
 use anyhow::{Ok, Result};
 use serde_json::Value;
@@ -24,7 +29,10 @@ pub async fn get(rid: &str) -> Result<ShowType> {
             let result = &resp["result"];
             match result["liveState"].to_string().parse::<usize>()? {
                 // 开播状态
-                1 => Ok(ShowType::On(vec![parse_url(result["pullUrl"].to_string())])),
+                1 => {
+                    let nodes = vec![parse_url(result["pullUrl"].to_string())];
+                    Ok(ShowType::On(Detail::new("mht".to_owned(), nodes)))
+                }
                 _ => Ok(ShowType::Off),
             }
         }

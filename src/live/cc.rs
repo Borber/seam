@@ -1,4 +1,9 @@
-use crate::{common::CLIENT, default_danmu_client, model::ShowType, util::parse_url};
+use crate::{
+    common::CLIENT,
+    default_danmu_client,
+    model::{Detail, ShowType},
+    util::parse_url,
+};
 use anyhow::{Ok, Result};
 use regex::Regex;
 
@@ -41,7 +46,7 @@ pub async fn get(rid: &str) -> Result<ShowType> {
             break;
         }
     }
-    Ok(ShowType::On(nodes))
+    Ok(ShowType::On(Detail::new("cc".to_owned(), nodes)))
 }
 
 #[cfg(test)]

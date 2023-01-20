@@ -1,5 +1,6 @@
 use std::collections::HashMap;
 
+use crate::model::Detail;
 use crate::{common::CLIENT, default_danmu_client, model::ShowType};
 
 use crate::util::{do_js, md5, parse_url};
@@ -34,10 +35,11 @@ pub async fn get(rid: &str) -> Result<ShowType> {
                 Some((k, _)) => k,
                 None => key,
             };
-            Ok(ShowType::On(vec![
+            let nodes = vec![
                 parse_url(format!("{CDN_1}{key}.flv")),
                 parse_url(format!("{CDN_2}{key}.flv")),
-            ]))
+            ];
+            Ok(ShowType::On(Detail::new("douyu".to_owned(), nodes)))
         }
         _ => Ok(ShowType::Off),
     }

@@ -1,7 +1,12 @@
 use anyhow::{Ok, Result};
 use regex::Regex;
 
-use crate::{common::CLIENT, default_danmu_client, model::ShowType, util::parse_url};
+use crate::{
+    common::CLIENT,
+    default_danmu_client,
+    model::{Detail, ShowType},
+    util::parse_url,
+};
 
 const URL: &str = "https://sgapi.kktv8.com/roomApi/room/roomVideoBitrate?roomId=";
 
@@ -19,9 +24,10 @@ pub async fn get(rid: &str) -> Result<ShowType> {
         .await?;
     let re = Regex::new(r#"http[\s\S]*?flv"#).unwrap();
     match re.captures(&text) {
-        Some(cap) => Ok(ShowType::On(vec![parse_url(
-            cap.get(0).unwrap().as_str().to_string(),
-        )])),
+        Some(cap) => {
+            let nodes = vec![parse_url(cap.get(0).unwrap().as_str().to_string())];
+            Ok(ShowType::On(Detail::new("kk".to_owned(), nodes)))
+        }
         None => Ok(ShowType::Off),
     }
 }

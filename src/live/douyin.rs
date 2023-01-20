@@ -1,4 +1,9 @@
-use crate::{common::CLIENT, default_danmu_client, model::ShowType, util::parse_url};
+use crate::{
+    common::CLIENT,
+    default_danmu_client,
+    model::{Detail, ShowType},
+    util::parse_url,
+};
 
 use anyhow::{Ok, Result};
 use regex::Regex;
@@ -27,10 +32,13 @@ pub async fn get(rid: &str) -> Result<ShowType> {
         serde_json::Value::Null => Ok(ShowType::Error("直播间不存在".to_string())),
         _ => match &room_info["room"]["stream_url"] {
             Value::Null => Ok(ShowType::Off),
-            stream_url => Ok(ShowType::On(vec![
-                parse_url(douyin_trim_value(&stream_url["flv_pull_url"]["FULL_HD1"])),
-                parse_url(douyin_trim_value(&stream_url["hls_pull_url"])),
-            ])),
+            stream_url => {
+                let nodes = vec![
+                    parse_url(douyin_trim_value(&stream_url["flv_pull_url"]["FULL_HD1"])),
+                    parse_url(douyin_trim_value(&stream_url["hls_pull_url"])),
+                ];
+                Ok(ShowType::On(Detail::new("douyin".to_owned(), nodes)))
+            }
         },
     }
 }

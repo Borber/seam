@@ -1,4 +1,9 @@
-use crate::{common::CLIENT, default_danmu_client, model::ShowType, util::parse_url};
+use crate::{
+    common::CLIENT,
+    default_danmu_client,
+    model::{Detail, ShowType},
+    util::parse_url,
+};
 
 use anyhow::{Ok, Result};
 use std::collections::HashMap;
@@ -16,7 +21,10 @@ pub async fn get(rid: &str) -> Result<ShowType> {
     let resp: serde_json::Value = CLIENT.post(URL).form(&params).send().await?.json().await?;
     let data = &resp["data"];
     match data["status"].to_string().parse::<usize>()? {
-        2 => Ok(ShowType::On(vec![parse_url(data["url"].to_string())])),
+        2 => {
+            let nodes = vec![parse_url(data["url"].to_string())];
+            Ok(ShowType::On(Detail::new("yqs".to_owned(), nodes)))
+        }
         _ => Ok(ShowType::Off),
     }
 }

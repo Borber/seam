@@ -1,6 +1,11 @@
 use anyhow::{Ok, Result};
 
-use crate::{common::CLIENT, default_danmu_client, model::ShowType, util::parse_url};
+use crate::{
+    common::CLIENT,
+    default_danmu_client,
+    model::{Detail, ShowType},
+    util::parse_url,
+};
 
 const URL: &str = "https://api.flextv.co.kr/api/channels/rid/stream?option=all";
 
@@ -18,9 +23,10 @@ pub async fn get(rid: &str) -> Result<ShowType> {
         .await?;
     match &json["sources"][0]["url"] {
         serde_json::Value::Null => Ok(ShowType::Off),
-        url => Ok(ShowType::On(vec![parse_url(
-            url.as_str().unwrap().to_string(),
-        )])),
+        url => {
+            let nodes = vec![parse_url(url.as_str().unwrap().to_string())];
+            Ok(ShowType::On(Detail::new("flex".to_owned(), nodes)))
+        }
     }
 }
 

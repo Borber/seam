@@ -5,7 +5,7 @@ use serde::{Serialize, Serializer};
 #[derive(Serialize, Debug)]
 pub enum ShowType {
     // 开播
-    On(Vec<Node>),
+    On(Detail),
     // 未开播
     Off,
     // 错误
@@ -19,6 +19,18 @@ impl Display for ShowType {
             ShowType::Off => write!(f, "未开播"),
             ShowType::Error(msg) => write!(f, "{}", msg),
         }
+    }
+}
+
+#[derive(Serialize, Debug)]
+pub struct Detail {
+    pub title: String,
+    pub nodes: Vec<Node>,
+}
+
+impl Detail {
+    pub fn new(title: String, nodes: Vec<Node>) -> Self {
+        Self { title, nodes }
     }
 }
 

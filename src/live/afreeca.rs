@@ -3,7 +3,12 @@ use std::collections::HashMap;
 use anyhow::{Ok, Result};
 use regex::Regex;
 
-use crate::{common::CLIENT, default_danmu_client, model::ShowType, util::parse_url};
+use crate::{
+    common::CLIENT,
+    default_danmu_client,
+    model::{Detail, ShowType},
+    util::parse_url,
+};
 
 const URL: &str = "https://play.afreecatv.com/";
 const PLAY_URL: &str = "https://live.afreecatv.com/afreeca/player_live_api.php?bjid=";
@@ -44,10 +49,11 @@ pub async fn get(rid: &str) -> Result<ShowType> {
         .await?
         .json()
         .await?;
-    Ok(ShowType::On(vec![parse_url(format!(
+    let nodes = vec![parse_url(format!(
         "{CDN}{}",
         json["CHANNEL"]["AID"].as_str().unwrap()
-    ))]))
+    ))];
+    Ok(ShowType::On(Detail::new("afreeca".to_owned(), nodes)))
 }
 
 #[cfg(test)]
