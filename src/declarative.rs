@@ -60,7 +60,7 @@ macro_rules! default_danmu_client {
 
         paste! {
             use async_trait::async_trait;
-            use crate::danmu::{Danmu, DanmuRecorder};
+            use $crate::danmu::{Danmu, DanmuRecorder};
 
             pub struct [<$name DanmuClient>] {}
 

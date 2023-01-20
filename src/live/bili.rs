@@ -63,7 +63,7 @@ pub async fn get(rid: &str) -> Result<ShowType> {
             }
             _ => Ok(ShowType::Off),
         },
-        None => return Ok(ShowType::Error("直播间不存在".to_owned())),
+        None => Ok(ShowType::Error("直播间不存在".to_owned())),
     }
 }
 
@@ -120,7 +120,7 @@ pub async fn get_real_room_info(rid: &str) -> Option<(i32, String, String)> {
     let live_status = json["live_status"].to_string().parse::<i32>().unwrap();
     let room_id = json["room_id"].as_i64().unwrap().to_string();
     let title = json["title"].as_str().unwrap().to_owned();
-    return Some((live_status, room_id, title));
+    Some((live_status, room_id, title))
 }
 
 pub struct BiliDanmuClient {

@@ -31,9 +31,9 @@ pub fn match_format(url: &str) -> Format {
     if url.contains(".m3u8") {
         Format::M3U
     } else if url.contains(".flv") {
-        Format::FLV
+        Format::Flv
     } else if url.contains("rtmp:") {
-        Format::RTMP
+        Format::Rtmp
     } else {
         Format::Other("unknown".to_owned())
     }

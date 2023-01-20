@@ -61,7 +61,7 @@ fn douyin_trim_value(url: &str) -> String {
         true => {
             let url = url.split_once('?').unwrap().0;
             let re = Regex::new(r#"_[\s\S]*?\."#).unwrap();
-            match re.captures(&url) {
+            match re.captures(url) {
                 Some(c) => url.replace(c.get(0).unwrap().as_str(), "."),
                 None => url.to_owned(),
             }
