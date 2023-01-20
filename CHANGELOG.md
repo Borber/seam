@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - 添加 bili 直播间 标题获取, 标题字段初步支持
+- 支持 抖音, cc直播标题获取
 
 ### Changed
 

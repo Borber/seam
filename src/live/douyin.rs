@@ -25,6 +25,14 @@ pub async fn get(rid: &str) -> Result<ShowType> {
         .await?;
     let resp_text = resp.text().await?;
     let re = Regex::new(r#"<script id="RENDER_DATA" type="application/json">([\s\S]*?)</script>"#)?;
+    let re1 = Regex::new(r#""live-room-name">([\s\S]*?)</h1>"#)?;
+    let title = re1
+        .captures(&resp_text)
+        .unwrap()
+        .get(1)
+        .unwrap()
+        .as_str()
+        .to_string();
     let json = decode(re.captures(&resp_text).unwrap().get(1).unwrap().as_str())?;
     let json: serde_json::Value = serde_json::from_str(&json)?;
     let room_info = &json["app"]["initialState"]["roomStore"]["roomInfo"];
@@ -37,7 +45,7 @@ pub async fn get(rid: &str) -> Result<ShowType> {
                     parse_url(douyin_trim_value(&stream_url["flv_pull_url"]["FULL_HD1"])),
                     parse_url(douyin_trim_value(&stream_url["hls_pull_url"])),
                 ];
-                Ok(ShowType::On(Detail::new("douyin".to_owned(), nodes)))
+                Ok(ShowType::On(Detail::new(title, nodes)))
             }
         },
     }
