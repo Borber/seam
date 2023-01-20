@@ -45,12 +45,18 @@ pub async fn get(rid: &str) -> Result<ShowType> {
 
 /// 去除抖音返回链接的多余引号和暂时无用的参数简化链接
 fn douyin_trim_value(v: &Value) -> String {
-    v.to_string()
+    let url = v
+        .to_string()
         .trim_matches('"')
         .split_once('?')
         .unwrap()
         .0
-        .to_owned()
+        .to_owned();
+    let re = Regex::new(r#"_[\s\S]*?\."#).unwrap();
+    match re.captures(&url) {
+        Some(c) => url.replace(c.get(0).unwrap().as_str(), "."),
+        None => url,
+    }
 }
 
 #[cfg(test)]
@@ -59,6 +65,6 @@ mod tests {
 
     #[tokio::test]
     async fn test_get_url() {
-        println!("{}", get("228619203678").await.unwrap());
+        println!("{}", get("357626301151").await.unwrap());
     }
 }

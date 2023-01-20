@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- 添加 bili 直播间 标题获取, 标题字段初步支持
+
+### Changed
+
+- 抖音去除画质标签
+
 
 ## [0.1.13]
 
