@@ -42,8 +42,12 @@ pub async fn get(rid: &str) -> Result<ShowType> {
             Value::Null => Ok(ShowType::Off),
             stream_url => {
                 let nodes = vec![
-                    parse_url(douyin_trim_value(&stream_url["flv_pull_url"]["FULL_HD1"])),
-                    parse_url(douyin_trim_value(&stream_url["hls_pull_url"])),
+                    parse_url(douyin_trim_value(
+                        stream_url["flv_pull_url"]["FULL_HD1"].as_str().unwrap(),
+                    )),
+                    parse_url(douyin_trim_value(
+                        stream_url["hls_pull_url"].as_str().unwrap(),
+                    )),
                 ];
                 Ok(ShowType::On(Detail::new(title, nodes)))
             }
@@ -52,18 +56,17 @@ pub async fn get(rid: &str) -> Result<ShowType> {
 }
 
 /// 去除抖音返回链接的多余引号和暂时无用的参数简化链接
-fn douyin_trim_value(v: &Value) -> String {
-    let url = v
-        .to_string()
-        .trim_matches('"')
-        .split_once('?')
-        .unwrap()
-        .0
-        .to_owned();
-    let re = Regex::new(r#"_[\s\S]*?\."#).unwrap();
-    match re.captures(&url) {
-        Some(c) => url.replace(c.get(0).unwrap().as_str(), "."),
-        None => url,
+fn douyin_trim_value(url: &str) -> String {
+    match url.contains("third") {
+        true => {
+            let url = url.split_once('?').unwrap().0;
+            let re = Regex::new(r#"_[\s\S]*?\."#).unwrap();
+            match re.captures(&url) {
+                Some(c) => url.replace(c.get(0).unwrap().as_str(), "."),
+                None => url.to_owned(),
+            }
+        }
+        false => url.to_owned(),
     }
 }
 
@@ -73,6 +76,6 @@ mod tests {
 
     #[tokio::test]
     async fn test_get_url() {
-        println!("{}", get("357626301151").await.unwrap());
+        println!("{}", get("279322104492").await.unwrap());
     }
 }

@@ -5,12 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.1.14]
 
 ### Added
 
 - 添加 bili 直播间 标题获取, 标题字段初步支持
 - 支持 抖音, cc直播标题获取
+
+### Fixd
+
+- 修复抖音直播源获取
 
 ### Changed
 
