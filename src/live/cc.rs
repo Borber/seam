@@ -34,19 +34,26 @@ pub async fn get(rid: &str) -> Result<ShowType> {
             serde_json::Value::Null => return Ok(ShowType::Off),
             v => v,
         };
+    let title = json["props"]["pageProps"]["roomInfoInitData"]["live"]["title"]
+        .as_str()
+        .unwrap();
     let mut nodes = vec![];
     for vbr in ["blueray", "ultra", "high", "standard"] {
         if resolution[vbr] != serde_json::Value::Null {
-            nodes.push(parse_url(
-                resolution[vbr]["cdn"]["ali"].as_str().unwrap().to_string(),
-            ));
-            nodes.push(parse_url(
-                resolution[vbr]["cdn"]["ks"].as_str().unwrap().to_string(),
-            ));
+            if resolution[vbr]["cdn"]["ali"] != serde_json::Value::Null {
+                nodes.push(parse_url(
+                    resolution[vbr]["cdn"]["ali"].as_str().unwrap().to_string(),
+                ));
+            }
+            if resolution[vbr]["cdn"]["ks"] != serde_json::Value::Null {
+                nodes.push(parse_url(
+                    resolution[vbr]["cdn"]["ks"].as_str().unwrap().to_string(),
+                ));
+            }
             break;
         }
     }
-    Ok(ShowType::On(Detail::new("cc".to_owned(), nodes)))
+    Ok(ShowType::On(Detail::new(title.to_owned(), nodes)))
 }
 
 #[cfg(test)]
