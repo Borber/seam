@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.15]
+
+### Added
+- 虎牙直播间标题字段支持
+
+### Fixed
+- 删除虎牙多余信息输出
+
 ## [0.1.14]
 
 ### Added

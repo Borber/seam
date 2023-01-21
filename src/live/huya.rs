@@ -29,8 +29,12 @@ pub async fn get(rid: &str) -> Result<ShowType> {
             return Ok(ShowType::Error("直播间不存在".to_string()));
         }
     };
+    let re = Regex::new(r#"class="host-title" title="[\s\S]*?>([\s\S]*?)</h1>"#).unwrap();
+    let title = match re.captures(&text) {
+        Some(caps) => caps.get(1).unwrap().as_str(),
+        None => "huya",
+    };
     let json: serde_json::Value = serde_json::from_str(stream).unwrap();
-    println!("{}", json);
     let mut nodes = vec![];
     match json["data"][0]["gameStreamInfoList"].as_array().unwrap() {
         list if list.is_empty() => {
@@ -53,7 +57,7 @@ pub async fn get(rid: &str) -> Result<ShowType> {
             }
         }
     }
-    Ok(ShowType::On(Detail::new("huya".to_owned(), nodes)))
+    Ok(ShowType::On(Detail::new(title.to_owned(), nodes)))
 }
 
 #[cfg(test)]
@@ -62,6 +66,6 @@ mod tests {
 
     #[tokio::test]
     async fn test_get_url() {
-        println!("{}", get("18757676").await.unwrap());
+        println!("{}", get("880236").await.unwrap());
     }
 }
