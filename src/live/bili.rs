@@ -5,8 +5,6 @@ use crate::{
     util::parse_url,
 };
 
-use std::collections::HashMap;
-
 use anyhow::{anyhow, Ok, Result};
 use async_trait::async_trait;
 use miniz_oxide::inflate::decompress_to_vec_zlib;
@@ -156,9 +154,9 @@ impl BiliDanmuClient {
         reg_data
     }
 
-    fn decode_and_record_danmu(data: &[u8], recorder: &DanmuRecorder) -> Result<()> {
+    fn decode_and_record_danmu(data: &[u8]) -> Result<Vec<DanmuBody>> {
         if data.len() < 16 {
-            return Ok(());
+            return Ok(vec![]);
         }
 
         let mut dm_list_compressed = vec![];
@@ -200,14 +198,11 @@ impl BiliDanmuClient {
                 let packet_len =
                     u32::from_be_bytes(decompressed[sptr..sptr + 4].try_into().unwrap());
                 let op = u32::from_be_bytes(decompressed[sptr + 8..sptr + 12].try_into().unwrap());
-
                 if decompressed[sptr..].len() < packet_len as usize {
                     break;
                 }
-
                 ops.push(op);
                 dm_list.push(&decompressed[sptr + 16..sptr + packet_len as usize]);
-
                 if decompressed[sptr..].len() == packet_len as usize {
                     break;
                 } else {
@@ -216,63 +211,19 @@ impl BiliDanmuClient {
             }
         }
 
-        let mut msg_type_map = HashMap::new();
-        msg_type_map.insert("SEND_GIFT", "gift");
-        msg_type_map.insert("DANMU_MSG", "danmu");
-        msg_type_map.insert("WELCOME", "enter");
-        msg_type_map.insert("NOTICE_MSG", "broadcast");
-        msg_type_map.insert("LIVE_INTERACTIVE_GAME", "interactive_danmaku");
-
         for (idx, &dm) in dm_list.iter().enumerate() {
-            let mut msg = HashMap::new();
+            let mut msg = DanmuBody::new("".to_owned(), "".to_owned());
             if ops[idx] == 5 {
                 let j: serde_json::Value = serde_json::from_slice(dm).unwrap();
-                let msg_type: &str = j.get("cmd").unwrap().as_str().unwrap();
-                let mapped_msg_type = *msg_type_map.get(msg_type).unwrap_or(&"other");
-                if mapped_msg_type == "other" && msg_type.starts_with("DANMU_MSG") {
-                    msg.insert("msg_type".to_owned(), "danmu".to_owned());
-                } else {
-                    msg.insert("msg_type".to_owned(), mapped_msg_type.to_owned());
-                }
-
-                if msg.get("msg_type").unwrap() == "danmu" {
-                    // TODO: 可能panic，需要处理第二种情况: j.get("data").unwrap().get("uname").unwrap().as_str().unwrap().to_string();
-                    let name = j["info"][2][1].as_str().unwrap().trim().to_string();
-                    let content = j["info"][1].as_str().unwrap().trim().to_string();
-                    msg.insert("name".to_owned(), name);
-                    msg.insert("content".to_owned(), content);
-                } else if msg.get("msg_type").unwrap() == "interactive_danmaku" {
-                    let name = j["data"]["uname"].as_str().unwrap().to_string();
-                    let content = j["data"]["msg"].as_str().unwrap().to_string();
-                    msg.insert("name".to_owned(), name);
-                    msg.insert("content".to_owned(), content);
-                } else {
-                    msg.insert("content".to_owned(), j.to_string());
-                }
-            } else {
-                msg.insert("msg_type".to_owned(), "other".to_owned());
-                msg.insert(
-                    "content".to_owned(),
-                    String::from_utf8_lossy(dm).to_string(),
-                );
-                msg.insert("name".to_owned(), "".to_owned());
-            }
-            msgs.push(msg);
-        }
-
-        if recorder == &DanmuRecorder::Terminal {
-            for m in msgs.iter() {
-                if m.get("msg_type") == Some(&"danmu".to_string()) {
-                    println!(
-                        "name: {:?}, content: {:?}",
-                        m.get("name").unwrap(),
-                        m.get("content").unwrap()
-                    );
+                let msg_type = j.get("cmd").unwrap().as_str().unwrap();
+                if msg_type == "DANMU_MSG" {
+                    msg.user = j["info"][2][1].as_str().unwrap().trim().to_string();
+                    msg.content = j["info"][1].as_str().unwrap().trim().to_string();
+                    msgs.push(msg);
                 }
             }
         }
-
-        Ok(())
+        Ok(msgs)
     }
 }
 
