@@ -128,9 +128,12 @@ pub struct BiliDanmuClient {
 }
 
 impl BiliDanmuClient {
-    pub async fn new(rid: &str) -> Self {
-        let (_, room_id, _) = get_real_room_info(rid).await.unwrap();
-        Self { room_id }
+    pub async fn try_new(rid: &str) -> Result<Self> {
+        if let Some((_, room_id, _)) = get_real_room_info(rid).await {
+            Ok(Self { room_id })
+        } else {
+            Err(anyhow!("直播间不存在"))
+        }
     }
 
     fn init_msg_generator(room_id: &str) -> Vec<Vec<u8>> {

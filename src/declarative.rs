@@ -33,7 +33,7 @@ macro_rules! get_source_url_command {
                             println!("{}", live::[<$name: lower>]::get(&rid).await?);
                             // TODO: 目前无视输出参数，直接输出到终端，后期需要保存到参数指定的文件地址
                             if let Some(_danmu_path) = danmu {
-                                let mut danmu_client = live::[<$name: lower>]::[<$name DanmuClient>]::new(&rid).await;
+                                let mut danmu_client = live::[<$name: lower>]::[<$name DanmuClient>]::try_new(&rid).await?;
                                 danmu_client.start(danmu::DanmuRecorder::Terminal).await?;
                             }
                         }
@@ -65,8 +65,8 @@ macro_rules! default_danmu_client {
             pub struct [<$name DanmuClient>] {}
 
             impl [<$name DanmuClient>] {
-                pub async fn new(_room_id: &str) -> Self {
-                    Self {}
+                pub async fn try_new(_room_id: &str) -> Result<Self> {
+                    Ok(Self {})
                 }
             }
 

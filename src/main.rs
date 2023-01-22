@@ -25,5 +25,6 @@ struct Cli {
 
 #[tokio::main]
 async fn main() -> Result<()> {
-    get_source_url().await
+    get_source_url().await.unwrap();
+    Ok(())
 }
