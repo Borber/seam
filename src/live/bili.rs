@@ -276,6 +276,10 @@ impl BiliDanmuClient {
     }
 }
 
+async fn is_closed_room(rid: &str) -> Option<bool> {
+    get_real_room_info(rid).await.map(|info| info.0 != 1)
+}
+
 #[async_trait]
 impl Danmu for BiliDanmuClient {
     async fn start(&mut self, recorder: DanmuRecorder) -> Result<()> {
@@ -288,6 +292,11 @@ impl Danmu for BiliDanmuClient {
 
         let heart_beat_msg_generator = || HEART_BEAT.as_bytes().to_vec();
         let heart_beat_interval = HEART_BEAT_INTERVAL;
+        
+        let room_id = &self.room_id.clone();
+        let is_closed_room_closure = move || async {
+            is_closed_room(room_id).await
+        };
 
         websocket_danmu_work_flow(
             &self.room_id,
@@ -295,6 +304,7 @@ impl Danmu for BiliDanmuClient {
             recorder,
             recorder_checker,
             Self::init_msg_generator,
+            is_closed_room_closure,
             heart_beat_msg_generator,
             heart_beat_interval,
             Self::decode_and_record_danmu,
