@@ -1,6 +1,6 @@
 use crate::{
     common::{CLIENT, USER_AGENT},
-    danmu::{websocket_danmu_work_flow, Danmu, DanmuRecorder},
+    danmu::{websocket_danmu_work_flow, Danmu, DanmuRecorder, DanmuBody},
     model::{Detail, ShowType},
     util::parse_url,
 };

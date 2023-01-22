@@ -98,7 +98,7 @@ pub async fn websocket_danmu_work_flow<B>(
     is_closed_room: impl Fn() -> B,
     heart_beat_msg_generator: fn() -> Vec<u8>,
     heart_beat_interval: u64,
-    decode_and_record_danmu: fn(&[u8], &DanmuRecorder) -> Result<()>,
+    decode_and_record_danmu: fn(&[u8]) -> Result<Vec<DanmuBody>>,
 ) -> Result<()>
 where
     B: Future<Output = Option<bool>>,
@@ -123,13 +123,14 @@ where
         _ = heart_beat(&mut write, heart_beat_msg_generator, heart_beat_interval) => { println!("websocket已关闭"); }
         _ = fetch_danmu(&mut read, decode_and_record_danmu, &recorder) => { println!("websocket已关闭"); }
     }
-    
+
     Ok(())
 }
 
 // 检测直播间是否关闭
 async fn closed_room_checker<B>(is_closed_room: impl Fn() -> B)
-    where B: Future<Output = Option<bool>>
+where
+    B: Future<Output = Option<bool>>,
 {
     loop {
         if let Some(if_room_closed) = is_closed_room().await {
@@ -146,10 +147,18 @@ async fn closed_room_checker<B>(is_closed_room: impl Fn() -> B)
 }
 
 // 心跳机制
-async fn heart_beat(ws_write: &mut SplitSink<WebSocketStream<MaybeTlsStream<TcpStream>>, Message>, heart_beat_msg_generator: fn() -> Vec<u8>, heart_beat_interval: u64) {
+async fn heart_beat(
+    ws_write: &mut SplitSink<WebSocketStream<MaybeTlsStream<TcpStream>>, Message>,
+    heart_beat_msg_generator: fn() -> Vec<u8>,
+    heart_beat_interval: u64,
+) {
     loop {
         let msg = heart_beat_msg_generator();
-        if Pin::new(&mut *ws_write).send(Message::Binary(msg)).await.is_ok() {
+        if Pin::new(&mut *ws_write)
+            .send(Message::Binary(msg))
+            .await
+            .is_ok()
+        {
             tokio::time::sleep(tokio::time::Duration::from_secs(heart_beat_interval)).await;
         } else {
             let short_rebeat_interval = if heart_beat_interval / 10 > 3 {
@@ -163,7 +172,11 @@ async fn heart_beat(ws_write: &mut SplitSink<WebSocketStream<MaybeTlsStream<TcpS
 }
 
 // 解码并记录弹幕
-async fn fetch_danmu(ws_read: &mut SplitStream<WebSocketStream<MaybeTlsStream<TcpStream>>>, decode_and_record_danmu: fn(&[u8], &DanmuRecorder) -> Result<()>, recorder: &DanmuRecorder) {
+async fn fetch_danmu(
+    ws_read: &mut SplitStream<WebSocketStream<MaybeTlsStream<TcpStream>>>,
+    decode_and_record_danmu: fn(&[u8]) -> Result<Vec<DanmuBody>>,
+    recorder: &DanmuRecorder,
+) {
     let ws_to_stdout = {
         ws_read.for_each(|message| async {
             let data = message.unwrap().into_data();
@@ -171,7 +184,7 @@ async fn fetch_danmu(ws_read: &mut SplitStream<WebSocketStream<MaybeTlsStream<Tc
             match recorder {
                 DanmuRecorder::File(_) => {}
                 DanmuRecorder::Terminal => {
-                    msgs.iter().for_each(|DanmuBody{user, content}| {
+                    msgs.iter().for_each(|DanmuBody { user, content }| {
                         println!("user: {user}, content: {content}");
                     });
                 }
