@@ -1,6 +1,6 @@
 use crate::{
     common::{CLIENT, USER_AGENT},
-    danmu::{websocket_danmu_work_flow, Danmu, DanmuRecorder, DanmuBody},
+    danmu::{websocket_danmu_work_flow, Danmu, DanmuBody, DanmuRecorder},
     model::{Detail, ShowType},
     util::parse_url,
 };
@@ -9,10 +9,10 @@ use anyhow::{anyhow, Ok, Result};
 use async_trait::async_trait;
 use miniz_oxide::inflate::decompress_to_vec_zlib;
 use rand::Rng;
-use regex::Regex;
 use serde_json::json;
 
-const INIT_URL: &str = "https://live.bilibili.com/";
+const INIT_URL: &str = "https://api.live.bilibili.com/room/v1/Room/room_init";
+const INFO_URL: &str = "https://api.live.bilibili.com/room/v1/Room/get_info";
 const URL: &str = "https://api.live.bilibili.com/xlive/web-room/v2/index/getRoomPlayInfo";
 const WSS_URL: &str = "wss://broadcastlv.chat.bilibili.com/sub";
 const HEART_BEAT: &str = "\x00\x00\x00\x1f\x00\x10\x00\x01\x00\x00\x00\x02\x00\x00\x00\x01\x5b\x6f\x62\x6a\x65\x63\x74\x20\x4f\x62\x6a\x65\x63\x74\x5d ";
@@ -92,33 +92,42 @@ mod tests {
 
     #[tokio::test]
     async fn test_get_url() {
-        println!("{}", get("7777").await.unwrap());
+        println!("{}", get("6").await.unwrap());
     }
 }
 
 /// 获取直播间信息
 /// 返回值：( 直播状态,真实房间号, 直播间标题)
-pub async fn get_real_room_info(rid: &str) -> Option<(i32, String, String)> {
-    let resp = CLIENT
-        .get(format!("{INIT_URL}{rid}"))
-        .header("User-Agent", USER_AGENT)
+pub async fn get_real_room_info(rid: &str) -> Option<(i64, String, String)> {
+    let resp: serde_json::Value = CLIENT
+        .get(INIT_URL)
+        .query(&[("id", rid)])
         .send()
         .await
         .unwrap()
-        .text()
+        .json()
         .await
         .unwrap();
-    let re = Regex::new(r#"<script>window.__NEPTUNE_IS_MY_WAIFU__=([\s\S]*?)</script>"#).unwrap();
-    let json = match re.captures(&resp) {
-        Some(cap) => cap.get(1).unwrap().as_str(),
-        None => return None,
+    let (rid, live_status) = match resp["data"]["room_id"] {
+        serde_json::Value::Null => return None,
+        _ => (
+            resp["data"]["room_id"].as_i64().unwrap(),
+            resp["data"]["live_status"].as_i64().unwrap(),
+        ),
     };
-    let json: serde_json::Value = serde_json::from_str(json).unwrap();
-    let json = &json["roomInfoRes"]["data"]["room_info"];
-    let live_status = json["live_status"].to_string().parse::<i32>().unwrap();
-    let room_id = json["room_id"].as_i64().unwrap().to_string();
-    let title = json["title"].as_str().unwrap().to_owned();
-    Some((live_status, room_id, title))
+
+    let json: serde_json::Value = CLIENT
+        .get(INFO_URL)
+        .query(&[("room_id", rid)])
+        .send()
+        .await
+        .unwrap()
+        .json()
+        .await
+        .unwrap();
+    let title = json["data"]["title"].as_str().unwrap().to_owned();
+
+    Some((live_status, rid.to_string(), title))
 }
 
 pub struct BiliDanmuClient {
@@ -246,11 +255,9 @@ impl Danmu for BiliDanmuClient {
 
         let heart_beat_msg_generator = || HEART_BEAT.as_bytes().to_vec();
         let heart_beat_interval = HEART_BEAT_INTERVAL;
-        
+
         let room_id = &self.room_id.clone();
-        let is_closed_room_closure = move || async {
-            is_closed_room(room_id).await
-        };
+        let is_closed_room_closure = move || async { is_closed_room(room_id).await };
 
         websocket_danmu_work_flow(
             &self.room_id,
