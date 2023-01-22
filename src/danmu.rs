@@ -6,6 +6,7 @@
 //! 本模块提供了基于websocket的标准弹幕工作流。
 //! 如无定制需求，可以直接使用本模块提供的工作流。
 
+use std::future::Future;
 use std::path::PathBuf;
 use std::pin::Pin;
 
@@ -75,16 +76,20 @@ pub enum DanmuRecorder {
 // - decode_and_record_danmu: 解码并按照recorder的要求记录弹幕。
 //
 // - 特别说明：heart_beat与decode_and_record_danmu将在同一线程异步并行。
-pub async fn websocket_danmu_work_flow(
+pub async fn websocket_danmu_work_flow<B>(
     room_id: &str,
     url: &str,
     recorder: DanmuRecorder,
     recorder_checker: fn(&DanmuRecorder) -> Result<()>,
     init_msg_generator: fn(&str) -> Vec<Vec<u8>>,
+    is_closed_room: impl Fn() -> B,
     heart_beat_msg_generator: fn() -> Vec<u8>,
     heart_beat_interval: u64,
     decode_and_record_danmu: fn(&[u8], &DanmuRecorder) -> Result<()>,
-) -> Result<()> {
+) -> Result<()>
+where
+    B: Future<Output = Option<bool>>,
+{
     // 检查recorder是否支持
     recorder_checker(&recorder)?;
 
@@ -99,27 +104,53 @@ pub async fn websocket_danmu_work_flow(
     let (mut write, mut read) = ws.split();
 
     // 异步执行心跳机制和弹幕获取
+    // 需要检测直播间是否关闭，如果关闭则停止心跳机制和弹幕获取
     tokio::select! {
-        res = heart_beat(&mut write, heart_beat_msg_generator, heart_beat_interval) => {
-            res
-        }
-        res = fetch_danmu(&mut read, decode_and_record_danmu, &recorder) => {
-            res
+        _ = closed_room_checker(is_closed_room) => { }
+        _ = heart_beat(&mut write, heart_beat_msg_generator, heart_beat_interval) => { println!("websocket已关闭"); }
+        _ = fetch_danmu(&mut read, decode_and_record_danmu, &recorder) => { println!("websocket已关闭"); }
+    }
+    
+    Ok(())
+}
+
+// 检测直播间是否关闭
+async fn closed_room_checker<B>(is_closed_room: impl Fn() -> B)
+    where B: Future<Output = Option<bool>>
+{
+    loop {
+        if let Some(if_room_closed) = is_closed_room().await {
+            if if_room_closed {
+                println!("直播间已关闭");
+                break;
+            } else {
+                tokio::time::sleep(tokio::time::Duration::from_secs(3)).await;
+            }
+        } else {
+            println!("直播间不存在");
         }
     }
 }
 
 // 心跳机制
-async fn heart_beat(ws_write: &mut SplitSink<WebSocketStream<MaybeTlsStream<TcpStream>>, Message>, heart_beat_msg_generator: fn() -> Vec<u8>, heart_beat_interval: u64) -> Result<()> {
+async fn heart_beat(ws_write: &mut SplitSink<WebSocketStream<MaybeTlsStream<TcpStream>>, Message>, heart_beat_msg_generator: fn() -> Vec<u8>, heart_beat_interval: u64) {
     loop {
         let msg = heart_beat_msg_generator();
-        Pin::new(&mut *ws_write).send(Message::Binary(msg)).await?;
-        tokio::time::sleep(tokio::time::Duration::from_secs(heart_beat_interval)).await;
+        if Pin::new(&mut *ws_write).send(Message::Binary(msg)).await.is_ok() {
+            tokio::time::sleep(tokio::time::Duration::from_secs(heart_beat_interval)).await;
+        } else {
+            let short_rebeat_interval = if heart_beat_interval / 10 > 3 {
+                heart_beat_interval / 10
+            } else {
+                3
+            };
+            tokio::time::sleep(tokio::time::Duration::from_secs(short_rebeat_interval)).await;
+        }
     }
 }
 
 // 解码并记录弹幕
-async fn fetch_danmu(ws_read: &mut SplitStream<WebSocketStream<MaybeTlsStream<TcpStream>>>, decode_and_record_danmu: fn(&[u8], &DanmuRecorder) -> Result<()>, recorder: &DanmuRecorder) -> Result<()> {
+async fn fetch_danmu(ws_read: &mut SplitStream<WebSocketStream<MaybeTlsStream<TcpStream>>>, decode_and_record_danmu: fn(&[u8], &DanmuRecorder) -> Result<()>, recorder: &DanmuRecorder) {
     let ws_to_stdout = {
         ws_read.for_each(|message| async {
             let data = message.unwrap().into_data();
@@ -127,5 +158,4 @@ async fn fetch_danmu(ws_read: &mut SplitStream<WebSocketStream<MaybeTlsStream<Tc
         })
     };
     ws_to_stdout.await;
-    Ok(())
 }
