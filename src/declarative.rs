@@ -1,8 +1,8 @@
 use crate::{
-    danmu::{self, Danmu},
+    danmu::{Danmu, DanmuRecorder, Terminal, Csv},
     live, Cli,
 };
-use anyhow::{Ok, Result};
+use anyhow::{anyhow, Ok, Result};
 use clap::{Parser, Subcommand};
 use paste::paste;
 use std::path::PathBuf;
@@ -17,9 +17,12 @@ macro_rules! get_source_url_command {
                 $name {
                     /// 房间号
                     rid: String,
-                    // 弹幕功能
+                    // 输出到终端的弹幕功能
                     #[arg(short = 'd')]
-                    danmu: Option<PathBuf>,
+                    danmu: bool,
+                    // 根据参数指定的文件地址输出弹幕
+                    #[arg(short = 'D')]
+                    config_danmu: bool
                 },
             )*
         }
@@ -29,12 +32,21 @@ macro_rules! get_source_url_command {
             paste! {
                 match Cli::parse().command {
                     $(
-                        Commands::$name { rid, danmu } => {
-                            println!("{}", live::[<$name: lower>]::get(&rid).await?);
-                            // TODO: 目前无视输出参数，直接输出到终端，后期需要保存到参数指定的文件地址
-                            if let Some(_danmu_path) = danmu {
+                        Commands::$name { rid, danmu, config_danmu } => {
+                            // 参数D为最高优先级
+                            // 参数d为次高优先级
+                            // 两个参数都没有时，直接输出直播源信息 
+                            if config_danmu {
                                 let mut danmu_client = live::[<$name: lower>]::[<$name DanmuClient>]::try_new(&rid).await?;
-                                danmu_client.start(danmu::DanmuRecorder::Terminal).await?;
+                                let cwd = std::env::current_exe()?; // 对于MACOS，CWD可执行文件目录，所以需要使用current_exe
+                                let file_name = "danmu.csv"; // 临时使用，后续时间戳实现后会改为参数
+                                let path = PathBuf::from(cwd.parent().ok_or(anyhow!("错误的弹幕记录地址。"))?).join(file_name);
+                                danmu_client.start(vec![&Csv::try_new(Some(path))?]).await?;
+                            } else if danmu {
+                                let mut danmu_client = live::[<$name: lower>]::[<$name DanmuClient>]::try_new(&rid).await?;
+                                danmu_client.start(vec![&Terminal::try_new(None)?]).await?;
+                            } else {
+                                println!("{}", live::[<$name: lower>]::get(&rid).await?);
                             }
                         }
                     )*
@@ -72,7 +84,7 @@ macro_rules! default_danmu_client {
 
             #[async_trait]
             impl Danmu for [<$name DanmuClient>] {
-                async fn start(&mut self, _recorder: DanmuRecorder) -> Result<()> {
+                async fn start(&mut self, _recorder: Vec<&dyn DanmuRecorder>) -> Result<()> {
                     println!("该直播平台暂未实现弹幕功能。");
                     Ok(())
                 }
