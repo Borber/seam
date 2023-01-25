@@ -1,5 +1,5 @@
 use crate::{
-    danmu::{Danmu, DanmuRecorder, Terminal, Csv},
+    danmu::{Csv, Danmu, DanmuRecorder, Terminal},
     live, Cli,
 };
 use anyhow::{anyhow, Ok, Result};
@@ -35,7 +35,7 @@ macro_rules! get_source_url_command {
                         Commands::$name { rid, danmu, config_danmu } => {
                             // 参数D为最高优先级
                             // 参数d为次高优先级
-                            // 两个参数都没有时，直接输出直播源信息 
+                            // 两个参数都没有时，直接输出直播源信息
                             if config_danmu {
                                 let mut danmu_client = live::[<$name: lower>]::[<$name DanmuClient>]::try_new(&rid).await?;
                                 let cwd = std::env::current_exe()?; // 对于MACOS，CWD可执行文件目录，所以需要使用current_exe
@@ -61,7 +61,8 @@ macro_rules! get_source_url_command {
 // 展开宏命令
 // 添加新的直播平台可以在括号末尾添加，并在live文件夹里添加对应的文件
 get_source_url_command!(
-    Bili, Douyu, Douyin, Huya, Kuaishou, Cc, Huajiao, Kk, Qf, Yqs, Mht, Now, Afreeca, Panda, Flex, Wink
+    Bili, Douyu, Douyin, Huya, Kuaishou, Cc, Huajiao, Kk, Qf, Yqs, Mht, Now, Afreeca, Panda, Flex,
+    Wink
 );
 
 // 为没有实现弹幕功能的直播平台添加默认空白实现

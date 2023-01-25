@@ -6,11 +6,11 @@
 //! 本模块提供了基于websocket的标准弹幕工作流。
 //! 如无定制需求，可以直接使用本模块提供的工作流。
 
+use std::fs::{File, OpenOptions};
 use std::future::Future;
+use std::io::prelude::*;
 use std::path::PathBuf;
 use std::pin::Pin;
-use std::fs::{File, OpenOptions};
-use std::io::prelude::*;
 
 use anyhow::Result;
 use async_trait::async_trait;
@@ -36,30 +36,41 @@ pub trait Danmu {
 }
 
 /// 标准化弹幕记录trait。
-/// 
+///
 /// 本trait提供了标准化的弹幕记录方式。
-/// 
+///
 /// - try_new: 尝试使用给定的地址初始化弹幕记录器，None地址可以被终端记录器接受，其他必须有文件地址。
 /// - path: 获取弹幕记录的地址，输出到终端为None。
 /// - init: 初始化弹幕记录器，如创建文件，创建表头，创建文件格式信息（如BOM头等）。
 /// - formatter: 格式化弹幕，将弹幕转换为字符串。
 /// - record: 记录弹幕（自动调用自带的formatter函数，所以入参为`&DanmuBody`）。
 pub trait DanmuRecorder: Send + Sync {
-    fn try_new(path: Option<PathBuf>) -> Result<Self> where Self: Sized;
+    fn try_new(path: Option<PathBuf>) -> Result<Self>
+    where
+        Self: Sized;
     fn path(&self) -> Option<&PathBuf>;
 
     fn init(&self) -> Result<()> {
-        let path = self.path().ok_or(anyhow::anyhow!("no supported path pamameter"))?;
+        let path = self
+            .path()
+            .ok_or_else(|| anyhow::anyhow!("no supported path pamameter"))?;
         File::create(path)?;
         Ok(())
     }
 
     fn formatter(&self, danmu: &DanmuBody) -> String {
-        format!("{}{}    {}", danmu.user.yellow(), ":".yellow(), danmu.content.green().bold())
+        format!(
+            "{}{}    {}",
+            danmu.user.yellow(),
+            ":".yellow(),
+            danmu.content.green().bold()
+        )
     }
 
     fn record(&self, danmu: &DanmuBody) -> Result<()> {
-        let path = self.path().ok_or(anyhow::anyhow!("no supported path pamameter"))?;
+        let path = self
+            .path()
+            .ok_or_else(|| anyhow::anyhow!("no supported path pamameter"))?;
         let mut file = OpenOptions::new().append(true).open(path)?;
         file.write_all(self.formatter(danmu).as_bytes())?;
         file.write_all(b"\n")?;
@@ -74,7 +85,7 @@ pub struct Csv {
 
 impl DanmuRecorder for Csv {
     fn try_new(path: Option<PathBuf>) -> Result<Self> {
-        let path = path.ok_or(anyhow::anyhow!("初始化CSV弹幕记录器时未指定文件地址"))?;
+        let path = path.ok_or_else(|| anyhow::anyhow!("初始化CSV弹幕记录器时未指定文件地址"))?;
         Ok(Self { path })
     }
 
