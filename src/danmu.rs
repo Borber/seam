@@ -6,12 +6,15 @@
 //! 本模块提供了基于websocket的标准弹幕工作流。
 //! 如无定制需求，可以直接使用本模块提供的工作流。
 
+use std::fs::{File, OpenOptions};
 use std::future::Future;
+use std::io::prelude::*;
 use std::path::PathBuf;
 use std::pin::Pin;
 
 use anyhow::Result;
 use async_trait::async_trait;
+use colored::Colorize;
 use futures_sink::Sink;
 use futures_util::stream::{SplitSink, SplitStream};
 use futures_util::{SinkExt, StreamExt};
@@ -29,18 +32,103 @@ pub trait Danmu {
     /// # Errors
     ///
     /// 发生不可继续运行的错误的情况下，返回错误。
-    async fn start(&mut self, recorder: DanmuRecorder) -> Result<()>;
+    async fn start(&mut self, recorder: Vec<&dyn DanmuRecorder>) -> Result<()>;
 }
 
-/// 弹幕记录方式: 文件, 终端, 文件+终端, 不记录。
-// TODO: 未来可能会添加其他记录方式，比如sqlite，xml等。
-// TODO: 为了方便，目前只支持终端输出，后期需要添加文件输出。所以暂时allow dead_code。
-#[allow(dead_code)]
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub enum DanmuRecorder {
-    File(PathBuf),
-    Terminal,
-    None,
+/// 标准化弹幕记录trait。
+///
+/// 本trait提供了标准化的弹幕记录方式。
+///
+/// - try_new: 尝试使用给定的地址初始化弹幕记录器，None地址可以被终端记录器接受，其他必须有文件地址。
+/// - path: 获取弹幕记录的地址，输出到终端为None。
+/// - init: 初始化弹幕记录器，如创建文件，创建表头，创建文件格式信息（如BOM头等）。
+/// - formatter: 格式化弹幕，将弹幕转换为字符串。
+/// - record: 记录弹幕（自动调用自带的formatter函数，所以入参为`&DanmuBody`）。
+pub trait DanmuRecorder: Send + Sync {
+    fn try_new(path: Option<PathBuf>) -> Result<Self>
+    where
+        Self: Sized;
+    fn path(&self) -> Option<&PathBuf>;
+
+    fn init(&self) -> Result<()> {
+        let path = self
+            .path()
+            .ok_or_else(|| anyhow::anyhow!("no supported path pamameter"))?;
+        File::create(path)?;
+        Ok(())
+    }
+
+    fn formatter(&self, danmu: &DanmuBody) -> String {
+        format!(
+            "{}{}    {}",
+            danmu.user.yellow(),
+            ":".yellow(),
+            danmu.content.green().bold()
+        )
+    }
+
+    fn record(&self, danmu: &DanmuBody) -> Result<()> {
+        let path = self
+            .path()
+            .ok_or_else(|| anyhow::anyhow!("no supported path pamameter"))?;
+        let mut file = OpenOptions::new().append(true).open(path)?;
+        file.write_all(self.formatter(danmu).as_bytes())?;
+        file.write_all(b"\n")?;
+        Ok(())
+    }
+}
+
+/// CSV弹幕记录器。
+pub struct Csv {
+    path: PathBuf,
+}
+
+impl DanmuRecorder for Csv {
+    fn try_new(path: Option<PathBuf>) -> Result<Self> {
+        let path = path.ok_or_else(|| anyhow::anyhow!("初始化CSV弹幕记录器时未指定文件地址"))?;
+        Ok(Self { path })
+    }
+
+    fn path(&self) -> Option<&PathBuf> {
+        Some(&self.path)
+    }
+
+    /// 初始化csv文件
+    /// - 添加BOM头
+    /// - 添加表头
+    fn init(&self) -> Result<()> {
+        let mut file = File::create(&self.path)?;
+        let mut init_info: Vec<u8> = vec![0xEF, 0xBB, 0xBF];
+        init_info.extend(b"user, content\n");
+        file.write_all(&init_info)?;
+        Ok(())
+    }
+
+    fn formatter(&self, danmu: &DanmuBody) -> String {
+        format!("{}, {}", danmu.user, danmu.content)
+    }
+}
+
+pub struct Terminal;
+
+impl DanmuRecorder for Terminal {
+    fn try_new(_path: Option<PathBuf>) -> Result<Self> {
+        Ok(Self)
+    }
+
+    fn path(&self) -> Option<&PathBuf> {
+        None
+    }
+
+    fn init(&self) -> Result<()> {
+        println!("即将在终端输出弹幕：");
+        Ok(())
+    }
+
+    fn record(&self, danmu: &DanmuBody) -> Result<()> {
+        println!("{}", &self.formatter(danmu));
+        Ok(())
+    }
 }
 
 /// 标准弹幕格式
@@ -92,8 +180,7 @@ impl DanmuBody {
 pub async fn websocket_danmu_work_flow<B>(
     room_id: &str,
     url: &str,
-    recorder: DanmuRecorder,
-    recorder_checker: fn(&DanmuRecorder) -> Result<()>,
+    recorder: Vec<&dyn DanmuRecorder>,
     init_msg_generator: fn(&str) -> Vec<Vec<u8>>,
     is_closed_room: impl Fn() -> B,
     heart_beat_msg_generator: fn() -> Vec<u8>,
@@ -103,9 +190,6 @@ pub async fn websocket_danmu_work_flow<B>(
 where
     B: Future<Output = Option<bool>>,
 {
-    // 检查recorder是否支持
-    recorder_checker(&recorder)?;
-
     // 初始化websocket连接
     let reg_datas = init_msg_generator(room_id);
     let (mut ws, _) = tokio_tungstenite::connect_async(url).await?;
@@ -121,7 +205,7 @@ where
     tokio::select! {
         _ = closed_room_checker(is_closed_room) => { }
         _ = heart_beat(&mut write, heart_beat_msg_generator, heart_beat_interval) => { println!("websocket已关闭"); }
-        _ = fetch_danmu(&mut read, decode_and_record_danmu, &recorder) => { println!("websocket已关闭"); }
+        e = fetch_danmu(&mut read, decode_and_record_danmu, recorder) => { e?; }
     }
 
     Ok(())
@@ -175,22 +259,28 @@ async fn heart_beat(
 async fn fetch_danmu(
     ws_read: &mut SplitStream<WebSocketStream<MaybeTlsStream<TcpStream>>>,
     decode_and_record_danmu: fn(&[u8]) -> Result<Vec<DanmuBody>>,
-    recorder: &DanmuRecorder,
-) {
+    recorder: Vec<&dyn DanmuRecorder>,
+) -> Result<()> {
+    // 初始化recorder
+    for r in recorder.iter() {
+        r.init()?;
+    }
+
     let ws_to_stdout = {
         ws_read.for_each(|message| async {
             let data = message.unwrap().into_data();
             let msgs = decode_and_record_danmu(&data).unwrap();
-            match recorder {
-                DanmuRecorder::File(_) => {}
-                DanmuRecorder::Terminal => {
-                    msgs.iter().for_each(|DanmuBody { user, content }| {
-                        println!("user: {user}, content: {content}");
-                    });
+            for msg in msgs.iter() {
+                for r in recorder.iter() {
+                    if let Err(e) = r.record(msg) {
+                        println!("记录弹幕失败: {}", e);
+                        println!("弹幕内容: {:?}", msg.content);
+                    }
                 }
-                DanmuRecorder::None => {}
-            };
+            }
         })
     };
+
     ws_to_stdout.await;
+    Ok(())
 }

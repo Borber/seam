@@ -245,14 +245,7 @@ async fn is_closed_room(rid: &str) -> Option<bool> {
 
 #[async_trait]
 impl Danmu for BiliDanmuClient {
-    async fn start(&mut self, recorder: DanmuRecorder) -> Result<()> {
-        let recorder_checker = |recorder: &DanmuRecorder| {
-            if recorder != &DanmuRecorder::Terminal {
-                return Err(anyhow!("Bilibili弹幕服务目前仅支持终端输出。"));
-            }
-            Ok(())
-        };
-
+    async fn start(&mut self, recorder: Vec<&dyn DanmuRecorder>) -> Result<()> {
         let heart_beat_msg_generator = || HEART_BEAT.as_bytes().to_vec();
         let heart_beat_interval = HEART_BEAT_INTERVAL;
 
@@ -263,7 +256,6 @@ impl Danmu for BiliDanmuClient {
             &self.room_id,
             WSS_URL,
             recorder,
-            recorder_checker,
             Self::init_msg_generator,
             is_closed_room_closure,
             heart_beat_msg_generator,

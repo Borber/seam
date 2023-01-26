@@ -25,3 +25,4 @@ tokio-tungstenite = { version = "0.18", features = ["native-tls"] }
 futures-sink = "0.3"
 futures-util = { version = "0.3", default-features = false, features = ["sink", "std"] }
 miniz_oxide = "0.6.2"
+colored = "2.0.0"
