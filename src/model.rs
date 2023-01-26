@@ -12,6 +12,15 @@ pub enum ShowType {
     Error(String),
 }
 
+impl ShowType {
+    pub fn get_room_title(&self) -> Option<&str> {
+        match self {
+            ShowType::On(detail) => Some(detail.title.as_str()),
+            _ => None,
+        }
+    }
+}
+
 impl Display for ShowType {
     fn fmt(&self, f: &mut Formatter<'_>) -> FmtResult {
         match self {

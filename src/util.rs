@@ -45,3 +45,10 @@ pub fn parse_url(url: String) -> Node {
         url: url.to_owned(),
     }
 }
+
+/// 获取当前时间
+/// 格式：20230121-000000-000 (年月日-时分秒-毫秒)
+#[inline]
+pub fn get_datetime() -> String {
+    chrono::Local::now().format("%Y%m%d-%H%M%S-%3f").to_string()
+}

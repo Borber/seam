@@ -85,7 +85,9 @@ pub struct Csv {
 
 impl DanmuRecorder for Csv {
     fn try_new(path: Option<PathBuf>) -> Result<Self> {
-        let path = path.ok_or_else(|| anyhow::anyhow!("初始化CSV弹幕记录器时未指定文件地址"))?;
+        let file_stem =
+            path.ok_or_else(|| anyhow::anyhow!("初始化CSV弹幕记录器时未指定文件地址"))?;
+        let path = file_stem.with_extension("csv");
         Ok(Self { path })
     }
 
