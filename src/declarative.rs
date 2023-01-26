@@ -1,6 +1,8 @@
 use crate::{
     danmu::{Csv, Danmu, DanmuRecorder, Terminal},
-    live, Cli,
+    live,
+    util::get_datetime,
+    Cli,
 };
 use anyhow::{anyhow, Ok, Result};
 use clap::{Parser, Subcommand};
@@ -39,7 +41,9 @@ macro_rules! get_source_url_command {
                             if config_danmu {
                                 let mut danmu_client = live::[<$name: lower>]::[<$name DanmuClient>]::try_new(&rid).await?;
                                 let cwd = std::env::current_exe()?; // 对于MACOS，CWD可执行文件目录，所以需要使用current_exe
-                                let file_name = "danmu.csv"; // 临时使用，后续时间戳实现后会改为参数
+                                let room_info = live::[<$name: lower>]::get(&rid).await?;
+                                let room_title = room_info.get_room_title().or(Some("未知直播标题")).unwrap();
+                                let file_name = format!("{}-{}-{}", rid, get_datetime(), room_title);
                                 let path = PathBuf::from(cwd.parent().ok_or(anyhow!("错误的弹幕记录地址。"))?).join(file_name);
                                 danmu_client.start(vec![&Csv::try_new(Some(path))?]).await?;
                             } else if danmu {
