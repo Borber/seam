@@ -171,10 +171,51 @@ impl BiliDanmuClient {
             return Ok(vec![]);
         }
 
-        let mut dm_list_compressed = vec![];
-        let mut dm_list = vec![];
-        let mut ops = vec![];
         let mut msgs = vec![];
+
+        let data_to_danmu_body = |sliced_data: &[u8]| -> Option<DanmuBody> {
+            let j: serde_json::Value = serde_json::from_slice(sliced_data).unwrap();
+            let msg_type = j.get("cmd").unwrap().as_str().unwrap();
+            if msg_type == "DANMU_MSG" {
+                let user = j["info"][2][1].as_str().unwrap().trim().to_string();
+                let content = j["info"][1].as_str().unwrap().trim().to_string();
+                Some(DanmuBody::new(user, content))
+            } else {
+                None
+            }
+        };
+
+        let decompress_data_to_danmu_body = |compressed_data: &[u8]| -> Vec<DanmuBody> {
+            let decompressed = decompress_to_vec_zlib(compressed_data).unwrap();
+            let mut sptr = 0;
+            let mut danmu_bodies = vec![];
+
+            loop {
+                let packet_len =
+                    u32::from_be_bytes(decompressed[sptr..sptr + 4].try_into().unwrap());
+                let op = u32::from_be_bytes(decompressed[sptr + 8..sptr + 12].try_into().unwrap());
+
+                if decompressed[sptr..].len() < packet_len as usize {
+                    break;
+                }
+
+                if op == 5 {
+                    if let Some(danmu_body) =
+                        data_to_danmu_body(&decompressed[sptr + 16..sptr + packet_len as usize])
+                    {
+                        danmu_bodies.push(danmu_body);
+                    }
+                }
+
+                if decompressed[sptr..].len() == packet_len as usize {
+                    break;
+                } else {
+                    sptr += packet_len as usize;
+                }
+            }
+
+            danmu_bodies
+        };
 
         let mut sptr = 0;
         loop {
@@ -186,11 +227,16 @@ impl BiliDanmuClient {
                 break;
             }
 
-            if ver == 1 || ver == 0 {
-                ops.push(op);
-                dm_list.push(&data[sptr + 16..sptr + packet_len as usize]);
+            if (ver == 1 || ver == 0) && (op == 5) {
+                if let Some(danmu_body) =
+                    data_to_danmu_body(&data[sptr + 16..sptr + packet_len as usize])
+                {
+                    msgs.push(danmu_body);
+                }
             } else if ver == 2 {
-                dm_list_compressed.push(&data[sptr + 16..sptr + packet_len as usize]);
+                msgs.extend(decompress_data_to_danmu_body(
+                    &data[sptr + 16..sptr + packet_len as usize],
+                ));
             }
 
             if data[sptr..].len() == packet_len as usize {
@@ -200,41 +246,6 @@ impl BiliDanmuClient {
             }
         }
 
-        let dm_list_decompressed = dm_list_compressed
-            .iter()
-            .map(|dm| decompress_to_vec_zlib(dm).unwrap())
-            .collect::<Vec<_>>();
-        for decompressed in dm_list_decompressed.iter() {
-            let mut sptr = 0;
-            loop {
-                let packet_len =
-                    u32::from_be_bytes(decompressed[sptr..sptr + 4].try_into().unwrap());
-                let op = u32::from_be_bytes(decompressed[sptr + 8..sptr + 12].try_into().unwrap());
-                if decompressed[sptr..].len() < packet_len as usize {
-                    break;
-                }
-                ops.push(op);
-                dm_list.push(&decompressed[sptr + 16..sptr + packet_len as usize]);
-                if decompressed[sptr..].len() == packet_len as usize {
-                    break;
-                } else {
-                    sptr += packet_len as usize;
-                }
-            }
-        }
-
-        for (idx, &dm) in dm_list.iter().enumerate() {
-            let mut msg = DanmuBody::new("".to_owned(), "".to_owned());
-            if ops[idx] == 5 {
-                let j: serde_json::Value = serde_json::from_slice(dm).unwrap();
-                let msg_type = j.get("cmd").unwrap().as_str().unwrap();
-                if msg_type == "DANMU_MSG" {
-                    msg.user = j["info"][2][1].as_str().unwrap().trim().to_string();
-                    msg.content = j["info"][1].as_str().unwrap().trim().to_string();
-                    msgs.push(msg);
-                }
-            }
-        }
         Ok(msgs)
     }
 }
