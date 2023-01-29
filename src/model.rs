@@ -19,6 +19,13 @@ impl ShowType {
             _ => None,
         }
     }
+
+    pub fn is_bad_rid(&self) -> bool {
+        match self {
+            ShowType::Error(_) => true,
+            _ => false,
+        }
+    }
 }
 
 impl Display for ShowType {

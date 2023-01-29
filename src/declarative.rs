@@ -24,7 +24,13 @@ macro_rules! get_source_url_command {
                     danmu: bool,
                     // 根据参数指定的文件地址输出弹幕
                     #[arg(short = 'D')]
-                    config_danmu: bool
+                    config_danmu: bool,
+                    // 直接录播功能
+                    #[arg(short = 'r')]
+                    record: bool,
+                    // 自动监控录播功能
+                    #[arg(short = 'R')]
+                    auto_record: bool,
                 },
             )*
         }
@@ -34,23 +40,56 @@ macro_rules! get_source_url_command {
             paste! {
                 match Cli::parse().command {
                     $(
-                        Commands::$name { rid, danmu, config_danmu } => {
-                            // 参数D为最高优先级
-                            // 参数d为次高优先级
-                            // 两个参数都没有时，直接输出直播源信息
-                            if config_danmu {
-                                let mut danmu_client = live::[<$name: lower>]::[<$name DanmuClient>]::try_new(&rid).await?;
-                                let cwd = std::env::current_exe()?; // 对于MACOS，CWD可执行文件目录，所以需要使用current_exe
-                                let room_info = live::[<$name: lower>]::get(&rid).await?;
-                                let room_title = room_info.get_room_title().or(Some("未知直播标题")).unwrap();
-                                let file_name = format!("{}-{}-{}", rid, get_datetime(), room_title);
-                                let path = PathBuf::from(cwd.parent().ok_or(anyhow!("错误的弹幕记录地址。"))?).join(file_name);
-                                danmu_client.start(vec![&Csv::try_new(Some(path))?]).await?;
-                            } else if danmu {
-                                let mut danmu_client = live::[<$name: lower>]::[<$name DanmuClient>]::try_new(&rid).await?;
-                                danmu_client.start(vec![&Terminal::try_new(None)?]).await?;
-                            } else {
+                        Commands::$name { rid, danmu, config_danmu, record, auto_record } => {
+                            // 无参数情况下，直接输出直播源信息
+                            if !(danmu || config_danmu || record || auto_record) {
                                 println!("{}", live::[<$name: lower>]::get(&rid).await?);
+                                return Ok(());
+                            }
+
+                            // 检查房间参数是否正确
+                            let live_info = live::[<$name: lower>]::get(&rid).await?;
+                            if live_info.is_bad_rid() {
+                                println!("{live_info}");
+                                return Ok(());
+                            }
+
+                            // 收集不同参数功能的异步线程handler
+                            let mut thread_handlers = vec![];
+                            
+                            // 处理参数-d，直接输出弹幕。
+                            // 由于该函数为cli层，所以出错可以直接panic。
+                            if danmu {
+                                let rid_clone = rid.clone();
+                                let h = tokio::spawn(async move { 
+                                    let mut danmu_client = live::[<$name: lower>]::[<$name DanmuClient>]::try_new(&rid_clone).await.unwrap();
+                                    danmu_client.start(vec![&Terminal::try_new(None).unwrap()]).await.unwrap();
+                                });
+                                thread_handlers.push(h);
+                            }
+
+                            // 处理参数-D，输出弹幕到指定文件。
+                            if config_danmu {
+                                let rid_clone = rid.clone();
+                                let h = tokio::spawn(async move {
+                                    let mut danmu_client = live::[<$name: lower>]::[<$name DanmuClient>]::try_new(&rid_clone).await.unwrap();
+                                    let cwd = std::env::current_exe().unwrap(); // 对于MACOS，CWD可执行文件目录，所以需要使用current_exe
+                                    let room_info = live::[<$name: lower>]::get(&rid).await.unwrap();
+                                    let room_title = room_info.get_room_title().or(Some("未知直播标题")).unwrap();
+                                    let file_name = format!("{}-{}-{}", rid, get_datetime(), room_title);
+                                    let path = PathBuf::from(cwd.parent().ok_or(anyhow!("错误的弹幕记录地址。")).unwrap()).join(file_name);
+                                    danmu_client.start(vec![&Csv::try_new(Some(path)).unwrap()]).await.unwrap();
+                                });
+                                thread_handlers.push(h);
+                            }
+
+                            // select
+                            tokio::select! {
+                                _ = async {
+                                    for h in thread_handlers {
+                                        h.await.unwrap();
+                                    }
+                                } => {}
                             }
                         }
                     )*
