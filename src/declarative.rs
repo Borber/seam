@@ -146,29 +146,39 @@ macro_rules! get_source_url_command {
                                 thread_handlers.push(h);
                             }
 
-                            // 检查直播间是否开播
-                            let on_air_checker = async {
-                                loop {
-                                    tokio::time::sleep(tokio::time::Duration::from_secs(10)).await;
-                                    if let std::result::Result::Ok(live_info) = live::[<$name: lower>]::get(&rid).await {
-                                        if !live_info.is_on() {
-                                            break;
+                            if auto_record {
+                                tokio::select! {
+                                    _ = async {
+                                        for h in thread_handlers {
+                                            h.await.unwrap();
+                                        }
+                                    } => {}
+                                }
+                            } else {
+                                // 检查直播间是否开播
+                                let on_air_checker = async {
+                                    loop {
+                                        tokio::time::sleep(tokio::time::Duration::from_secs(10)).await;
+                                        if let std::result::Result::Ok(live_info) = live::[<$name: lower>]::get(&rid).await {
+                                            if !live_info.is_on() {
+                                                break;
+                                            }
                                         }
                                     }
-                                }
-                            };
+                                };
 
-                            // select
-                            tokio::select! {
-                                _ = on_air_checker => {
-                                    println!("主线程退出。");
-                                    println!("直播间已关闭。");
-                                },
-                                _ = async {
-                                    for h in thread_handlers {
-                                        h.await.unwrap();
-                                    }
-                                } => {}
+                                // select
+                                tokio::select! {
+                                    _ = on_air_checker => {
+                                        println!("主线程退出。");
+                                        println!("直播间已关闭。");
+                                    },
+                                    _ = async {
+                                        for h in thread_handlers {
+                                            h.await.unwrap();
+                                        }
+                                    } => {}
+                                }
                             }
                         }
                     )*
