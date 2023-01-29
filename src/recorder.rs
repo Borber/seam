@@ -4,7 +4,7 @@ pub async fn record(url: &str, output: &str) {
     let exe = std::env::current_exe().unwrap();
     let cwd = exe.parent().unwrap();
     Command::new("ffmpeg")
-        .args(&[
+        .args([
             "-hide_banner",
             "-loglevel",
             "error",

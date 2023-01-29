@@ -23,17 +23,11 @@ impl ShowType {
     }
 
     pub fn is_on(&self) -> bool {
-        match self {
-            ShowType::On(_) => true,
-            _ => false,
-        }
+        matches!(self, ShowType::On(_))
     }
 
     pub fn is_bad_rid(&self) -> bool {
-        match self {
-            ShowType::Error(_) => true,
-            _ => false,
-        }
+        matches!(self, ShowType::Error(_))
     }
 }
 
@@ -104,5 +98,36 @@ impl Serialize for Format {
             Format::Other(s) => s.as_str(),
         };
         serializer.serialize_str(str)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_is_on() {
+        let detail = Detail::new("title".to_string(), vec![]);
+        let show_type = ShowType::On(detail);
+        assert!(show_type.is_on());
+
+        let show_type = ShowType::Off;
+        assert!(!show_type.is_on());
+
+        let show_type = ShowType::Error("error".to_string());
+        assert!(!show_type.is_on());
+    }
+
+    #[test]
+    fn test_is_bad_rid() {
+        let detail = Detail::new("title".to_string(), vec![]);
+        let show_type = ShowType::On(detail);
+        assert!(!show_type.is_bad_rid());
+
+        let show_type = ShowType::Off;
+        assert!(!show_type.is_bad_rid());
+
+        let show_type = ShowType::Error("error".to_string());
+        assert!(show_type.is_bad_rid());
     }
 }
