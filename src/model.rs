@@ -36,7 +36,7 @@ impl Display for ShowType {
         match self {
             ShowType::On(nodes) => write!(f, "{}", serde_json::to_string_pretty(&nodes).unwrap()),
             ShowType::Off => write!(f, "未开播"),
-            ShowType::Error(msg) => write!(f, "{}", msg),
+            ShowType::Error(msg) => write!(f, "{msg}"),
         }
     }
 }

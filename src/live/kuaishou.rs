@@ -17,7 +17,7 @@ default_danmu_client!(Kuaishou);
 /// https://live.kuaishou.com/
 pub async fn get(rid: &str) -> Result<ShowType> {
     let text = CLIENT
-        .get(format!("{}{}", URL, rid))
+        .get(format!("{URL}{rid}"))
         .header("User-Agent", USER_AGENT)
         .header("Cookie", "did=web_d563dca728d28b00336877723e0359ed;")
         .send()

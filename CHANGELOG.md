@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+## Added
+
+- 弹幕 CSV 支持
+- 开始支持设置
+
+## Fixed
+
+- 修复抖音直播源获取
+- B站弹幕解压情况下的顺序问题
+
 ## [0.1.15]
 
 ### Added

@@ -20,7 +20,8 @@ default_danmu_client!(Douyin);
 pub async fn get(rid: &str) -> Result<ShowType> {
     let resp = CLIENT
         .get(format!("{URL}{rid}"))
-        .header("cookie", "__ac_nonce=063b59ce0001243a9217f;")
+        // TODO: 支持随机cookie
+        .header("cookie", "__ac_nonce=073b59ce0001243a9217f;")
         .send()
         .await?;
     let resp_text = resp.text().await?;
@@ -55,7 +56,8 @@ pub async fn get(rid: &str) -> Result<ShowType> {
     }
 }
 
-/// 去除抖音返回链接的多余引号和暂时无用的参数简化链接
+/// 去除抖音third链接的多余参数
+/// 目前遇到了 third 链接去除清晰度参数无法播放的情况, 所以删除去除逻辑
 fn douyin_trim_value(url: &str) -> String {
     match url.contains("third") {
         true => {

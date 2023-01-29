@@ -275,7 +275,7 @@ async fn fetch_danmu(
             for msg in msgs.iter() {
                 for r in recorder.iter() {
                     if let Err(e) = r.record(msg) {
-                        println!("记录弹幕失败: {}", e);
+                        println!("记录弹幕失败: {e}");
                         println!("弹幕内容: {:?}", msg.content);
                     }
                 }

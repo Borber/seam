@@ -1,6 +1,7 @@
 mod declarative;
 
 mod common;
+mod config;
 mod danmu;
 mod live;
 mod model;
@@ -26,6 +27,7 @@ struct Cli {
 
 #[tokio::main]
 async fn main() -> Result<()> {
-    get_source_url().await.unwrap();
+    get_source_url().await?;
+    println!("{:?}", config::get_config().await ?);
     Ok(())
 }

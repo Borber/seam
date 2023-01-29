@@ -52,7 +52,7 @@ pub async fn get(rid: &str) -> Result<ShowType> {
                             for url_info in codec["url_info"].as_array().unwrap() {
                                 let host = url_info["host"].as_str().unwrap();
                                 let extra = url_info["extra"].as_str().unwrap();
-                                nodes.push(parse_url(format!("{}{}{}", host, base_url, extra)));
+                                nodes.push(parse_url(format!("{host}{base_url}{extra}")));
                             }
                         }
                     }

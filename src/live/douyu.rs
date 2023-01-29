@@ -87,7 +87,7 @@ async fn douyu_do_js(rid: &str) -> Result<Value> {
     // 将eval运行字符串更改为直接返回字符串
     let re3 = Regex::new(r"eval\(strc\)[\s\S]*?\)").unwrap();
     let func = re3.replace_all(&func, "strc").to_string();
-    let func = format!("{}ub98484234(0,0,0)", func);
+    let func = format!("{func}ub98484234(0,0,0)");
     // println!("{func}");
 
     // 获取eval实际运行的字符串
