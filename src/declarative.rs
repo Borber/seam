@@ -3,6 +3,8 @@ use crate::{
     live,
     util::get_datetime,
     Cli,
+    model,
+    recorder,
 };
 use anyhow::{anyhow, Ok, Result};
 use clap::{Parser, Subcommand};
@@ -74,17 +76,54 @@ macro_rules! get_source_url_command {
                                 let h = tokio::spawn(async move {
                                     let mut danmu_client = live::[<$name: lower>]::[<$name DanmuClient>]::try_new(&rid_clone).await.unwrap();
                                     let cwd = std::env::current_exe().unwrap(); // 对于MACOS，CWD可执行文件目录，所以需要使用current_exe
-                                    let room_info = live::[<$name: lower>]::get(&rid).await.unwrap();
+                                    let room_info = live::[<$name: lower>]::get(&rid_clone).await.unwrap();
                                     let room_title = room_info.get_room_title().or(Some("未知直播标题")).unwrap();
-                                    let file_name = format!("{}-{}-{}", rid, get_datetime(), room_title);
+                                    let file_name = format!("{}-{}-{}", &rid_clone, get_datetime(), room_title);
                                     let path = PathBuf::from(cwd.parent().ok_or(anyhow!("错误的弹幕记录地址。")).unwrap()).join(file_name);
                                     danmu_client.start(vec![&Csv::try_new(Some(path)).unwrap()]).await.unwrap();
                                 });
                                 thread_handlers.push(h);
                             }
 
+                            // 处理参数-r，录制直播源。
+                            if record {
+                                let rid_clone = rid.clone();
+                                let h = tokio::spawn(async move {
+                                    let room_info = live::[<$name: lower>]::get(&rid_clone).await.unwrap();
+                                    let room_title = room_info.get_room_title().or(Some("未知直播标题")).unwrap();
+                                    let file_name = format!("{}-{}-{}.mp4", &rid_clone, get_datetime(), room_title);
+                                    match room_info {
+                                        model::ShowType::On(detail) => {
+                                            if let Some(url) = detail.iter().find_map(|node| node.is_m3u8().ok()) {
+                                                recorder::record(&url, &file_name).await;
+                                            } else {
+                                                return;
+                                            }
+                                        },
+                                        _ => { return; }
+                                    };
+                                });
+                                thread_handlers.push(h);
+                            }
+
+                            // 检查直播间是否开播
+                            let on_air_checker = async {
+                                loop {
+                                    tokio::time::sleep(tokio::time::Duration::from_secs(10)).await;
+                                    if let std::result::Result::Ok(live_info) = live::[<$name: lower>]::get(&rid).await {
+                                        if !live_info.is_on() {
+                                            break;
+                                        }
+                                    }
+                                }
+                            };
+
                             // select
                             tokio::select! {
+                                _ = on_air_checker => {
+                                    println!("主线程退出。");
+                                    println!("直播间已关闭。");
+                                },
                                 _ = async {
                                     for h in thread_handlers {
                                         h.await.unwrap();
