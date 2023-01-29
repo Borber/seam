@@ -20,4 +20,4 @@ pub async fn record(url: &str, output: &str) {
         .wait()
         .await
         .unwrap();
-} 
+}

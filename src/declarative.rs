@@ -1,10 +1,8 @@
 use crate::{
     danmu::{Csv, Danmu, DanmuRecorder, Terminal},
-    live,
+    live, model, recorder,
     util::get_datetime,
     Cli,
-    model,
-    recorder,
 };
 
 use std::path::PathBuf;
@@ -67,12 +65,12 @@ macro_rules! get_source_url_command {
 
                             // 收集不同参数功能的异步线程handler
                             let mut thread_handlers = vec![];
-                            
+
                             // 处理参数-d，直接输出弹幕。
                             // 由于该函数为cli层，所以出错可以直接panic。
                             if danmu {
                                 let rid_clone = rid.clone();
-                                let h = tokio::spawn(async move { 
+                                let h = tokio::spawn(async move {
                                     let mut danmu_client = live::[<$name: lower>]::[<$name DanmuClient>]::try_new(&rid_clone).await.unwrap();
                                     danmu_client.start(vec![&Terminal::try_new(None).unwrap()]).await.unwrap();
                                 });

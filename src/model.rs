@@ -1,8 +1,8 @@
 use std::fmt::{Display, Formatter, Result as FmtResult};
 use std::ops::Deref;
 
+use anyhow::{anyhow, Result};
 use serde::{Serialize, Serializer};
-use anyhow::{Result, anyhow};
 
 #[derive(Serialize, Debug)]
 pub enum ShowType {
