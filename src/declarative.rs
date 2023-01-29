@@ -1,4 +1,5 @@
 use crate::{
+    config,
     danmu::{Csv, Danmu, DanmuRecorder, Terminal},
     live, model, recorder,
     util::get_datetime,
@@ -86,6 +87,8 @@ macro_rules! get_source_url_command {
                                     let room_info = live::[<$name: lower>]::get(&rid_clone).await.unwrap();
                                     let room_title = room_info.get_room_title().or(Some("未知直播标题")).unwrap();
                                     let file_name = format!("{}-{}-{}", &rid_clone, get_datetime(), room_title);
+                                    let file_name = config::get_config().await.unwrap().danmu.name.replace("rid", &rid_clone).replace("time", &get_datetime()).replace("title", room_title);
+                                    println!("弹幕文件地址：{}", file_name);
                                     let path = PathBuf::from(cwd.parent().ok_or(anyhow!("错误的弹幕记录地址。")).unwrap()).join(file_name);
                                     danmu_client.start(vec![&Csv::try_new(Some(path)).unwrap()]).await.unwrap();
                                 });

@@ -1,6 +1,7 @@
 use anyhow::Result;
-use once_cell::sync::Lazy;
 use serde::Deserialize;
+
+use crate::util::bin_dir;
 
 #[derive(Deserialize, Debug)]
 pub struct Config {
@@ -17,7 +18,7 @@ pub static CONFIG: tokio::sync::OnceCell<Config> = tokio::sync::OnceCell::const_
 pub async fn get_config() -> Result<&'static Config> {
     CONFIG
         .get_or_try_init(|| async {
-            let config = std::fs::read_to_string("config.json").unwrap();
+            let config = std::fs::read_to_string(format!("{}config.json", bin_dir(),)).unwrap();
             let config = serde_json::from_str::<Config>(&config).unwrap();
             Ok(config)
         })
