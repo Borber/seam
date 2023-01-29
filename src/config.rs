@@ -5,7 +5,13 @@ use crate::util::bin_dir;
 
 #[derive(Deserialize, Debug)]
 pub struct Config {
+    pub video: VideoConfig,
     pub danmu: DanmuConfig,
+}
+
+#[derive(Deserialize, Debug)]
+pub struct VideoConfig {
+    pub name: String,
 }
 
 #[derive(Deserialize, Debug)]

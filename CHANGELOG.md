@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - 弹幕 CSV 支持
 - 开始支持设置
-  - 目前支持 rid title title 字段替换
+  - 弹幕, 视频 目前支持 rid title time 字段替换
 
 ## Fixed
 

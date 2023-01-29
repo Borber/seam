@@ -28,6 +28,5 @@ struct Cli {
 #[tokio::main]
 async fn main() -> Result<()> {
     get_source_url().await?;
-    println!("{:?}", config::get_config().await?);
     Ok(())
 }
