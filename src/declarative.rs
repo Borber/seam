@@ -6,10 +6,13 @@ use crate::{
     model,
     recorder,
 };
+
+use std::path::PathBuf;
+
 use anyhow::{anyhow, Ok, Result};
 use clap::{Parser, Subcommand};
 use paste::paste;
-use std::path::PathBuf;
+use rand::prelude::*;
 
 // 声明宏：获取直播源的command的实现
 macro_rules! get_source_url_command {
@@ -42,7 +45,7 @@ macro_rules! get_source_url_command {
             paste! {
                 match Cli::parse().command {
                     $(
-                        Commands::$name { rid, danmu, config_danmu, record, auto_record } => {
+                        Commands::$name { rid, danmu, config_danmu, mut record, auto_record } => {
                             // 无参数情况下，直接输出直播源信息
                             if !(danmu || config_danmu || record || auto_record) {
                                 println!("{}", live::[<$name: lower>]::get(&rid).await?);
@@ -54,6 +57,12 @@ macro_rules! get_source_url_command {
                             if live_info.is_bad_rid() {
                                 println!("{live_info}");
                                 return Ok(());
+                            }
+
+                            // 排斥参数检查
+                            // 1. 自动监控录播当检查到当前在直播时，应当自动开启下载任务，所以record选项此时是多余的
+                            if auto_record {
+                                record = false;
                             }
 
                             // 收集不同参数功能的异步线程handler
@@ -102,6 +111,39 @@ macro_rules! get_source_url_command {
                                         },
                                         _ => { return; }
                                     };
+                                });
+                                thread_handlers.push(h);
+                            }
+
+                            // 处理参数-R，自动监控录制直播。
+                            //
+                            // 3~9分钟检查一次是否开启直播。
+                            if auto_record {
+                                let rid_clone = rid.clone();
+                                let h = tokio::spawn(async move {
+                                    loop {
+                                        if let std::result::Result::Ok(live_info) = live::[<$name: lower>]::get(&rid_clone).await {
+                                            if !live_info.is_on() {
+                                                continue;
+                                            } else {
+                                                let room_info = live::[<$name: lower>]::get(&rid_clone).await.unwrap();
+                                                let room_title = room_info.get_room_title().or(Some("未知直播标题")).unwrap();
+                                                let file_name = format!("{}-{}-{}.mp4", &rid_clone, get_datetime(), room_title);
+                                                match room_info {
+                                                    model::ShowType::On(detail) => {
+                                                        if let Some(url) = detail.iter().find_map(|node| node.is_m3u8().ok()) {
+                                                            recorder::record(&url, &file_name).await;
+                                                        } else {
+                                                            return;
+                                                        }
+                                                    },
+                                                    _ => { return; }
+                                                };
+                                            }
+                                        }
+                                        let waiting_time = rand::thread_rng().gen_range(180..600);
+                                        tokio::time::sleep(tokio::time::Duration::from_secs(waiting_time)).await;
+                                    }
                                 });
                                 thread_handlers.push(h);
                             }
