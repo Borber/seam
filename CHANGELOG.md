@@ -7,18 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.1.16]
 
-## Added
+### Added
 
 - (尝试支持) 视频录制, 但目前需要自行放置 ffmpeg 文件到 `seam` 可执行文件所在目录下
 - 弹幕录制 CSV 支持
 - 开始支持设置
   - 弹幕, 视频 目前支持 rid title time 字段替换
 
-## Changed
+### Changed
 
 - 改进CI脚本, 提供更多平台/版本支持
 
-## Fixed
+### Fixed
 
 - 修复抖音直播源获取
 - B站弹幕解压情况下的顺序问题
