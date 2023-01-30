@@ -1,0 +1,105 @@
+#!/bin/bash
+
+BUILD_TARGET=""
+BUILD_FEATURES=()
+while getopts "t:f:" opt; do
+    case $opt in
+    t)
+        BUILD_TARGET=$OPTARG
+        ;;
+    f)
+        BUILD_FEATURES+=($OPTARG)
+        ;;
+    ?)
+        echo "Usage: $(basename $0) [-t <target-triple>] [-f <feature>]"
+        ;;
+    esac
+done
+
+BUILD_FEATURES+=${BUILD_EXTRA_FEATURES}
+
+ROOT_DIR=$(cd $(dirname $0) && pwd)
+VERSION=$(grep -E '^version' "${ROOT_DIR}/../Cargo.toml" | awk '{print $3}' | sed 's/"//g')
+HOST_TRIPLE=$(rustc -Vv | grep 'host:' | awk '{print $2}')
+
+echo "Started build release ${VERSION} for ${HOST_TRIPLE} (target: ${BUILD_TARGET}) with features \"${BUILD_FEATURES}\"..."
+
+if [[ "${BUILD_TARGET}" != "" ]]; then
+    if [[ "${BUILD_FEATURES}" != "" ]]; then
+        cargo build --release --features "${BUILD_FEATURES}" --target "${BUILD_TARGET}"
+    else
+        cargo build --release --target "${BUILD_TARGET}"
+    fi
+else
+    if [[ "${BUILD_FEATURES}" != "" ]]; then
+        cargo build --release --features "${BUILD_FEATURES}"
+    else
+        cargo build --release
+    fi
+fi
+
+if [[ "$?" != "0" ]]; then
+    exit 1
+fi
+
+if [[ "${BUILD_TARGET}" == "" ]]; then
+    BUILD_TARGET=$HOST_TRIPLE
+fi
+
+TARGET_SUFFIX=""
+if [[ "${BUILD_TARGET}" == *"-windows-"* ]]; then
+    TARGET_SUFFIX=".exe"
+fi
+
+TARGETS=("seam${TARGET_SUFFIX}" )
+
+RELEASE_FOLDER="${ROOT_DIR}/release"
+RELEASE_PACKAGE_NAME="seam-v${VERSION}.${BUILD_TARGET}"
+
+mkdir -p "${RELEASE_FOLDER}"
+
+# Into release folder
+if [[ "${BUILD_TARGET}" != "" ]]; then
+    cd "${ROOT_DIR}/../target/${BUILD_TARGET}/release"
+else
+    cd "${ROOT_DIR}/../target/release"
+fi
+
+cp "${ROOT_DIR}/../config.json" ./
+
+if [[ "${BUILD_TARGET}" == *"-windows-"* ]]; then
+    # For Windows, use zip
+
+    RELEASE_PACKAGE_FILE_NAME="${RELEASE_PACKAGE_NAME}.zip"
+    RELEASE_PACKAGE_FILE_PATH="${RELEASE_FOLDER}/${RELEASE_PACKAGE_FILE_NAME}"
+    zip "${RELEASE_PACKAGE_FILE_PATH}" "${TARGETS[@]}" "config.json"
+
+    if [[ $? != "0" ]]; then
+        exit 1
+    fi
+
+    # Checksum
+    cd "${RELEASE_FOLDER}"
+    shasum -a 256 "${RELEASE_PACKAGE_FILE_NAME}" >"${RELEASE_PACKAGE_FILE_NAME}.sha256"
+else
+    # For others, Linux, OS X, uses tar.xz
+
+    # For Darwin, .DS_Store and other related files should be ignored
+    if [[ "$(uname -s)" == "Darwin" ]]; then
+        export COPYFILE_DISABLE=1
+    fi
+
+    RELEASE_PACKAGE_FILE_NAME="${RELEASE_PACKAGE_NAME}.tar.xz"
+    RELEASE_PACKAGE_FILE_PATH="${RELEASE_FOLDER}/${RELEASE_PACKAGE_FILE_NAME}"
+    tar -cJf "${RELEASE_PACKAGE_FILE_PATH}" "${TARGETS[@]}" "config.json"
+
+    if [[ $? != "0" ]]; then
+        exit 1
+    fi
+
+    # Checksum
+    cd "${RELEASE_FOLDER}"
+    shasum -a 256 "${RELEASE_PACKAGE_FILE_NAME}" >"${RELEASE_PACKAGE_FILE_NAME}.sha256"
+fi
+
+echo "Finished build release ${RELEASE_PACKAGE_FILE_PATH}"
