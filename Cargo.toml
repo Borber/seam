@@ -26,4 +26,6 @@ futures-sink = "0.3"
 futures-util = { version = "0.3", default-features = false, features = ["sink", "std"] }
 miniz_oxide = "0.6.2"
 colored = "2.0.0"
+
+[target.'cfg(unix)'.dependencies]
 openssl = { version = '0.10', features = ["vendored"] }
