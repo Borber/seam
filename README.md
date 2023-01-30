@@ -9,6 +9,8 @@
 
 多平台直播源地址获取
 
+- 目前直播录制需要自行放置 ffmpeg 到 `seam` 可执行文件所在目录下, 未正式支持, 后续将优化此模块
+
 # 使用样例
 ```bash
 ❯ .\seam.exe douyu 88080
@@ -24,6 +26,26 @@
 ```
 
 > 因为数据具有时效性, 所以具体链接使用 `url` 进行替换
+
+## 设置
+
+`config.json` 放置在 `seam` 可执行文件所在目录下
+
+```json
+{
+    "video": {
+        "name": "rid-title-time"
+    },
+    "danmu": {
+        "name": "rid-title-time"
+    }
+}
+```
+- video: 视频文件名设置
+- danmu: 弹幕文件名设置
+- rid: 直播间号
+- title: 直播间标题
+- time: 当前时间
 
 # 使用
 |平台|房间号位置|
