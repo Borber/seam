@@ -1,4 +1,4 @@
-use anyhow::Result;
+use once_cell::sync::Lazy;
 use serde::Deserialize;
 
 use crate::util::bin_dir;
@@ -19,17 +19,11 @@ pub struct DanmuConfig {
     pub name: String,
 }
 
-pub static CONFIG: tokio::sync::OnceCell<Config> = tokio::sync::OnceCell::const_new();
-
-pub async fn get_config() -> Result<&'static Config> {
-    CONFIG
-        .get_or_try_init(|| async {
-            let config = std::fs::read_to_string(format!("{}config.json", bin_dir(),)).unwrap();
-            let config = serde_json::from_str::<Config>(&config).unwrap();
-            Ok(config)
-        })
-        .await
-}
+pub static CONFIG: Lazy<Config> = Lazy::new(|| {
+    let config = std::fs::read_to_string(format!("{}config.json", bin_dir(),)).unwrap();
+    let config = serde_json::from_str::<Config>(&config).unwrap();
+    config
+});
 
 #[cfg(test)]
 mod tests {

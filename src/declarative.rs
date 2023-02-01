@@ -1,5 +1,5 @@
 use crate::{
-    config,
+    config::CONFIG,
     danmu::{Csv, Danmu, DanmuRecorder, Terminal},
     live, model, recorder,
     util::get_datetime,
@@ -86,7 +86,7 @@ macro_rules! get_source_url_command {
                                     let cwd = std::env::current_exe().unwrap(); // 对于MACOS，CWD可执行文件目录，所以需要使用current_exe
                                     let room_info = live::[<$name: lower>]::get(&rid_clone).await.unwrap();
                                     let room_title = room_info.get_room_title().or(Some("未知直播标题")).unwrap();
-                                    let file_name = config::get_config().await.unwrap().danmu.name.replace("rid", &rid_clone).replace("time", &get_datetime()).replace("title", room_title);
+                                    let file_name = CONFIG.danmu.name.replace("rid", &rid_clone).replace("time", &get_datetime()).replace("title", room_title);
                                     println!("弹幕文件地址：{}", file_name);
                                     let path = PathBuf::from(cwd.parent().ok_or(anyhow!("错误的弹幕记录地址。")).unwrap()).join(file_name);
                                     danmu_client.start(vec![&Csv::try_new(Some(path)).unwrap()]).await.unwrap();
@@ -100,7 +100,7 @@ macro_rules! get_source_url_command {
                                 let h = tokio::spawn(async move {
                                     let room_info = live::[<$name: lower>]::get(&rid_clone).await.unwrap();
                                     let room_title = room_info.get_room_title().or(Some("未知直播标题")).unwrap();
-                                    let file_name = config::get_config().await.unwrap().video.name.replace("rid", &rid_clone).replace("time", &get_datetime()).replace("title", room_title);
+                                    let file_name = CONFIG.video.name.replace("rid", &rid_clone).replace("time", &get_datetime()).replace("title", room_title);
                                     let file_name = format!("{file_name}.mp4");
                                     match room_info {
                                         model::ShowType::On(detail) => {
