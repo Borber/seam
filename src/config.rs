@@ -21,8 +21,7 @@ pub struct DanmuConfig {
 
 pub static CONFIG: Lazy<Config> = Lazy::new(|| {
     let config = std::fs::read_to_string(format!("{}config.json", bin_dir(),)).unwrap();
-    let config = serde_json::from_str::<Config>(&config).unwrap();
-    config
+    serde_json::from_str::<Config>(&config).unwrap()
 });
 
 #[cfg(test)]

@@ -61,7 +61,7 @@ pub fn bin_dir() -> String {
         .to_str()
         .unwrap()
         .to_owned();
-    format!("{}{}", p, SEPARATOR)
+    format!("{p}{SEPARATOR}")
 }
 
 /// 获取当前时间
