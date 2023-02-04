@@ -1,9 +1,8 @@
 use crate::{
-    common::{CLIENT, DO_JS_URL},
     model::{Format, Node},
 };
+use boa_engine::Context;
 use md5::{Digest, Md5};
-use serde_json::json;
 
 /// 提取字符串md5值
 pub fn md5(data: &[u8]) -> String {
@@ -15,16 +14,8 @@ pub fn md5(data: &[u8]) -> String {
 // TODO 报错信息显示
 /// js在线运行时
 pub async fn do_js(js: &str) -> String {
-    let json = json!({ "js": js });
-    CLIENT
-        .post(DO_JS_URL)
-        .json(&json)
-        .send()
-        .await
-        .expect("msg1")
-        .text()
-        .await
-        .expect("msg2")
+    let mut context = Context::default();
+    context.eval(js).unwrap().as_string().unwrap().to_string()
 }
 
 pub fn match_format(url: &str) -> Format {
@@ -45,7 +36,6 @@ pub fn parse_url(url: String) -> Node {
         url: url.to_owned(),
     }
 }
-
 
 #[cfg(windows)]
 const SEPARATOR: &str = "\\";

@@ -23,9 +23,20 @@ async-trait = "0.1.61"
 rand = "0.8.5"
 tokio-tungstenite = { version = "0.18", features = ["native-tls"] }
 futures-sink = "0.3"
-futures-util = { version = "0.3", default-features = false, features = ["sink", "std"] }
+futures-util = { version = "0.3", default-features = false, features = [
+    "sink",
+    "std",
+] }
 miniz_oxide = "0.6.2"
 colored = "2.0.0"
+boa_engine = "0.16"
 
 [target.'cfg(unix)'.dependencies]
 openssl = { version = '0.10', features = ["vendored"] }
+
+[profile.release]
+opt-level = "z"
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true
