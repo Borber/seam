@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 -   更改 js 运行时为 boa_engine 去除在线 js 运行接口
 -   添加编译参数, 减小二进制体积
+-   斗鱼使用移动端接口获取直播源
 
 ## [0.1.16]
 

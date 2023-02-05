@@ -1,6 +1,4 @@
-use crate::{
-    model::{Format, Node},
-};
+use crate::model::{Format, Node};
 use boa_engine::Context;
 use md5::{Digest, Md5};
 

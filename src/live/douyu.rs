@@ -12,6 +12,7 @@ use serde_json::Value;
 const URL: &str = "https://www.douyu.com/";
 const M_URL: &str = "https://m.douyu.com/";
 const PLAY_URL: &str = "https://www.douyu.com/lapi/live/getH5Play/";
+const PLAY_URL_M: &str = "https://m.douyu.com/api/room/ratestream";
 const CDN_1: &str = "http://akm-tct.douyucdn.cn/live/";
 const CDN_2: &str = "http://ws-tct.douyucdn.cn/live/";
 const DID: &str = "10000000000000000000000000001501";
@@ -26,23 +27,7 @@ pub async fn get(rid: &str) -> Result<ShowType> {
         Some(rid) => rid,
         None => return Ok(ShowType::Error("直播间不存在".to_string())),
     };
-    let json = douyu_do_js(&rid).await?;
-    match json["error"].as_i64().unwrap() {
-        0 => {
-            let key = json["data"]["rtmp_live"].as_str().unwrap();
-            let key = key.split_once('.').unwrap().0;
-            let key = match key.split_once('_') {
-                Some((k, _)) => k,
-                None => key,
-            };
-            let nodes = vec![
-                parse_url(format!("{CDN_1}{key}.flv")),
-                parse_url(format!("{CDN_2}{key}.flv")),
-            ];
-            Ok(ShowType::On(Detail::new("douyu".to_owned(), nodes)))
-        }
-        _ => Ok(ShowType::Off),
-    }
+    douyu_do_js(&rid).await
 }
 
 /// 获取真实房间号
@@ -54,8 +39,9 @@ async fn real_rid(rid: &str) -> Option<String> {
         .map(|caps| caps.get(1).unwrap().as_str().to_owned())
 }
 
-/// TODO: 更改为移动版 减少资源消耗
-async fn douyu_do_js(rid: &str) -> Result<Value> {
+// TODO 简化代码 今天状态不行, 改天再说
+#[allow(dead_code)]
+async fn douyu_do_js_pc(rid: &str) -> Result<ShowType> {
     // 构造时间戳
     let binding = Local::now().timestamp_millis().to_string();
     let dt = &binding.as_str()[0..10];
@@ -125,7 +111,103 @@ async fn douyu_do_js(rid: &str) -> Result<Value> {
         .await?
         .json()
         .await?;
-    Ok(json)
+    match json["error"].as_i64().unwrap() {
+        0 => {
+            let key = json["data"]["rtmp_live"].as_str().unwrap();
+            let key = key.split_once('.').unwrap().0;
+            let key = match key.split_once('_') {
+                Some((k, _)) => k,
+                None => key,
+            };
+            let nodes = vec![
+                parse_url(format!("{CDN_1}{key}.flv")),
+                parse_url(format!("{CDN_2}{key}.flv")),
+            ];
+            Ok(ShowType::On(Detail::new("douyu".to_owned(), nodes)))
+        }
+        _ => Ok(ShowType::Off),
+    }
+}
+
+async fn douyu_do_js(rid: &str) -> Result<ShowType> {
+    // 构造时间戳
+    let binding = Local::now().timestamp_millis().to_string();
+    let dt = &binding.as_str()[0..10];
+
+    // 获取指定直播间的首页源代码, 认证的sign和直播间是绑定的
+    let text = CLIENT
+        .get(format!("{M_URL}{rid}"))
+        .send()
+        .await?
+        .text()
+        .await?;
+
+    // 正则匹配固定位置的js代码
+    let re = Regex::new(r"(function ub98484234.*)\s(var.*)").unwrap();
+    let func = re
+        .captures(&text)
+        .unwrap()
+        .get(0)
+        .unwrap()
+        .as_str()
+        .to_owned();
+    let re = Regex::new(r#"eval.*;}"#).unwrap();
+    let func = re.replace(&func, "strc;}");
+    let func = format!("{func}ub98484234(0,0,0)");
+
+    // 获取eval实际运行的字符串
+    let res = do_js(&func).await;
+
+    // 构建函数, 替换数值
+    let res = res.replace("(function", "let ccc = function");
+    let res = res.replace("rt;})", &format!("rt;}};ccc({rid}, \"{DID}\", {dt});"));
+    let re = Regex::new(r#"v=([0-9]{12})"#).unwrap();
+    let v = re.captures(&res).unwrap().get(1).unwrap().as_str();
+
+    // 替换md5值避免js依赖
+    let cb = format!("{rid}{DID}{dt}{v}");
+    let rb = md5(cb.as_bytes());
+    let res = res.replace(
+        "CryptoJS.MD5(cb).toString();",
+        format!("\"{}\";", &rb).as_str(),
+    );
+    // println!("{}", res);
+    // 运行js获取签名值
+    let sign = do_js(&res).await;
+    // println!("{}", sign);
+    let sign = sign.rsplit_once('=').unwrap().1;
+
+    let mut params = HashMap::new();
+    params.insert("v", v);
+    params.insert("did", DID);
+    params.insert("tt", dt);
+    params.insert("sign", sign);
+    params.insert("rid", rid);
+
+    let json: serde_json::Value = CLIENT
+        .post(PLAY_URL_M)
+        .form(&params)
+        .send()
+        .await?
+        .json()
+        .await?;
+    match json["code"].as_i64().unwrap() {
+        0 => {
+            let key = json["data"]["url"].as_str().unwrap();
+            let key = key.split_once(".m3u8").unwrap().0;
+            let key = key.rsplit_once('/').unwrap().1;
+            let key = match key.split_once('_') {
+                Some((k, _)) => k,
+                None => key,
+            };
+            let nodes = vec![
+                parse_url(format!("{CDN_1}{key}.flv")),
+                parse_url(format!("{CDN_2}{key}.flv")),
+            ];
+            Ok(ShowType::On(Detail::new("douyu".to_owned(), nodes)))
+        }
+        _ => Ok(ShowType::Off),
+    }
 }
 
 #[cfg(test)]
@@ -134,6 +216,6 @@ mod tests {
 
     #[tokio::test]
     async fn test_get_url() {
-        println!("{}", get("33").await.unwrap());
+        println!("{}", get("221869").await.unwrap());
     }
 }
