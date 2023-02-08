@@ -7,7 +7,6 @@ use crate::util::{do_js, md5, parse_url};
 use anyhow::{Ok, Result};
 use chrono::prelude::*;
 use regex::Regex;
-use serde_json::Value;
 
 const URL: &str = "https://www.douyu.com/";
 const M_URL: &str = "https://m.douyu.com/";
@@ -142,6 +141,15 @@ async fn douyu_do_js(rid: &str) -> Result<ShowType> {
         .text()
         .await?;
 
+    let re = Regex::new(r#"roomName":"([\s\S]*?)""#).unwrap();
+    let title = re
+        .captures(&text)
+        .unwrap()
+        .get(1)
+        .unwrap()
+        .as_str()
+        .to_owned();
+
     // 正则匹配固定位置的js代码
     let re = Regex::new(r"(function ub98484234.*)\s(var.*)").unwrap();
     let func = re
@@ -204,7 +212,7 @@ async fn douyu_do_js(rid: &str) -> Result<ShowType> {
                 parse_url(format!("{CDN_1}{key}.flv")),
                 parse_url(format!("{CDN_2}{key}.flv")),
             ];
-            Ok(ShowType::On(Detail::new("douyu".to_owned(), nodes)))
+            Ok(ShowType::On(Detail::new(title, nodes)))
         }
         _ => Ok(ShowType::Off),
     }
