@@ -6,6 +6,7 @@ pub mod douyu;
 pub mod flex;
 pub mod huajiao;
 pub mod huya;
+pub mod inke;
 pub mod kk;
 pub mod kuaishou;
 pub mod mht;
