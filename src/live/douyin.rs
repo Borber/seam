@@ -5,8 +5,10 @@ use crate::{
     util::parse_url,
 };
 
+use crate::common::USER_AGENT;
 use anyhow::{Ok, Result};
 use regex::Regex;
+use reqwest::header::HeaderMap;
 use serde_json::Value;
 use urlencoding::decode;
 
@@ -18,10 +20,17 @@ default_danmu_client!(Douyin);
 ///
 /// https://live.douyin.com/
 pub async fn get(rid: &str) -> Result<ShowType> {
+    let mut header_map = HeaderMap::new();
+    header_map.insert("user-agent", USER_AGENT.parse()?);
     let resp = CLIENT
         .get(format!("{URL}{rid}"))
-        // TODO: 支持随机cookie
-        .header("cookie", "__ac_nonce=073b59ce0001243a9217f;")
+        .headers(header_map.clone())
+        .send()
+        .await?;
+    header_map.insert("cookie", resp.headers().get("set-cookie").unwrap().clone());
+    let resp = CLIENT
+        .get(format!("{URL}{rid}"))
+        .headers(header_map)
         .send()
         .await?;
     let resp_text = resp.text().await?;
@@ -78,6 +87,6 @@ mod tests {
 
     #[tokio::test]
     async fn test_get_url() {
-        println!("{}", get("279322104492").await.unwrap());
+        println!("{}", get("201088644229").await.unwrap());
     }
 }
