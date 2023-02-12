@@ -51,24 +51,25 @@
 
 # 使用
 
-|                   平台                    |                                房间号位置                                |
-| :---------------------------------------: | :----------------------------------------------------------------------: |
-|    [B 站（bili)](https://live.bilibili.com/)     |                    `https://live.bilibili.com/<RID>`                     |
-|      [斗鱼（douyu)](https://www.douyu.com/)       | `https://www.douyu.com/<RID>` 或 `https://www.douyu.com/xx/xx?rid=<RID>` |
-|     [抖音（douyin)](https://live.douyin.com/)      |                     `https://live.douyin.com/<RID>`                      |
-|         [虎牙（huya)](https://huya.com/)         |                         `https://huya.com/<RID>`                         |
-|    [快手（kuaishou)](https://live.kuaishou.com/)     |                   `https://live.kuaishou.com/u/<RID>`                    |
-|         [CC（cc)](https://cc.163.com/)         |                        `https://cc.163.com/<RID>`                        |
+|                        平台                        |                                房间号位置                                |
+|:------------------------------------------------:| :----------------------------------------------------------------------: |
+|     [B 站（bili)](https://live.bilibili.com/)      |                    `https://live.bilibili.com/<RID>`                     |
+|       [斗鱼（douyu)](https://www.douyu.com/)        | `https://www.douyu.com/<RID>` 或 `https://www.douyu.com/xx/xx?rid=<RID>` |
+|      [抖音（douyin)](https://live.douyin.com/)      |                     `https://live.douyin.com/<RID>`                      |
+|          [虎牙（huya)](https://huya.com/)           |                         `https://huya.com/<RID>`                         |
+|    [快手（kuaishou)](https://live.kuaishou.com/)    |                   `https://live.kuaishou.com/u/<RID>`                    |
+|          [CC（cc)](https://cc.163.com/)           |                        `https://cc.163.com/<RID>`                        |
 |     [花椒（huajiao)](https://www.huajiao.com/)      |                    `https://www.huajiao.com/l/<RID>`                     |
-|      [艺气山（yqs)](https://www.173.com/)       |                       `https://www.173.com/<RID>`                        |
-|      [棉花糖（mht)](https://www.2cq.com/)       |                       `https://www.2cq.com/<RID>`                        |
-|       [kk（kk)](https://www.kktv5.com/)        |                    `https://www.kktv5.com/show/<RID>`                    |
-|      [千帆直播（qf)](https://qf.56.com/)       |                        `https://qf.56.com/<RID>`                         |
-|      [Now 直播（now)](https://now.qq.com/)      |            `https://now.qq.com/pcweb/story.html?roomid=<RID>`            |
-|     [afreeca（afreeca)](https://afreecatv.com/)     |          `https://bj.afreecatv.com/<RID>` 主播名字而非直播间号           |
+|         [艺气山（yqs)](https://www.173.com/)         |                       `https://www.173.com/<RID>`                        |
+|         [棉花糖（mht)](https://www.2cq.com/)         |                       `https://www.2cq.com/<RID>`                        |
+|         [kk（kk)](https://www.kktv5.com/)         |                    `https://www.kktv5.com/show/<RID>`                    |
+|          [千帆直播（qf)](https://qf.56.com/)          |                        `https://qf.56.com/<RID>`                         |
+|        [Now 直播（now)](https://now.qq.com/)        |            `https://now.qq.com/pcweb/story.html?roomid=<RID>`            |
+|         [映客（inke)](https://www.inke.cn/)          |            `https://www.inke.cn/liveroom/index.html?uid=<RID>`            |
+|    [afreeca（afreeca)](https://afreecatv.com/)    |          `https://bj.afreecatv.com/<RID>` 主播名字而非直播间号           |
 | [pandalive（panda)](https://www.pandalive.co.kr/) |     `https://www.pandalive.co.kr/channel/<RID>` 主播名字而非直播间号     |
-|     [flex（flex)](https://www.flextv.co.kr/)     |      `https://www.flextv.co.kr/channels/<RID>` 主播名字而非直播间号      |
-|     [wink（wink)](https://www.winktv.co.kr/)     |      `https://www.winktv.co.kr/channel/<RID>` 主播名字而非直播间号       |
+|     [flex（flex)](https://www.flextv.co.kr/)      |      `https://www.flextv.co.kr/channels/<RID>` 主播名字而非直播间号      |
+|     [wink（wink)](https://www.winktv.co.kr/)      |      `https://www.winktv.co.kr/channel/<RID>` 主播名字而非直播间号       |
 
 # 路线
 

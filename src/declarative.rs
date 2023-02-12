@@ -196,8 +196,8 @@ macro_rules! get_source_url_command {
 // 展开宏命令
 // 添加新的直播平台可以在括号末尾添加，并在live文件夹里添加对应的文件
 get_source_url_command!(
-    Bili, Douyu, Douyin, Huya, Kuaishou, Cc, Huajiao, Kk, Qf, Yqs, Mht, Now, Afreeca, Panda, Flex,
-    Wink
+    Bili, Douyu, Douyin, Huya, Kuaishou, Cc, Huajiao, Kk, Qf, Yqs, Mht, Now, Inke, Afreeca, Panda,
+    Flex, Wink
 );
 
 // 为没有实现弹幕功能的直播平台添加默认空白实现
