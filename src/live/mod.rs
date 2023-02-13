@@ -1,17 +1,15 @@
-pub mod afreeca;
+use crate::model::{Node, Status};
+use anyhow::Result;
+
 pub mod bili;
-pub mod cc;
-pub mod douyin;
-pub mod douyu;
-pub mod flex;
-pub mod huajiao;
-pub mod huya;
-pub mod inke;
-pub mod kk;
-pub mod kuaishou;
-pub mod mht;
-pub mod now;
-pub mod panda;
-pub mod qf;
-pub mod wink;
-pub mod yqs;
+
+/// 获取直播信息
+pub trait Live {
+    // 获取直播源
+    // rid: 直播间号
+    async fn get(self) -> Result<Node>;
+    // 获取直播间状态
+    // rid: 直播间号
+    // ext: 附加信息或附加操作
+    async fn status(self, ext: bool) -> Result<Status>;
+}

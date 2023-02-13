@@ -1,75 +1,40 @@
+use std::collections::HashMap;
 use std::fmt::{Display, Formatter, Result as FmtResult};
 use std::ops::Deref;
 
 use anyhow::{anyhow, Result};
 use serde::{Serialize, Serializer};
 
-#[derive(Serialize, Debug)]
-pub enum ShowType {
-    // 开播
-    On(Detail),
-    // 未开播
-    Off,
-    // 错误
-    Error(String),
-}
-
-impl ShowType {
-    pub fn get_room_title(&self) -> Option<&str> {
-        match self {
-            ShowType::On(detail) => Some(detail.title.as_str()),
-            _ => None,
-        }
-    }
-
-    pub fn is_on(&self) -> bool {
-        matches!(self, ShowType::On(_))
-    }
-
-    pub fn is_bad_rid(&self) -> bool {
-        matches!(self, ShowType::Error(_))
-    }
-}
-
-impl Display for ShowType {
-    fn fmt(&self, f: &mut Formatter<'_>) -> FmtResult {
-        match self {
-            ShowType::On(nodes) => write!(f, "{}", serde_json::to_string_pretty(&nodes).unwrap()),
-            ShowType::Off => write!(f, "未开播"),
-            ShowType::Error(msg) => write!(f, "{msg}"),
-        }
-    }
-}
-
-#[derive(Serialize, Debug)]
-pub struct Detail {
-    pub title: String,
-    pub nodes: Vec<Node>,
-}
-
-impl Detail {
-    pub fn new(title: String, nodes: Vec<Node>) -> Self {
-        Self { title, nodes }
-    }
-}
-
-impl Deref for Detail {
-    type Target = Vec<Node>;
-
-    fn deref(&self) -> &Self::Target {
-        &self.nodes
-    }
-}
-
+/// 直播源
+/// 1. 正确解析后的直播源
+///
+/// - rid: 直播间号
+/// - title: 直播间标题
+/// - nodes: 直播源列表
 #[derive(Serialize, Debug)]
 pub struct Node {
+    pub rid: String,
+    pub title: String,
+    pub urls: Vec<Url>,
+}
+
+impl Deref for Node {
+    type Target = Vec<Url>;
+
+    fn deref(&self) -> &Self::Target {
+        &self.urls
+    }
+}
+
+#[derive(Serialize, Debug)]
+pub struct Url {
     // 直播源格式
     pub format: Format,
     // 直播源地址, 默认均为最高清晰度, 故而无需额外标注清晰度
     pub url: String,
 }
 
-impl Node {
+impl Url {
     pub fn is_m3u8(&self) -> Result<String> {
         match self.format {
             Format::M3U => Ok(self.url.clone()),

@@ -1,4 +1,4 @@
-use crate::model::{Format, Node};
+use crate::model::{Format, Node, Url};
 use boa_engine::Context;
 use md5::{Digest, Md5};
 
@@ -9,9 +9,8 @@ pub fn md5(data: &[u8]) -> String {
     hex::encode(h.finalize())
 }
 
-// TODO 报错信息显示
-/// js在线运行时
-pub async fn do_js(js: &str) -> String {
+/// 运行js代码
+pub async fn eval(js: &str) -> String {
     let mut context = Context::default();
     context.eval(js).unwrap().as_string().unwrap().to_string()
 }
@@ -28,8 +27,8 @@ pub fn match_format(url: &str) -> Format {
     }
 }
 
-pub fn parse_url(url: String) -> Node {
-    Node {
+pub fn parse_url(url: String) -> Url {
+    Url {
         format: match_format(&url),
         url: url.to_owned(),
     }

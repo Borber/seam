@@ -22,12 +22,11 @@ use tokio::net::TcpStream;
 use tokio_tungstenite::{tungstenite::protocol::Message, MaybeTlsStream, WebSocketStream};
 
 /// 标准化弹幕记录异步接口。
-#[async_trait]
 pub trait Danmu {
     /// 运行弹幕记录服务。
     ///
     /// 本函数通常将运行websocket长连接，并按指定方式记录弹幕。
-    /// 由于websockt的机制，本函数需要`&mut self`作为参数。
+    /// 由于websocket的机制，本函数需要`&mut self`作为参数。
     ///
     /// # Errors
     ///
@@ -48,6 +47,7 @@ pub trait DanmuRecorder: Send + Sync {
     fn try_new(path: Option<PathBuf>) -> Result<Self>
     where
         Self: Sized;
+
     fn path(&self) -> Option<&PathBuf>;
 
     fn init(&self) -> Result<()> {
