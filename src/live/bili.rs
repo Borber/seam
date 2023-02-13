@@ -1,18 +1,18 @@
-use crate::{
-    common::{CLIENT, USER_AGENT},
-    danmu::{websocket_danmu_work_flow, Danmu, DanmuBody, DanmuRecorder},
-    model::{Detail, ShowType},
-    util::parse_url,
-};
 use std::collections::HashMap;
 
-use crate::live::Live;
-use crate::model::{Node, Status};
-use anyhow::{anyhow, Ok, Result};
+use anyhow::{Ok, Result};
 use async_trait::async_trait;
 use miniz_oxide::inflate::decompress_to_vec_zlib;
 use rand::Rng;
 use serde_json::json;
+
+use crate::live::Live;
+use crate::model::{Node, Status};
+use crate::{
+    common::{CLIENT, USER_AGENT},
+    danmu::{websocket_danmu_work_flow, Danmu, DanmuBody, DanmuRecorder},
+    util::parse_url,
+};
 
 const INIT_URL: &str = "https://api.live.bilibili.com/room/v1/Room/room_init";
 const INFO_URL: &str = "https://api.live.bilibili.com/room/v1/Room/get_info";
@@ -24,21 +24,97 @@ const HEART_BEAT_INTERVAL: u64 = 60;
 /// bilibili直播
 ///
 /// https://live.bilibili.com/
-type Bili = Node;
+pub type Bili = Node;
 
 impl Bili {
     pub async fn new(rid: &str) -> Option<Bili> {
-        let mut tmp = Self {
-            rid: rid.to_owned(),
-            title: "".to_string(),
-            urls: vec![],
-        };
-        match tmp.status(true).await {
-            true => Some(tmp),
-            false => None,
+        match Bili::status(rid, true).await {
+            Status::On(Some(m)) => Some(Self {
+                rid: m.get("rid").unwrap().to_owned(),
+                title: "".to_string(),
+                urls: vec![],
+            }),
+            _ => None,
         }
     }
 }
+
+#[async_trait]
+impl Live for Bili {
+    async fn get(mut self) -> Self {
+        let mut stream_info = get_bili_stream_info(&self.rid, 10000).await.unwrap();
+        let max = stream_info
+            .as_array()
+            .unwrap()
+            .iter()
+            .map(|data| {
+                data["format"][0]["codec"][0]["accept_qn"]
+                    .as_array()
+                    .unwrap()
+                    .iter()
+                    .map(|item| item.as_u64().unwrap())
+                    .max()
+                    .unwrap()
+            })
+            .max()
+            .unwrap();
+        if max != 10000 {
+            stream_info = get_bili_stream_info(&self.rid, max).await.unwrap();
+        }
+        for obj in stream_info.as_array().unwrap() {
+            for format in obj["format"].as_array().unwrap() {
+                for codec in format["codec"].as_array().unwrap() {
+                    let base_url = codec["base_url"].as_str().unwrap();
+                    for url_info in codec["url_info"].as_array().unwrap() {
+                        let host = url_info["host"].as_str().unwrap();
+                        let extra = url_info["extra"].as_str().unwrap();
+                        self.urls
+                            .push(parse_url(format!("{host}{base_url}{extra}")));
+                    }
+                }
+            }
+        }
+
+        let json: serde_json::Value = CLIENT
+            .get(INFO_URL)
+            .query(&[("room_id", &self.rid)])
+            .send()
+            .await
+            .unwrap()
+            .json()
+            .await
+            .unwrap();
+        self.title = json["data"]["title"].as_str().unwrap().to_owned();
+        self.clone()
+    }
+
+    //短id和真实房间号均可用以检测状态
+    async fn status(rid: &str, ext: bool) -> Status {
+        let resp: serde_json::Value = CLIENT
+            .get(INIT_URL)
+            .query(&[("id", rid)])
+            .send()
+            .await
+            .unwrap()
+            .json()
+            .await
+            .unwrap();
+        let s = match resp["data"]["live_status"].as_i64() {
+            Some(1) => true,
+            _ => false,
+        };
+        if s == true && ext == true {
+            let mut m = HashMap::new();
+            m.insert(
+                "rid".to_owned(),
+                resp["data"]["room_id"].as_u64().unwrap().to_string(),
+            );
+            return Status::On(Some(m));
+        }
+        Status::On(None)
+    }
+}
+
 /// 通过真实房间号获取直播源信息
 pub async fn get_bili_stream_info(rid: &str, qn: u64) -> Result<serde_json::Value> {
     Ok(CLIENT
@@ -60,91 +136,21 @@ pub async fn get_bili_stream_info(rid: &str, qn: u64) -> Result<serde_json::Valu
         .to_owned())
 }
 
-impl Live for Bili {
-    async fn get(&mut self) {
-        let mut stream_info = self.get_bili_stream_info(10000).await?;
-        let max = stream_info
-            .as_array()
-            .unwrap()
-            .iter()
-            .map(|data| {
-                data["format"][0]["codec"][0]["accept_qn"]
-                    .as_array()
-                    .unwrap()
-                    .iter()
-                    .map(|item| item.as_u64().unwrap())
-                    .max()
-                    .unwrap()
-            })
-            .max()
-            .unwrap();
-        if max != 10000 {
-            stream_info = self.get_bili_stream_info(max).await?;
-        }
-        for obj in stream_info.as_array().unwrap() {
-            for format in obj["format"].as_array().unwrap() {
-                for codec in format["codec"].as_array().unwrap() {
-                    let base_url = codec["base_url"].as_str().unwrap();
-                    for url_info in codec["url_info"].as_array().unwrap() {
-                        let host = url_info["host"].as_str().unwrap();
-                        let extra = url_info["extra"].as_str().unwrap();
-                        self.urls
-                            .push(parse_url(format!("{host}{base_url}{extra}")));
-                    }
-                }
-            }
-        }
-
-        let json: serde_json::Value = CLIENT
-            .get(INFO_URL)
-            .query(&[("room_id", rid)])
-            .send()
-            .await
-            .unwrap()
-            .json()
-            .await
-            .unwrap();
-        self.title = json["data"]["title"].as_str().unwrap().to_owned();
-    }
-
-    //短id和真实房间号均可用以检测状态
-    async fn status(&mut self, ext: bool) -> bool {
-        let resp: serde_json::Value = CLIENT
-            .get(INIT_URL)
-            .query(&[("id", &self.rid)])
-            .send()
-            .await
-            .unwrap()
-            .json()
-            .await
-            .unwrap();
-        let s = match resp["data"]["live_status"].as_i64() {
-            Some(1) => true,
-            _ => return false,
-        };
-        if s == true && ext == true {
-            self.rid = resp["data"]["room_id"].as_str().unwrap().to_owned();
-        }
-        true
-    }
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
 
     #[tokio::test]
     async fn test_get_url() {
-        let mut live = Bili::new("6").await.unwrap();
-        live.get().await;
-        println!("{:?}", live);
+        let live = Bili::new("6").await.unwrap().get().await;
+        println!("{}", serde_json::to_string_pretty(&live).unwrap());
     }
 }
 
-fn init_msg_generator(room_id: &str) -> Vec<Vec<u8>> {
+fn init_msg_generator(rid: &str) -> Vec<Vec<u8>> {
     let mut reg_data = vec![];
 
-    let room_id = room_id.parse::<i64>().unwrap();
+    let room_id = rid.parse::<i64>().unwrap();
     let random_uid: u64 = rand::thread_rng().gen_range(100_000_000_000_000..300_000_000_000_000);
     let data = json!({
         "roomid": room_id,
@@ -245,23 +251,25 @@ fn decode_and_record_danmu(data: &[u8]) -> Result<Vec<DanmuBody>> {
     Ok(msgs)
 }
 
+#[async_trait]
 impl Danmu for Bili {
     async fn start(&mut self, recorder: Vec<&dyn DanmuRecorder>) -> Result<()> {
         let heart_beat_msg_generator = || HEART_BEAT.as_bytes().to_vec();
         let heart_beat_interval = HEART_BEAT_INTERVAL;
 
-        let rid = self.rid.clone();
-        let is_closed_room_closure = move || async { self.status(false) };
+        let rid_clone = &self.rid;
+
+        let is_closed_room_closure = move || async { Bili::status(rid_clone, false).await };
 
         websocket_danmu_work_flow(
             &self.rid,
             WSS_URL,
             recorder,
-            Self::init_msg_generator,
+            init_msg_generator,
             is_closed_room_closure,
             heart_beat_msg_generator,
             heart_beat_interval,
-            Self::decode_and_record_danmu,
+            decode_and_record_danmu,
         )
         .await?;
 

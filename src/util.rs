@@ -1,8 +1,10 @@
-use crate::model::{Format, Node, Url};
 use boa_engine::Context;
 use md5::{Digest, Md5};
 
+use crate::model::{Format, Url};
+
 /// 提取字符串md5值
+#[allow(dead_code)]
 pub fn md5(data: &[u8]) -> String {
     let mut h = Md5::new();
     h.update(data);
@@ -10,6 +12,7 @@ pub fn md5(data: &[u8]) -> String {
 }
 
 /// 运行js代码
+#[allow(dead_code)]
 pub async fn eval(js: &str) -> String {
     let mut context = Context::default();
     context.eval(js).unwrap().as_string().unwrap().to_string()

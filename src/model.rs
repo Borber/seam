@@ -1,6 +1,4 @@
 use std::collections::HashMap;
-use std::fmt::{Display, Formatter, Result as FmtResult};
-use std::ops::Deref;
 
 use anyhow::{anyhow, Result};
 use serde::{Serialize, Serializer};
@@ -11,22 +9,28 @@ use serde::{Serialize, Serializer};
 /// - rid: 直播间号
 /// - title: 直播间标题
 /// - nodes: 直播源列表
-#[derive(Serialize, Debug)]
+#[derive(Serialize, Debug, Clone, PartialEq)]
 pub struct Node {
     pub rid: String,
     pub title: String,
     pub urls: Vec<Url>,
 }
 
-impl Deref for Node {
-    type Target = Vec<Url>;
-
-    fn deref(&self) -> &Self::Target {
-        &self.urls
-    }
+/// 开播状态
+/// 1. 用于检测直播间是否开播
+/// 2. 用于直播间初始化, 可能返回附加信息, 但此字段未固定可能被删除
+///
+/// - 开播状态 bool
+/// - 附加信息 Option<HashMap<String, String>>
+pub enum Status {
+    // 开播
+    On(Option<HashMap<String, String>>),
+    // 附加信息
+    #[allow(dead_code)]
+    Not,
 }
 
-#[derive(Serialize, Debug)]
+#[derive(Serialize, Debug, Clone, PartialEq)]
 pub struct Url {
     // 直播源格式
     pub format: Format,
@@ -43,7 +47,7 @@ impl Url {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum Format {
     Flv,
     M3U,
@@ -63,36 +67,5 @@ impl Serialize for Format {
             Format::Other(s) => s.as_str(),
         };
         serializer.serialize_str(str)
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_is_on() {
-        let detail = Detail::new("title".to_string(), vec![]);
-        let show_type = ShowType::On(detail);
-        assert!(show_type.is_on());
-
-        let show_type = ShowType::Off;
-        assert!(!show_type.is_on());
-
-        let show_type = ShowType::Error("error".to_string());
-        assert!(!show_type.is_on());
-    }
-
-    #[test]
-    fn test_is_bad_rid() {
-        let detail = Detail::new("title".to_string(), vec![]);
-        let show_type = ShowType::On(detail);
-        assert!(!show_type.is_bad_rid());
-
-        let show_type = ShowType::Off;
-        assert!(!show_type.is_bad_rid());
-
-        let show_type = ShowType::Error("error".to_string());
-        assert!(show_type.is_bad_rid());
     }
 }
