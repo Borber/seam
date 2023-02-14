@@ -36,7 +36,6 @@ pub async fn get(rid: &str) -> Result<ShowType> {
     let resp_text = resp.text().await?;
 
     let re = Regex::new(r#"<script id="RENDER_DATA" type="application/json">([\s\S]*?)</script>"#)?;
-    let re1 = Regex::new(r#""live-room-name">([\s\S]*?)</h1>"#)?;
     let json = decode(re.captures(&resp_text).unwrap().get(1).unwrap().as_str())?;
     let json: serde_json::Value = serde_json::from_str(&json)?;
 
