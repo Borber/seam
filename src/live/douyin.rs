@@ -34,18 +34,14 @@ pub async fn get(rid: &str) -> Result<ShowType> {
         .send()
         .await?;
     let resp_text = resp.text().await?;
+
     let re = Regex::new(r#"<script id="RENDER_DATA" type="application/json">([\s\S]*?)</script>"#)?;
     let re1 = Regex::new(r#""live-room-name">([\s\S]*?)</h1>"#)?;
-    let title = re1
-        .captures(&resp_text)
-        .unwrap()
-        .get(1)
-        .unwrap()
-        .as_str()
-        .to_string();
     let json = decode(re.captures(&resp_text).unwrap().get(1).unwrap().as_str())?;
     let json: serde_json::Value = serde_json::from_str(&json)?;
+
     let room_info = &json["app"]["initialState"]["roomStore"]["roomInfo"];
+    let title = room_info["room"]["title"].as_str().unwrap().to_string();
     match room_info["anchor"] {
         serde_json::Value::Null => Ok(ShowType::Error("直播间不存在".to_string())),
         _ => match &room_info["room"]["stream_url"] {
@@ -87,6 +83,6 @@ mod tests {
 
     #[tokio::test]
     async fn test_get_url() {
-        println!("{}", get("201088644229").await.unwrap());
+        println!("{}", get("93912444706").await.unwrap());
     }
 }
