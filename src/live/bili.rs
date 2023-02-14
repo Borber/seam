@@ -257,16 +257,14 @@ impl Danmu for Bili {
         let heart_beat_msg_generator = || HEART_BEAT.as_bytes().to_vec();
         let heart_beat_interval = HEART_BEAT_INTERVAL;
 
-        let rid_clone = &self.rid;
-
-        let is_closed_room_closure = move || async { Bili::status(rid_clone, false).await };
+        let is_closed_room = || async { Bili::status(&self.rid, false).await };
 
         websocket_danmu_work_flow(
             &self.rid,
             WSS_URL,
             recorder,
             init_msg_generator,
-            is_closed_room_closure,
+            is_closed_room,
             heart_beat_msg_generator,
             heart_beat_interval,
             decode_and_record_danmu,

@@ -126,7 +126,7 @@ pub async fn get_source_url() -> Result<()> {
 
             // 处理参数-R，自动监控录制直播。
             //
-            // 3~9分钟检查一次是否开启直播。
+            // 5秒检查一次是否开启直播。 TODO 支持自定义检查间隔
             if auto_record {
                 let live_clone = live.clone();
                 let h = tokio::spawn(async move {

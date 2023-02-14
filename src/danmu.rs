@@ -227,7 +227,8 @@ where
                 println!("直播间已关闭");
                 break;
             }
-            _ => tokio::time::sleep(tokio::time::Duration::from_secs(3)).await,
+            // 间隔10秒检测一次直播间是否关闭
+            _ => tokio::time::sleep(tokio::time::Duration::from_secs(10)).await,
         }
     }
 }
