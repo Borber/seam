@@ -1,7 +1,7 @@
 use boa_engine::Context;
 use md5::{Digest, Md5};
 
-use crate::model::{Format, Url};
+use crate::live::{Format, Url};
 
 /// 提取字符串md5值
 #[allow(dead_code)]

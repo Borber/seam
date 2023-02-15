@@ -4,8 +4,7 @@ use anyhow::{anyhow, Ok, Result};
 use clap::{Parser, Subcommand};
 
 use crate::live::bili::Bili;
-use crate::live::Live;
-use crate::model::Status;
+use crate::live::{Live, Status};
 use crate::{
     config::CONFIG,
     danmu::{Csv, Danmu, DanmuRecorder, Terminal},
@@ -48,7 +47,7 @@ pub async fn get_source_url() -> Result<()> {
             // 检查房间参数是否正确
             let live = Bili::new(&rid).await;
             if None == live {
-                println!("未开播或房间号错误。");
+                println!("未开播或房间号错误");
                 return Ok(());
             }
             let live = live.unwrap().get().await;

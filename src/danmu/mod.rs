@@ -6,6 +6,8 @@
 //! 本模块提供了基于websocket的标准弹幕工作流。
 //! 如无定制需求，可以直接使用本模块提供的工作流。
 
+pub mod bili;
+
 use std::fs::{File, OpenOptions};
 use std::future::Future;
 use std::io::prelude::*;
@@ -21,7 +23,7 @@ use futures_util::{SinkExt, StreamExt};
 use tokio::net::TcpStream;
 use tokio_tungstenite::{tungstenite::protocol::Message, MaybeTlsStream, WebSocketStream};
 
-use crate::model::Status;
+use crate::live::Status;
 
 /// 标准化弹幕记录异步接口。
 #[async_trait]

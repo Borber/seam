@@ -4,7 +4,6 @@ mod common;
 mod config;
 mod danmu;
 mod live;
-mod model;
 mod recorder;
 mod util;
 
