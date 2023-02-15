@@ -27,7 +27,7 @@ futures-util = { version = "0.3", default-features = false, features = [
     "sink",
     "std",
 ] }
-miniz_oxide = "0.6.2"
+miniz_oxide = "0.7.1"
 colored = "2.0.0"
 boa_engine = "0.16"
 
