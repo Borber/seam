@@ -1262,10 +1262,19 @@ name = "seam"
 version = "0.1.18"
 dependencies = [
  "anyhow",
+ "clap",
+ "seam_core",
+ "tokio",
+]
+
+[[package]]
+name = "seam_core"
+version = "0.1.18"
+dependencies = [
+ "anyhow",
  "async-trait",
  "boa_engine",
  "chrono",
- "clap",
  "colored",
  "futures-sink",
  "futures-util",

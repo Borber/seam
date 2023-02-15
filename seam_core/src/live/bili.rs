@@ -29,6 +29,10 @@ impl Bili {
             _ => None,
         }
     }
+
+    pub fn json(&self) -> String {
+        serde_json::to_string_pretty(&self).unwrap_or("序列化失败".to_owned())
+    }
 }
 
 #[async_trait]

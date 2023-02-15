@@ -1,11 +1,5 @@
 mod declarative;
 
-mod common;
-mod config;
-mod danmu;
-mod live;
-mod recorder;
-mod util;
 
 use crate::declarative::{get_source_url, Commands};
 use anyhow::Result;

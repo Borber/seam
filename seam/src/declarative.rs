@@ -3,15 +3,16 @@ use std::path::PathBuf;
 use anyhow::{anyhow, Ok, Result};
 use clap::{Parser, Subcommand};
 
-use crate::live::bili::Bili;
-use crate::live::{Live, Status};
-use crate::{
+use seam_core::live::bili::Bili;
+use seam_core::live::{Live, Status};
+use seam_core::{
     config::CONFIG,
     danmu::{Csv, Danmu, DanmuRecorder, Terminal},
     recorder,
     util::get_datetime,
-    Cli,
 };
+
+use crate::Cli;
 
 // 声明宏：获取直播源的command的实现
 #[derive(Debug, Subcommand)]
@@ -54,7 +55,7 @@ pub async fn get_source_url() -> Result<()> {
 
             // 无参数情况下，直接输出直播源信息
             if !(danmu || config_danmu || record || auto_record) {
-                println!("{}", serde_json::to_string_pretty(&live).unwrap());
+                println!("{}", &live.json());
                 return Ok(());
             }
 
