@@ -5,12 +5,9 @@ use clap::{Parser, Subcommand};
 
 use seam_core::live::bili::Bili;
 use seam_core::live::{Live, Status};
-use seam_core::{
-    config::CONFIG,
-    danmu::{Csv, Danmu, DanmuRecorder, Terminal},
-    recorder,
-    util::get_datetime,
-};
+use seam_core::{config::CONFIG, recorder, util::get_datetime};
+use seam_danmu::bili::BiliDanmuClient;
+use seam_danmu::{Csv, Danmu, DanmuRecorder, Terminal};
 
 use crate::Cli;
 
@@ -71,9 +68,9 @@ pub async fn get_source_url() -> Result<()> {
             // 处理参数-d，直接输出弹幕。
             // 由于该函数为cli层，所以出错可以直接panic。
             if danmu {
-                let mut live_clone = live.clone();
+                let mut client = BiliDanmuClient::new(live.rid.as_str());
                 let h = tokio::spawn(async move {
-                    live_clone
+                    client
                         .start(vec![&Terminal::try_new(None).unwrap()])
                         .await
                         .unwrap();
@@ -83,7 +80,8 @@ pub async fn get_source_url() -> Result<()> {
 
             // 处理参数-D，输出弹幕到指定文件。
             if config_danmu {
-                let mut live_clone = live.clone();
+                let live_clone = live.clone();
+                let mut client = BiliDanmuClient::new(live.rid.as_str());
                 let h = tokio::spawn(async move {
                     let file_name = CONFIG
                         .danmu
@@ -96,7 +94,7 @@ pub async fn get_source_url() -> Result<()> {
                     let path =
                         PathBuf::from(cwd.parent().ok_or(anyhow!("错误的弹幕记录地址。")).unwrap())
                             .join(file_name);
-                    live_clone
+                    client
                         .start(vec![&Csv::try_new(Some(path)).unwrap()])
                         .await
                         .unwrap();

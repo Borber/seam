@@ -1,9 +1,9 @@
-use crate::live::bili::Bili;
-use crate::live::Live;
 use anyhow::Result;
 use async_trait::async_trait;
 use miniz_oxide::inflate::decompress_to_vec_zlib;
 use rand::Rng;
+use seam_core::live::Live;
+use seam_core::live::{bili::Bili, Status};
 use serde_json::json;
 
 use super::{websocket_danmu_work_flow, Danmu, DanmuBody, DanmuRecorder};
@@ -116,13 +116,30 @@ fn decode_and_record_danmu(data: &[u8]) -> Result<Vec<DanmuBody>> {
     Ok(msgs)
 }
 
+pub struct BiliDanmuClient {
+    rid: String,
+}
+
+impl BiliDanmuClient {
+    pub fn new(rid: &str) -> Self {
+        Self {
+            rid: rid.to_owned(),
+        }
+    }
+}
+
 #[async_trait]
-impl Danmu for Bili {
+impl Danmu for BiliDanmuClient {
     async fn start(&mut self, recorder: Vec<&dyn DanmuRecorder>) -> Result<()> {
         let heart_beat_msg_generator = || HEART_BEAT.as_bytes().to_vec();
         let heart_beat_interval = HEART_BEAT_INTERVAL;
 
-        let is_closed_room = || async { Bili::status(&self.rid, false).await };
+        let is_closed_room = || async {
+            match Bili::status(&self.rid, false).await {
+                Status::Not => false,
+                _ => true,
+            }
+        };
 
         websocket_danmu_work_flow(
             &self.rid,

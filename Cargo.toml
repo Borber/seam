@@ -1,5 +1,5 @@
 [workspace]
-members = ["seam_core", "seam"]
+members = ["seam_core", "seam_danmu", "seam"]
 
 [profile.release]
 opt-level = "z"

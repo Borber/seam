@@ -23,8 +23,6 @@ use futures_util::{SinkExt, StreamExt};
 use tokio::net::TcpStream;
 use tokio_tungstenite::{tungstenite::protocol::Message, MaybeTlsStream, WebSocketStream};
 
-use crate::live::Status;
-
 /// 标准化弹幕记录异步接口。
 #[async_trait]
 pub trait Danmu {
@@ -195,7 +193,7 @@ pub async fn websocket_danmu_work_flow<B>(
     decode_and_record_danmu: fn(&[u8]) -> Result<Vec<DanmuBody>>,
 ) -> Result<()>
 where
-    B: Future<Output = Status>,
+    B: Future<Output = bool>,
 {
     // 初始化websocket连接
     let reg_datas = init_msg_generator(room_id);
@@ -221,16 +219,16 @@ where
 // 检测直播间是否关闭
 async fn closed_room_checker<B>(is_closed_room: impl Fn() -> B)
 where
-    B: Future<Output = Status>,
+    B: Future<Output = bool>,
 {
     loop {
         match is_closed_room().await {
-            Status::Not => {
+            // 间隔10秒检测一次直播间是否关闭
+            true => tokio::time::sleep(tokio::time::Duration::from_secs(10)).await,
+            false => {
                 println!("直播间已关闭");
                 break;
             }
-            // 间隔10秒检测一次直播间是否关闭
-            _ => tokio::time::sleep(tokio::time::Duration::from_secs(10)).await,
         }
     }
 }

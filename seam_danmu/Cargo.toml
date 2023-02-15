@@ -1,0 +1,23 @@
+[package]
+name = "seam_danmu"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+seam_core = { path = "../seam_core" }
+anyhow = "1.0"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+tokio = { version = "1", features = ["full"] }
+tokio-tungstenite = { version = "0.18", features = ["native-tls"] }
+futures-sink = "0.3"
+futures-util = { version = "0.3", default-features = false, features = [
+    "sink",
+    "std",
+] }
+miniz_oxide = "0.6.2"
+colored = "2.0.0"
+rand = "0.8.5"
+async-trait = "0.1.61"

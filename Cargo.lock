@@ -1263,7 +1263,9 @@ version = "0.1.18"
 dependencies = [
  "anyhow",
  "clap",
+ "paste",
  "seam_core",
+ "seam_danmu",
  "tokio",
 ]
 
@@ -1275,23 +1277,34 @@ dependencies = [
  "async-trait",
  "boa_engine",
  "chrono",
- "colored",
- "futures-sink",
- "futures-util",
  "hex",
  "md-5",
- "miniz_oxide",
  "once_cell",
  "openssl",
- "paste",
- "rand",
  "regex",
  "reqwest",
  "serde",
  "serde_json",
  "tokio",
- "tokio-tungstenite",
  "urlencoding",
+]
+
+[[package]]
+name = "seam_danmu"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "async-trait",
+ "colored",
+ "futures-sink",
+ "futures-util",
+ "miniz_oxide",
+ "rand",
+ "seam_core",
+ "serde",
+ "serde_json",
+ "tokio",
+ "tokio-tungstenite",
 ]
 
 [[package]]
