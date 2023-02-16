@@ -6,10 +6,11 @@
 //! 本模块提供了基于websocket的标准弹幕工作流。
 //! 如无定制需求，可以直接使用本模块提供的工作流。
 
-use anyhow::{anyhow, Result};
 use async_trait::async_trait;
 use serde::{Serialize, Serializer};
 use std::collections::HashMap;
+
+use crate::error::{Result, SeamError};
 
 pub mod bili;
 
@@ -22,7 +23,7 @@ pub trait Live {
     // 获取直播间状态
     // rid: 直播间号
     // ext: 是否返回附加信息
-    async fn status(rid: &str, ext: bool) -> Status;
+    async fn status(rid: &str, ext: bool) -> Result<Status>;
 }
 
 /// 直播源
@@ -64,7 +65,7 @@ impl Url {
     pub fn is_m3u8(&self) -> Result<String> {
         match self.format {
             Format::M3U => Ok(self.url.clone()),
-            _ => Err(anyhow!("不是m3u8格式")),
+            _ => Err(SeamError::Type("not m3u8".to_string())),
         }
     }
 }
@@ -78,7 +79,7 @@ pub enum Format {
 }
 /// 自定义序列化方法
 impl Serialize for Format {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    fn serialize<S>(&self, serializer: S) -> std::result::Result<S::Ok, S::Error>
     where
         S: Serializer,
     {

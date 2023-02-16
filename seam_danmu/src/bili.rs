@@ -136,8 +136,8 @@ impl Danmu for BiliDanmuClient {
 
         let is_closed_room = || async {
             match Bili::status(&self.rid, false).await {
-                Status::Not => false,
-                _ => true,
+                Ok(Status::On(_)) => true,
+                _ => false,
             }
         };
 

@@ -1,8 +1,8 @@
 use std::collections::HashMap;
 
-use anyhow::{Ok, Result};
 use async_trait::async_trait;
 
+use crate::error::Result;
 use crate::live::{Live, Node, Status};
 use crate::{
     common::{CLIENT, USER_AGENT},
@@ -20,7 +20,7 @@ pub type Bili = Node;
 
 impl Bili {
     pub async fn new(rid: &str) -> Option<Bili> {
-        match Bili::status(rid, true).await {
+        match Bili::status(rid, true).await.ok()? {
             Status::On(Some(m)) => Some(Self {
                 rid: m.get("rid").unwrap().to_owned(),
                 title: "".to_string(),
@@ -85,16 +85,14 @@ impl Live for Bili {
     }
 
     //短id和真实房间号均可用以检测状态
-    async fn status(rid: &str, ext: bool) -> Status {
+    async fn status(rid: &str, ext: bool) -> Result<Status> {
         let resp: serde_json::Value = CLIENT
             .get(INIT_URL)
             .query(&[("id", rid)])
             .send()
-            .await
-            .unwrap()
+            .await?
             .json()
-            .await
-            .unwrap();
+            .await?;
         let s = match resp["data"]["live_status"].as_i64() {
             Some(1) => true,
             _ => false,
@@ -105,9 +103,9 @@ impl Live for Bili {
                 "rid".to_owned(),
                 resp["data"]["room_id"].as_u64().unwrap().to_string(),
             );
-            return Status::On(Some(m));
+            return Ok(Status::On(Some(m)));
         }
-        Status::On(None)
+        Ok(Status::On(None))
     }
 }
 

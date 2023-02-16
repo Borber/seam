@@ -1273,7 +1273,6 @@ dependencies = [
 name = "seam_core"
 version = "0.1.18"
 dependencies = [
- "anyhow",
  "async-trait",
  "boa_engine",
  "chrono",
@@ -1285,6 +1284,7 @@ dependencies = [
  "reqwest",
  "serde",
  "serde_json",
+ "thiserror",
  "tokio",
  "urlencoding",
 ]

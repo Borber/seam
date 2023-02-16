@@ -1,6 +1,6 @@
 use std::path::PathBuf;
 
-use anyhow::{anyhow, Ok, Result};
+use anyhow::{anyhow, Result};
 use clap::{Parser, Subcommand};
 
 use seam_core::live::bili::Bili;
@@ -130,10 +130,7 @@ pub async fn get_source_url() -> Result<()> {
                     let live = live_clone;
                     loop {
                         match Bili::status(&live.rid, false).await {
-                            Status::Not => {
-                                tokio::time::sleep(tokio::time::Duration::from_secs(5)).await
-                            }
-                            _ => {
+                            Ok(Status::On(_)) => {
                                 let file_name = CONFIG
                                     .video
                                     .name
@@ -149,6 +146,7 @@ pub async fn get_source_url() -> Result<()> {
                                     return;
                                 }
                             }
+                            _ => tokio::time::sleep(tokio::time::Duration::from_secs(5)).await,
                         }
                     }
                 });
@@ -170,10 +168,10 @@ pub async fn get_source_url() -> Result<()> {
                     loop {
                         let rid = rid.clone();
                         match Bili::status(&rid, false).await {
-                            Status::Not => break,
-                            _ => {
+                            Ok(Status::On(_)) => {
                                 tokio::time::sleep(tokio::time::Duration::from_secs(10)).await;
                             }
+                            _ => break,
                         }
                     }
                 };
