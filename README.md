@@ -28,7 +28,40 @@
 
 > 因为数据具有时效性, 所以具体链接使用 `url` 进行替换
 
-## 设置
+
+
+-   
+
+# 使用
+
+- [Releases · seam](https://github.com/Borber/seam/releases) 下载你对应平台的压缩包
+
+- 解压后使用命令行 `cmd` `powershell` 或其他终端程序进入解压后的目录
+- 使用对应平台的子命令
+
+|                   平台                    |  子命令  |                      房间号位置 `<RID>`                      |         备注         |
+| :---------------------------------------: | :------: | :----------------------------------------------------------: | :------------------: |
+|    [B 站](https://live.bilibili.com/)     |   bili   |              `https://live.bilibili.com/<RID>`               |                      |
+|      [斗鱼](https://www.douyu.com/)       |  douyu   | `https://www.douyu.com/<RID>` 或 `https://www.douyu.com/xx/xx?rid=<RID>` |                      |
+|     [抖音](https://live.douyin.com/)      |  douyin  |               `https://live.douyin.com/<RID>`                |                      |
+|         [虎牙](https://huya.com/)         |   huya   |                   `https://huya.com/<RID>`                   |                      |
+|    [快手](https://live.kuaishou.com/)     | kuaishou |             `https://live.kuaishou.com/u/<RID>`              |                      |
+|         [CC](https://cc.163.com/)         |    cc    |                  `https://cc.163.com/<RID>`                  |                      |
+|     [花椒](https://www.huajiao.com/)      | huajiao  |              `https://www.huajiao.com/l/<RID>`               |                      |
+|      [艺气山](https://www.173.com/)       |   yqs    |                 `https://www.173.com/<RID>`                  |                      |
+|      [棉花糖](https://www.2cq.com/)       |   mht    |                 `https://www.2cq.com/<RID>`                  |                      |
+|       [kk](https://www.kktv5.com/)        |    kk    |              `https://www.kktv5.com/show/<RID>`              |                      |
+|      [千帆直播](https://qf.56.com/)       |    qf    |                  `https://qf.56.com/<RID>`                   |                      |
+|      [Now 直播](https://now.qq.com/)      |   now    |      `https://now.qq.com/pcweb/story.html?roomid=<RID>`      |                      |
+|       [映客](https://www.inke.cn/)        |   inke   |     `https://www.inke.cn/liveroom/index.html?uid=<RID>`      |                      |
+|     [afreeca](https://afreecatv.com/)     | afreeca  |               `https://bj.afreecatv.com/<RID>`               | 主播名字而非直播间号 |
+| [pandalive](https://www.pandalive.co.kr/) |  panda   |         `https://www.pandalive.co.kr/channel/<RID>`          | 主播名字而非直播间号 |
+|     [flex](https://www.flextv.co.kr/)     |   flex   |          `https://www.flextv.co.kr/channels/<RID>`           | 主播名字而非直播间号 |
+|     [wink](https://www.winktv.co.kr/)     |   wink   |           `https://www.winktv.co.kr/channel/<RID>`           | 主播名字而非直播间号 |
+
+
+
+# 设置
 
 `config.json` 放置在 `seam` 可执行文件所在目录下
 
@@ -49,36 +82,13 @@
 -   title: 直播间标题
 -   time: 当前时间
 
-# 使用
 
-|                        平台                        |                                房间号位置                                |
-|:------------------------------------------------:| :----------------------------------------------------------------------: |
-|     [B 站（bili)](https://live.bilibili.com/)      |                    `https://live.bilibili.com/<RID>`                     |
-|       [斗鱼（douyu)](https://www.douyu.com/)        | `https://www.douyu.com/<RID>` 或 `https://www.douyu.com/xx/xx?rid=<RID>` |
-|      [抖音（douyin)](https://live.douyin.com/)      |                     `https://live.douyin.com/<RID>`                      |
-|          [虎牙（huya)](https://huya.com/)           |                         `https://huya.com/<RID>`                         |
-|    [快手（kuaishou)](https://live.kuaishou.com/)    |                   `https://live.kuaishou.com/u/<RID>`                    |
-|          [CC（cc)](https://cc.163.com/)           |                        `https://cc.163.com/<RID>`                        |
-|     [花椒（huajiao)](https://www.huajiao.com/)      |                    `https://www.huajiao.com/l/<RID>`                     |
-|         [艺气山（yqs)](https://www.173.com/)         |                       `https://www.173.com/<RID>`                        |
-|         [棉花糖（mht)](https://www.2cq.com/)         |                       `https://www.2cq.com/<RID>`                        |
-|         [kk（kk)](https://www.kktv5.com/)         |                    `https://www.kktv5.com/show/<RID>`                    |
-|          [千帆直播（qf)](https://qf.56.com/)          |                        `https://qf.56.com/<RID>`                         |
-|        [Now 直播（now)](https://now.qq.com/)        |            `https://now.qq.com/pcweb/story.html?roomid=<RID>`            |
-|         [映客（inke)](https://www.inke.cn/)          |            `https://www.inke.cn/liveroom/index.html?uid=<RID>`            |
-|    [afreeca（afreeca)](https://afreecatv.com/)    |          `https://bj.afreecatv.com/<RID>` 主播名字而非直播间号           |
-| [pandalive（panda)](https://www.pandalive.co.kr/) |     `https://www.pandalive.co.kr/channel/<RID>` 主播名字而非直播间号     |
-|     [flex（flex)](https://www.flextv.co.kr/)      |      `https://www.flextv.co.kr/channels/<RID>` 主播名字而非直播间号      |
-|     [wink（wink)](https://www.winktv.co.kr/)      |      `https://www.winktv.co.kr/channel/<RID>` 主播名字而非直播间号       |
+
+
 
 # 路线
 
 [seam](https://github.com/users/Borber/projects/4/views/1)
-
-# 说明
-
-1. 斗鱼平台动态 js 加密需要 js 运行时, 目前从在线 js 运行转换问 boa_engine, 减少了网络请求的时间.
-2. 抖音平台连接中包含`stage` 时需要后缀参数且标签如`_or4`无法删除, 因为签名和清晰度是绑定的, 工具默认获取的链接就是能获取到的最高清的, 请直接使用完整链接, 包含`third` 时, 自动删除后缀参数和清晰度标签以获取最高清资源.
 
 # 感谢
 
