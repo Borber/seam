@@ -47,32 +47,17 @@ pub async fn get(rid: &str) -> Result<ShowType> {
             Value::Null => Ok(ShowType::Off),
             stream_url => {
                 let nodes = vec![
-                    parse_url(douyin_trim_value(
-                        stream_url["flv_pull_url"]["FULL_HD1"].as_str().unwrap(),
-                    )),
-                    parse_url(douyin_trim_value(
-                        stream_url["hls_pull_url"].as_str().unwrap(),
-                    )),
+                    parse_url(
+                        stream_url["flv_pull_url"]["FULL_HD1"]
+                            .as_str()
+                            .unwrap()
+                            .to_owned(),
+                    ),
+                    parse_url(stream_url["hls_pull_url"].as_str().unwrap().to_owned()),
                 ];
                 Ok(ShowType::On(Detail::new(title, nodes)))
             }
         },
-    }
-}
-
-/// 去除抖音third链接的多余参数
-/// 目前遇到了 third 链接去除清晰度参数无法播放的情况, 所以删除去除逻辑
-fn douyin_trim_value(url: &str) -> String {
-    match url.contains("third") {
-        true => {
-            let url = url.split_once('?').unwrap().0;
-            let re = Regex::new(r#"_[\s\S]*?\."#).unwrap();
-            match re.captures(url) {
-                Some(c) => url.replace(c.get(0).unwrap().as_str(), "."),
-                None => url.to_owned(),
-            }
-        }
-        false => url.to_owned(),
     }
 }
 
@@ -82,6 +67,6 @@ mod tests {
 
     #[tokio::test]
     async fn test_get_url() {
-        println!("{}", get("93912444706").await.unwrap());
+        println!("{}", get("80017709309").await.unwrap());
     }
 }
