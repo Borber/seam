@@ -1,5 +1,6 @@
 use anyhow::{Ok, Result};
 use regex::Regex;
+use reqwest::header::HeaderMap;
 
 use crate::{
     common::{CLIENT, USER_AGENT},
@@ -16,10 +17,24 @@ default_danmu_client!(Kuaishou);
 ///
 /// https://live.kuaishou.com/
 pub async fn get(rid: &str) -> Result<ShowType> {
+    let mut header_map = HeaderMap::new();
+    header_map.insert("user-agent", USER_AGENT.parse()?);
+    let resp = CLIENT
+        .get(format!("{URL}{rid}"))
+        .headers(header_map.clone())
+        .send()
+        .await?;
+    let cookie = resp
+        .headers()
+        .get_all("set-cookie")
+        .iter()
+        .map(|x| x.to_str().unwrap().to_string())
+        .collect::<Vec<String>>()
+        .join("; ")
+        .to_string();
+    header_map.insert("cookie", cookie.parse()?);
     let text = CLIENT
         .get(format!("{URL}{rid}"))
-        .header("User-Agent", USER_AGENT)
-        .header("Cookie", "did=web_d563dca728d28b00336877723e0359ed;")
         .send()
         .await?
         .text()
