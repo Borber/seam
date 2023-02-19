@@ -41,6 +41,7 @@ pub async fn get(rid: &str) -> Result<ShowType> {
 
     let room_info = &json["app"]["initialState"]["roomStore"]["roomInfo"];
     let title = room_info["room"]["title"].as_str().unwrap().to_string();
+    println!("{}", &room_info["room"]["stream_url"]);
     match room_info["anchor"] {
         serde_json::Value::Null => Ok(ShowType::Error("直播间不存在".to_string())),
         _ => match &room_info["room"]["stream_url"] {
@@ -53,7 +54,12 @@ pub async fn get(rid: &str) -> Result<ShowType> {
                             .unwrap()
                             .to_owned(),
                     ),
-                    parse_url(stream_url["hls_pull_url"].as_str().unwrap().to_owned()),
+                    parse_url(
+                        stream_url["hls_pull_url_map"]["FULL_HD1"]
+                            .as_str()
+                            .unwrap()
+                            .to_owned(),
+                    ),
                 ];
                 Ok(ShowType::On(Detail::new(title, nodes)))
             }
@@ -67,6 +73,6 @@ mod tests {
 
     #[tokio::test]
     async fn test_get_url() {
-        println!("{}", get("80017709309").await.unwrap());
+        println!("{}", get("732385677810").await.unwrap());
     }
 }
