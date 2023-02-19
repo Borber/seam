@@ -18,6 +18,7 @@ default_danmu_client!(Huya);
 pub async fn get(rid: &str) -> Result<ShowType> {
     let text = CLIENT
         .get(format!("{URL}{rid}"))
+        .header("Accept-Encoding", "gzip")
         .send()
         .await?
         .text()
@@ -66,6 +67,6 @@ mod tests {
 
     #[tokio::test]
     async fn test_get_url() {
-        println!("{}", get("880236").await.unwrap());
+        println!("{}", get("196645").await.unwrap());
     }
 }
