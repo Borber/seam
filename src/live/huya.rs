@@ -18,7 +18,6 @@ default_danmu_client!(Huya);
 pub async fn get(rid: &str) -> Result<ShowType> {
     let text = CLIENT
         .get(format!("{URL}{rid}"))
-        .header("Accept-Encoding", "gzip, deflate")
         .send()
         .await?
         .text()
