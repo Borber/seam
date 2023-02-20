@@ -1,9 +1,9 @@
 use thiserror::Error;
 
-pub type Result<T> = std::result::Result<T, SeamError>;
+pub type Result<T> = std::result::Result<T, SeamStatusError>;
 
 #[derive(Error, Debug)]
-pub enum SeamError {
+pub enum SeamStatusError {
     #[error("Request error: {0}")]
     Request(#[from] reqwest::Error),
     #[error("Type error: {0}")]

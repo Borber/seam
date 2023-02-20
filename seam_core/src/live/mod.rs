@@ -2,28 +2,21 @@
 //!
 //! 本模块提供了标准化的直播获取方式和直播状态检测的async trait 以及
 //! 标准化的直播源信息和直播状态enum
-//!
-//! 本模块提供了基于websocket的标准弹幕工作流。
-//! 如无定制需求，可以直接使用本模块提供的工作流。
 
 use async_trait::async_trait;
 use serde::{Serialize, Serializer};
-use std::collections::HashMap;
 
 use crate::error::{Result, SeamError};
 
 pub mod bili;
+pub mod cc;
 
 /// 直播信息模块
 #[async_trait]
 pub trait Live {
     // 获取直播源
     // rid: 直播间号
-    async fn get(self) -> Self;
-    // 获取直播间状态
-    // rid: 直播间号
-    // ext: 是否返回附加信息
-    async fn status(rid: &str, ext: bool) -> Result<Status>;
+    async fn get(rid: &str) -> Result<Option<Node>>;
 }
 
 /// 直播源
@@ -39,18 +32,10 @@ pub struct Node {
     pub urls: Vec<Url>,
 }
 
-/// 开播状态
-/// 1. 用于检测直播间是否开播
-/// 2. 用于直播间初始化, 可能返回附加信息, 但此字段未固定可能被删除
-///
-/// - 开播状态 bool
-/// - 附加信息 Option<HashMap<String, String>>
-pub enum Status {
-    // 开播
-    On(Option<HashMap<String, String>>),
-    // 附加信息
-    #[allow(dead_code)]
-    Not,
+impl Node {
+    pub fn json(&self) -> String {
+        serde_json::to_string_pretty(&self).unwrap_or("序列化失败".to_owned())
+    }
 }
 
 #[derive(Serialize, Debug, Clone, PartialEq)]

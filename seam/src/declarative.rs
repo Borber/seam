@@ -4,10 +4,12 @@ use anyhow::{anyhow, Result};
 use clap::{Parser, Subcommand};
 
 use seam_core::live::bili::Bili;
-use seam_core::live::{Live, Status};
+use seam_core::live::Live;
 use seam_core::{config::CONFIG, recorder, util::get_datetime};
 use seam_danmu::bili::BiliDanmuClient;
 use seam_danmu::{Csv, Danmu, DanmuRecorder, Terminal};
+use seam_status::bili::BiliStatusClient;
+use seam_status::Client;
 
 use crate::Cli;
 
@@ -42,17 +44,17 @@ pub async fn get_source_url() -> Result<()> {
             mut record,
             auto_record,
         } => {
-            // 检查房间参数是否正确
-            let live = Bili::new(&rid).await;
-            if None == live {
-                println!("未开播或房间号错误");
-                return Ok(());
-            }
-            let live = live.unwrap().get().await;
+            let node = match Bili::get(&rid).await? {
+                None => {
+                    println!("未开播");
+                    return Ok(());
+                }
+                Some(node) => node,
+            };
 
             // 无参数情况下，直接输出直播源信息
             if !(danmu || config_danmu || record || auto_record) {
-                println!("{}", &live.json());
+                println!("{}", &node.json());
                 return Ok(());
             }
 
@@ -68,10 +70,9 @@ pub async fn get_source_url() -> Result<()> {
             // 处理参数-d，直接输出弹幕。
             // 由于该函数为cli层，所以出错可以直接panic。
             if danmu {
-                let rid = live.rid.clone();
+                let rid = node.rid.clone();
                 let h = tokio::spawn(async move {
-                    BiliDanmuClient::new(&rid)
-                        .start(vec![&Terminal::try_new(None).unwrap()])
+                    BiliDanmuClient::start(&rid, vec![&Terminal::try_new(None).unwrap()])
                         .await
                         .unwrap();
                 });
@@ -80,39 +81,41 @@ pub async fn get_source_url() -> Result<()> {
 
             // 处理参数-D，输出弹幕到指定文件。
             if config_danmu {
-                let live_clone = live.clone();
+                let node_clone = node.clone();
                 let h = tokio::spawn(async move {
                     let file_name = CONFIG
                         .danmu
                         .name
-                        .replace("rid", &live_clone.rid)
+                        .replace("rid", &node_clone.rid)
                         .replace("time", &get_datetime())
-                        .replace("title", &live_clone.title);
+                        .replace("title", &node_clone.title);
                     println!("弹幕文件地址：{}", file_name);
                     let cwd = std::env::current_exe().unwrap();
                     let path =
                         PathBuf::from(cwd.parent().ok_or(anyhow!("错误的弹幕记录地址。")).unwrap())
                             .join(file_name);
-                    BiliDanmuClient::new(&live_clone.rid)
-                        .start(vec![&Csv::try_new(Some(path)).unwrap()])
-                        .await
-                        .unwrap();
+                    BiliDanmuClient::start(
+                        &node_clone.rid,
+                        vec![&Csv::try_new(Some(path)).unwrap()],
+                    )
+                    .await
+                    .unwrap();
                 });
                 thread_handlers.push(h);
             }
 
             // 处理参数-r，录制直播源。
             if record {
-                let live_clone = live.clone();
+                let node_clone = node.clone();
                 let h = tokio::spawn(async move {
                     let file_name = CONFIG
                         .video
                         .name
-                        .replace("rid", &live_clone.rid)
+                        .replace("rid", &node_clone.rid)
                         .replace("time", &get_datetime())
-                        .replace("title", &live_clone.title);
+                        .replace("title", &node_clone.title);
                     let file_name = format!("{file_name}.mp4");
-                    if let Some(url) = live_clone.urls.iter().find_map(|node| node.is_m3u8().ok()) {
+                    if let Some(url) = node_clone.urls.iter().find_map(|url| url.is_m3u8().ok()) {
                         recorder::record(&url, &file_name).await;
                     } else {
                         return;
@@ -125,21 +128,21 @@ pub async fn get_source_url() -> Result<()> {
             //
             // 5秒检查一次是否开启直播。 TODO 支持自定义检查间隔
             if auto_record {
-                let live_clone = live.clone();
+                let node_clone = node.clone();
                 let h = tokio::spawn(async move {
-                    let live = live_clone;
+                    let node = node_clone;
                     loop {
-                        match Bili::status(&live.rid, false).await {
-                            Ok(Status::On(_)) => {
+                        match BiliStatusClient::status(&node.rid).await {
+                            Ok(true) => {
                                 let file_name = CONFIG
                                     .video
                                     .name
-                                    .replace("rid", &live.rid)
+                                    .replace("rid", &node.rid)
                                     .replace("time", &get_datetime())
-                                    .replace("title", &live.title);
+                                    .replace("title", &node.title);
                                 let file_name = format!("{file_name}.mp4");
                                 if let Some(url) =
-                                    live.urls.iter().find_map(|node| node.is_m3u8().ok())
+                                    node.urls.iter().find_map(|url| url.is_m3u8().ok())
                                 {
                                     recorder::record(&url, &file_name).await;
                                 } else {
@@ -162,13 +165,14 @@ pub async fn get_source_url() -> Result<()> {
                     } => {}
                 }
             } else {
-                let rid = live.clone().rid;
+                let rid = node.clone().rid;
                 // 检查直播间是否开播
                 let on_air_checker = async {
                     loop {
+                        // TODO 是否可优化
                         let rid = rid.clone();
-                        match Bili::status(&rid, false).await {
-                            Ok(Status::On(_)) => {
+                        match BiliStatusClient::status(&rid).await {
+                            Ok(true) => {
                                 tokio::time::sleep(tokio::time::Duration::from_secs(10)).await;
                             }
                             _ => break,

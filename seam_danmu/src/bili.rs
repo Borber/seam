@@ -1,10 +1,10 @@
-use anyhow::Result;
 use async_trait::async_trait;
 use miniz_oxide::inflate::decompress_to_vec_zlib;
 use rand::Rng;
-use seam_core::live::Live;
-use seam_core::live::{bili::Bili, Status};
+use seam_status::{bili::BiliStatusClient, Client};
 use serde_json::json;
+
+use crate::error::Result;
 
 use super::{websocket_danmu_work_flow, Danmu, DanmuBody, DanmuRecorder};
 
@@ -116,33 +116,18 @@ fn decode_and_record_danmu(data: &[u8]) -> Result<Vec<DanmuBody>> {
     Ok(msgs)
 }
 
-pub struct BiliDanmuClient {
-    rid: String,
-}
-
-impl BiliDanmuClient {
-    pub fn new(rid: &str) -> Self {
-        Self {
-            rid: rid.to_owned(),
-        }
-    }
-}
+pub struct BiliDanmuClient {}
 
 #[async_trait]
 impl Danmu for BiliDanmuClient {
-    async fn start(&mut self, recorder: Vec<&dyn DanmuRecorder>) -> Result<()> {
+    async fn start(rid: &str, recorder: Vec<&dyn DanmuRecorder>) -> Result<()> {
         let heart_beat_msg_generator = || HEART_BEAT.as_bytes().to_vec();
         let heart_beat_interval = HEART_BEAT_INTERVAL;
 
-        let is_closed_room = || async {
-            match Bili::status(&self.rid, false).await {
-                Ok(Status::On(_)) => true,
-                _ => false,
-            }
-        };
+        let is_closed_room = || async { BiliStatusClient::status(rid).await.unwrap() };
 
         websocket_danmu_work_flow(
-            &self.rid,
+            rid,
             WSS_URL,
             recorder,
             init_msg_generator,

@@ -7,6 +7,8 @@
 //! 如无定制需求，可以直接使用本模块提供的工作流。
 
 pub mod bili;
+pub mod cc;
+pub mod error;
 
 use std::fs::{File, OpenOptions};
 use std::future::Future;
@@ -14,9 +16,9 @@ use std::io::prelude::*;
 use std::path::PathBuf;
 use std::pin::Pin;
 
-use anyhow::Result;
 use async_trait::async_trait;
 use colored::Colorize;
+use error::{Result, SeamDanmuError};
 use futures_sink::Sink;
 use futures_util::stream::{SplitSink, SplitStream};
 use futures_util::{SinkExt, StreamExt};
@@ -34,7 +36,7 @@ pub trait Danmu {
     /// # Errors
     ///
     /// 发生不可继续运行的错误的情况下，返回错误。
-    async fn start(&mut self, recorder: Vec<&dyn DanmuRecorder>) -> Result<()>;
+    async fn start(rid: &str, recorder: Vec<&dyn DanmuRecorder>) -> Result<()>;
 }
 
 /// 标准化弹幕记录trait。
@@ -54,9 +56,9 @@ pub trait DanmuRecorder: Send + Sync {
     fn path(&self) -> Option<&PathBuf>;
 
     fn init(&self) -> Result<()> {
-        let path = self
-            .path()
-            .ok_or_else(|| anyhow::anyhow!("no supported path pamameter"))?;
+        let path = self.path().ok_or_else(|| {
+            return SeamDanmuError::Path("Path does not exist or failed to open".to_owned());
+        })?;
         File::create(path)?;
         Ok(())
     }
@@ -71,9 +73,9 @@ pub trait DanmuRecorder: Send + Sync {
     }
 
     fn record(&self, danmu: &DanmuBody) -> Result<()> {
-        let path = self
-            .path()
-            .ok_or_else(|| anyhow::anyhow!("no supported path pamameter"))?;
+        let path = self.path().ok_or_else(|| {
+            return SeamDanmuError::Path("Path does not exist or failed to open".to_owned());
+        })?;
         let mut file = OpenOptions::new().append(true).open(path)?;
         file.write_all(self.formatter(danmu).as_bytes())?;
         file.write_all(b"\n")?;
@@ -88,8 +90,9 @@ pub struct Csv {
 
 impl DanmuRecorder for Csv {
     fn try_new(path: Option<PathBuf>) -> Result<Self> {
-        let file_stem =
-            path.ok_or_else(|| anyhow::anyhow!("初始化CSV弹幕记录器时未指定文件地址"))?;
+        let file_stem = path.ok_or_else(|| {
+            return SeamDanmuError::Path("初始化CSV弹幕记录器时未指定文件地址".to_owned());
+        })?;
         let path = file_stem.with_extension("csv");
         Ok(Self { path })
     }
@@ -286,4 +289,27 @@ async fn fetch_danmu(
 
     ws_to_stdout.await;
     Ok(())
+}
+
+// 为没有实现弹幕功能的直播平台添加默认空白实现
+#[macro_export]
+macro_rules! default_danmu_client {
+    ($name: ident) => {
+        use paste::paste;
+
+        paste! {
+            use async_trait::async_trait;
+            use $crate::{Danmu, DanmuRecorder};
+
+            pub struct [<$name DanmuClient>] {}
+
+            #[async_trait]
+            impl Danmu for [<$name DanmuClient>] {
+                async fn start(rid: &str, _recorder: Vec<&dyn DanmuRecorder>) -> Result<()> {
+                    println!("该直播平台暂未实现弹幕功能。");
+                    Ok(())
+                }
+            }
+        }
+    };
 }

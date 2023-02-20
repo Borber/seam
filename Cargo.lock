@@ -1266,6 +1266,7 @@ dependencies = [
  "paste",
  "seam_core",
  "seam_danmu",
+ "seam_status",
  "tokio",
 ]
 
@@ -1293,18 +1294,35 @@ dependencies = [
 name = "seam_danmu"
 version = "0.1.0"
 dependencies = [
- "anyhow",
  "async-trait",
  "colored",
  "futures-sink",
  "futures-util",
  "miniz_oxide",
+ "paste",
  "rand",
- "seam_core",
+ "seam_status",
  "serde",
  "serde_json",
+ "thiserror",
  "tokio",
  "tokio-tungstenite",
+]
+
+[[package]]
+name = "seam_status"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "once_cell",
+ "openssl",
+ "regex",
+ "reqwest",
+ "serde",
+ "serde_json",
+ "thiserror",
+ "tokio",
+ "urlencoding",
 ]
 
 [[package]]
