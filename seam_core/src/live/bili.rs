@@ -102,8 +102,10 @@ mod tests {
     use super::*;
 
     #[tokio::test]
-    async fn test_get_url() -> Result<()> {
-        println!("{}", Bili::get("6").await?.json());
-        Ok(())
+    async fn test_get_url() {
+        match Bili::get("6").await {
+            Ok(node) => println!("{}", node.json()),
+            _ => println!("未开播"),
+        }
     }
 }

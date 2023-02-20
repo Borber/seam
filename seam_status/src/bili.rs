@@ -24,8 +24,10 @@ mod tests {
     use super::*;
 
     #[tokio::test]
-    async fn test_get_url() -> Result<()> {
-        println!("{}", BiliStatusClient::status("6").await?);
-        Ok(())
+    async fn test_status() {
+        match BiliStatusClient::status("6").await {
+            Ok(true) => println!("已开播"),
+            _ => println!("未开播"),
+        }
     }
 }

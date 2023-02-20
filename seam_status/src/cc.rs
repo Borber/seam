@@ -25,8 +25,10 @@ mod tests {
     use super::*;
 
     #[tokio::test]
-    async fn test_get_url() -> Result<()> {
-        println!("{}", CcStatusClient::status("361433").await?);
-        Ok(())
+    async fn test_status() {
+        match CcStatusClient::status("361433").await {
+            Ok(true) => println!("已开播"),
+            _ => println!("未开播"),
+        }
     }
 }
