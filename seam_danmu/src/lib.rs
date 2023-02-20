@@ -305,7 +305,7 @@ macro_rules! default_danmu_client {
 
             #[async_trait]
             impl Danmu for [<$name DanmuClient>] {
-                async fn start(rid: &str, _recorder: Vec<&dyn DanmuRecorder>) -> Result<()> {
+                async fn start(_rid: &str, _recorder: Vec<&dyn DanmuRecorder>) -> Result<()> {
                     println!("该直播平台暂未实现弹幕功能。");
                     Ok(())
                 }

@@ -1,7 +1,7 @@
 use async_trait::async_trait;
 
 use super::{Live, Node};
-use crate::error::Result;
+use crate::error::{Result, SeamError};
 use crate::{
     common::{CLIENT, USER_AGENT},
     util::parse_url,
@@ -18,7 +18,7 @@ pub struct Bili {}
 
 #[async_trait]
 impl Live for Bili {
-    async fn get(rid: &str) -> Result<Option<Node>> {
+    async fn get(rid: &str) -> Result<Node> {
         let resp: serde_json::Value = CLIENT
             .get(INIT_URL)
             .query(&[("id", rid)])
@@ -29,7 +29,7 @@ impl Live for Bili {
         // 获取真实房间号
         let rid = match resp["data"]["live_status"].as_i64() {
             Some(1) => resp["data"]["room_id"].as_u64().unwrap().to_string(),
-            _ => return Ok(None),
+            _ => return Err(SeamError::None),
         };
         let mut stream_info = get_bili_stream_info(&rid, 10000).await?;
         let max = stream_info
@@ -72,7 +72,7 @@ impl Live for Bili {
             .json()
             .await?;
         let title = json["data"]["title"].as_str().unwrap().to_owned();
-        Ok(Some(Node { rid, title, urls }))
+        Ok(Node { rid, title, urls })
     }
 }
 

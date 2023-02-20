@@ -16,7 +16,7 @@ pub mod cc;
 pub trait Live {
     // 获取直播源
     // rid: 直播间号
-    async fn get(rid: &str) -> Result<Option<Node>>;
+    async fn get(rid: &str) -> Result<Node>;
 }
 
 /// 直播源

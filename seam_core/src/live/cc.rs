@@ -1,5 +1,9 @@
 use super::{Live, Node};
-use crate::{common::CLIENT, error::Result, util::parse_url};
+use crate::{
+    common::CLIENT,
+    error::{Result, SeamError},
+    util::parse_url,
+};
 use async_trait::async_trait;
 use regex::Regex;
 
@@ -12,7 +16,7 @@ pub struct Cc {}
 
 #[async_trait]
 impl Live for Cc {
-    async fn get(rid: &str) -> Result<Option<Node>> {
+    async fn get(rid: &str) -> Result<Node> {
         let text = CLIENT
             .get(format!("{URL}{rid}"))
             .send()
@@ -23,14 +27,14 @@ impl Live for Cc {
         let json = match re.captures(&text) {
             Some(rap) => rap.get(1).unwrap().as_str(),
             None => {
-                return Ok(None);
+                return Err(SeamError::None);
             }
         };
         let json: serde_json::Value = serde_json::from_str(json)?;
         let resolution = match &json["props"]["pageProps"]["roomInfoInitData"]["live"]["quickplay"]
             ["resolution"]
         {
-            serde_json::Value::Null => return Ok(None),
+            serde_json::Value::Null => return Err(SeamError::None),
             v => v,
         };
         let title = json["props"]["pageProps"]["roomInfoInitData"]["live"]["title"]
@@ -53,11 +57,11 @@ impl Live for Cc {
                 break;
             }
         }
-        Ok(Some(Node {
+        Ok(Node {
             rid: rid.to_owned(),
             title,
             urls,
-        }))
+        })
     }
 }
 

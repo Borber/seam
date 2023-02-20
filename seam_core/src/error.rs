@@ -11,5 +11,7 @@ pub enum SeamError {
     #[error("Serde json error: {0}")]
     JsonError(#[from] serde_json::Error),
     #[error("unknown data store error")]
+    None,
+    #[error("unknown data store error")]
     Unknown,
 }

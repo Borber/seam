@@ -44,13 +44,7 @@ pub async fn get_source_url() -> Result<()> {
             mut record,
             auto_record,
         } => {
-            let node = match Bili::get(&rid).await? {
-                None => {
-                    println!("未开播");
-                    return Ok(());
-                }
-                Some(node) => node,
-            };
+            let node = Bili::get(&rid).await?;
 
             // 无参数情况下，直接输出直播源信息
             if !(danmu || config_danmu || record || auto_record) {
