@@ -71,7 +71,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_get_url() -> Result<()> {
-        println!("{}", Cc::get("361433").await?.unwrap().json());
+        println!("{}", Cc::get("361433").await?.json());
         Ok(())
     }
 }

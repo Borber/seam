@@ -15,9 +15,17 @@ impl Client for BiliStatusClient {
             .await?
             .json()
             .await?;
-        match resp["data"]["live_status"].as_i64() {
-            Some(1) => Ok(true),
-            _ => Ok(false),
-        }
+        Ok(resp["data"]["live_status"].as_i64().is_some())
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[tokio::test]
+    async fn test_get_url() -> Result<()> {
+        println!("{}", BiliStatusClient::status("6").await?);
+        Ok(())
     }
 }

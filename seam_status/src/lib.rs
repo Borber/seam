@@ -21,14 +21,3 @@ pub trait Client {
     // ext: 是否返回附加信息
     async fn status(rid: &str) -> Result<bool>;
 }
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
-    }
-}

@@ -1,6 +1,5 @@
 use crate::{common::CLIENT, error::Result, Client};
 use async_trait::async_trait;
-use regex::Regex;
 
 pub struct CcStatusClient {}
 
@@ -17,10 +16,17 @@ impl Client for CcStatusClient {
             .text()
             .await
             .unwrap();
-        let re = Regex::new(r#"<script id="__NEXT_DATA__" type="application/json" crossorigin="anonymous">([\s\S]*?)</script>"#).unwrap();
-        match re.captures(&text) {
-            Some(_) => Ok(true),
-            None => Ok(false),
-        }
+        Ok(text.find("quickplay").is_some())
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[tokio::test]
+    async fn test_get_url() -> Result<()> {
+        println!("{}", CcStatusClient::status("361433").await?);
+        Ok(())
     }
 }

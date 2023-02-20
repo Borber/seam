@@ -103,7 +103,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_get_url() -> Result<()> {
-        println!("{}", Bili::get("6").await?.unwrap().json());
+        println!("{}", Bili::get("6").await?.json());
         Ok(())
     }
 }
