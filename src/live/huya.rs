@@ -66,6 +66,6 @@ mod tests {
 
     #[tokio::test]
     async fn test_get_url() {
-        println!("{}", get("196645").await.unwrap());
+        println!("{}", get("598527").await.unwrap());
     }
 }

@@ -12,8 +12,8 @@ const URL: &str = "https://www.douyu.com/";
 const M_URL: &str = "https://m.douyu.com/";
 const PLAY_URL: &str = "https://www.douyu.com/lapi/live/getH5Play/";
 const PLAY_URL_M: &str = "https://m.douyu.com/api/room/ratestream";
-const CDN_1: &str = "http://akm-tct.douyucdn.cn/live/";
-const CDN_2: &str = "http://ws-tct.douyucdn.cn/live/";
+const CDN_1: &str = "http://hw-tct.douyucdn.cn/live/";
+const CDN_2: &str = "http://hdltc1.douyucdn.cn/live/";
 const DID: &str = "10000000000000000000000000001501";
 
 default_danmu_client!(Douyu);
