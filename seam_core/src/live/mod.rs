@@ -11,6 +11,7 @@ use crate::error::{Result, SeamError};
 pub mod bili;
 pub mod cc;
 pub mod douyin;
+pub mod douyu;
 
 /// 直播信息模块
 #[async_trait]

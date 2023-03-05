@@ -17,7 +17,7 @@ const URL: &str = "https://live.douyin.com/";
 /// 抖音直播
 ///
 /// https://live.douyin.com/
-pub struct Douyin {}
+pub struct Douyin;
 
 #[async_trait]
 impl Live for Douyin {

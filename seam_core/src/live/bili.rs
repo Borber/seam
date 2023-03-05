@@ -14,7 +14,7 @@ const URL: &str = "https://api.live.bilibili.com/xlive/web-room/v2/index/getRoom
 /// bilibili直播
 ///
 /// https://live.bilibili.com/
-pub struct Bili {}
+pub struct Bili;
 
 #[async_trait]
 impl Live for Bili {

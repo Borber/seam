@@ -111,8 +111,6 @@ pub async fn get_source_url() -> Result<()> {
                     let file_name = format!("{file_name}.mp4");
                     if let Some(url) = node_clone.urls.iter().find_map(|url| url.is_m3u8().ok()) {
                         recorder::record(&url, &file_name).await;
-                    } else {
-                        return;
                     }
                 });
                 thread_handlers.push(h);

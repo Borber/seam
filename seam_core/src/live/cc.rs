@@ -12,7 +12,7 @@ const URL: &str = "https://cc.163.com/";
 /// 网易CC直播
 ///
 /// https://cc.163.com/
-pub struct Cc {}
+pub struct Cc;
 
 #[async_trait]
 impl Live for Cc {
