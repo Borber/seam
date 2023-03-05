@@ -116,7 +116,7 @@ fn decode_and_record_danmu(data: &[u8]) -> Result<Vec<DanmuBody>> {
     Ok(msgs)
 }
 
-pub struct BiliDanmuClient {}
+pub struct BiliDanmuClient;
 
 #[async_trait]
 impl Danmu for BiliDanmuClient {

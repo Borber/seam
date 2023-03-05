@@ -12,6 +12,7 @@ pub mod bili;
 pub mod cc;
 pub mod douyin;
 pub mod douyu;
+pub mod huya;
 
 /// 直播信息模块
 #[async_trait]

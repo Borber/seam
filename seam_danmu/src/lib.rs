@@ -301,7 +301,7 @@ macro_rules! default_danmu_client {
             use async_trait::async_trait;
             use $crate::{Danmu, DanmuRecorder};
 
-            pub struct [<$name DanmuClient>] {}
+            pub struct [<$name DanmuClient>];
 
             #[async_trait]
             impl Danmu for [<$name DanmuClient>] {
