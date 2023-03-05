@@ -20,6 +20,6 @@ pub enum SeamError {
     ParseInt(#[from] std::num::ParseIntError),
     #[error("No live")]
     None,
-    #[error("unknown data store error")]
-    Unknown,
+    #[error("msg: {0}")]
+    Unknown(String),
 }
