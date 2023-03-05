@@ -12,6 +12,7 @@ pub mod bili;
 pub mod cc;
 pub mod douyin;
 pub mod douyu;
+pub mod huajiao;
 pub mod huya;
 pub mod kuaishou;
 

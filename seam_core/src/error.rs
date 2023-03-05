@@ -16,6 +16,8 @@ pub enum SeamError {
     Decode(#[from] std::string::FromUtf8Error),
     #[error("InvalidHeaderValue error: {0}")]
     InvalidHeaderValue(#[from] reqwest::header::InvalidHeaderValue),
+    #[error("ParseInt error: {0}")]
+    ParseInt(#[from] std::num::ParseIntError),
     #[error("No live")]
     None,
     #[error("unknown data store error")]
