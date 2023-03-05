@@ -15,10 +15,10 @@ const URL: &str = "https://live.kuaishou.com/u/";
 /// 快手直播
 ///
 /// https://live.kuaishou.com/
-pub struct Kuaishou;
+pub struct Ks;
 
 #[async_trait]
-impl Live for Kuaishou {
+impl Live for Ks {
     async fn get(rid: &str) -> Result<Node> {
         let mut header_map = HeaderMap::new();
         header_map.insert("user-agent", USER_AGENT.parse()?);
@@ -75,7 +75,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_kuaishou() {
-        match Kuaishou::get("3xgexgpig9gwwi2").await {
+        match Ks::get("3xgexgpig9gwwi2").await {
             Ok(node) => {
                 println!("{}", node.json())
             }

@@ -14,10 +14,11 @@ pub mod douyin;
 pub mod douyu;
 pub mod huajiao;
 pub mod huya;
-pub mod kuaishou;
+pub mod ks;
 pub mod mht;
 pub mod now;
 pub mod kk;
+pub mod qf;
 
 /// 直播信息模块
 #[async_trait]
