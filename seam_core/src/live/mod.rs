@@ -10,6 +10,7 @@ use crate::error::{Result, SeamError};
 
 pub mod bili;
 pub mod cc;
+pub mod douyin;
 
 /// 直播信息模块
 #[async_trait]
