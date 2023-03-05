@@ -17,6 +17,7 @@ pub mod huya;
 pub mod kuaishou;
 pub mod mht;
 pub mod now;
+pub mod kk;
 
 /// 直播信息模块
 #[async_trait]
