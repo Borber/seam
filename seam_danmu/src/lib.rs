@@ -57,7 +57,7 @@ pub trait DanmuRecorder: Send + Sync {
 
     fn init(&self) -> Result<()> {
         let path = self.path().ok_or_else(|| {
-            return SeamDanmuError::Path("Path does not exist or failed to open".to_owned());
+            SeamDanmuError::Path("Path does not exist or failed to open".to_owned())
         })?;
         File::create(path)?;
         Ok(())
@@ -74,7 +74,7 @@ pub trait DanmuRecorder: Send + Sync {
 
     fn record(&self, danmu: &DanmuBody) -> Result<()> {
         let path = self.path().ok_or_else(|| {
-            return SeamDanmuError::Path("Path does not exist or failed to open".to_owned());
+            SeamDanmuError::Path("Path does not exist or failed to open".to_owned())
         })?;
         let mut file = OpenOptions::new().append(true).open(path)?;
         file.write_all(self.formatter(danmu).as_bytes())?;
@@ -91,7 +91,7 @@ pub struct Csv {
 impl DanmuRecorder for Csv {
     fn try_new(path: Option<PathBuf>) -> Result<Self> {
         let file_stem = path.ok_or_else(|| {
-            return SeamDanmuError::Path("初始化CSV弹幕记录器时未指定文件地址".to_owned());
+            SeamDanmuError::Path("初始化CSV弹幕记录器时未指定文件地址".to_owned())
         })?;
         let path = file_stem.with_extension("csv");
         Ok(Self { path })

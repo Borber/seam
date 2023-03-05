@@ -16,7 +16,7 @@ impl Client for CcStatusClient {
             .text()
             .await
             .unwrap();
-        Ok(text.find("quickplay").is_some())
+        Ok(text.contains("quickplay"))
     }
 }
 

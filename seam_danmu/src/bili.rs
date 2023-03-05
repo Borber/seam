@@ -144,23 +144,14 @@ impl Danmu for BiliDanmuClient {
 
 #[cfg(test)]
 mod tests {
-    use crate::danmu::Terminal;
+    use crate::Terminal;
 
     use super::*;
 
     #[tokio::test]
     async fn test_danmu_terminal() {
-        match Bili::new("6").await {
-            None => println!("未开播"),
-            Some(mut live) => {
-                tokio::spawn(async move {
-                    live.start(vec![&Terminal::try_new(None).unwrap()])
-                        .await
-                        .unwrap();
-                })
-                .await
-                .unwrap();
-            }
-        }
+        BiliDanmuClient::start("6", vec![&Terminal::try_new(None).unwrap()])
+            .await
+            .unwrap();
     }
 }
