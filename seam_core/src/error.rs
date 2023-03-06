@@ -18,8 +18,8 @@ pub enum SeamError {
     InvalidHeaderValue(#[from] reqwest::header::InvalidHeaderValue),
     #[error("ParseInt error: {0}")]
     ParseInt(#[from] std::num::ParseIntError),
-    #[error("No live")]
+    #[error("Not on")]
     None,
-    #[error("msg: {0}")]
+    #[error("Error msg: {0}")]
     Unknown(String),
 }

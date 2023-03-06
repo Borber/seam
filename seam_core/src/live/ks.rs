@@ -76,10 +76,8 @@ mod tests {
     #[tokio::test]
     async fn test_kuaishou() {
         match Ks::get("3xgexgpig9gwwi2").await {
-            Ok(node) => {
-                println!("{}", node.json())
-            }
-            _ => println!("未开播"),
+            Ok(node) => println!("{}", node.json()),
+            Err(e) => println!("{e}"),
         }
     }
 }

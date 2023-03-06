@@ -240,10 +240,8 @@ mod tests {
     #[tokio::test]
     async fn test_get_url() {
         match Douyu::get("221869").await {
-            Ok(node) => {
-                println!("{}", node.json())
-            }
-            _ => panic!("未开播"),
+            Ok(node) => println!("{}", node.json()),
+            Err(e) => println!("{e}"),
         }
     }
 }

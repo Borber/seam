@@ -73,9 +73,7 @@ mod tests {
     async fn test_get_url() {
         match Cc::get("361433").await {
             Ok(node) => println!("{}", node.json()),
-            _ => {
-                println!("未开播");
-            }
+            Err(e) => println!("{e}"),
         };
     }
 }

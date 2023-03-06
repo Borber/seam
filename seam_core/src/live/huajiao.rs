@@ -63,10 +63,8 @@ mod tests {
     #[tokio::test]
     async fn test_get_url() {
         match Huajiao::get("337633032").await {
-            Ok(node) => {
-                println!("{}", node.json())
-            }
-            _ => println!("未开播"),
+            Ok(node) => println!("{}", node.json()),
+            Err(e) => println!("{e}"),
         }
     }
 }

@@ -71,10 +71,8 @@ mod tests {
     #[tokio::test]
     async fn test_get_url() {
         match Huya::get("880201").await {
-            Ok(node) => {
-                println!("{}", node.json())
-            }
-            _ => println!("未开播"),
+            Ok(node) => println!("{}", node.json()),
+            Err(e) => println!("{e}"),
         }
     }
 }
