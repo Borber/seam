@@ -21,6 +21,7 @@ pub mod kk;
 pub mod ks;
 pub mod mht;
 pub mod now;
+pub mod panda;
 pub mod qf;
 pub mod wink;
 pub mod yqs;
