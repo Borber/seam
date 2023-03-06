@@ -24,9 +24,9 @@ impl Live for Yqs {
         params.insert("roomId", rid);
         let resp: serde_json::Value = CLIENT.post(URL).form(&params).send().await?.json().await?;
         let data = &resp["data"];
-        match data["status"].to_string().parse::<usize>()? {
-            2 => {
-                let urls = vec![parse_url(data["url"].to_string())];
+        match data["status"].as_i64() {
+            Some(2) => {
+                let urls = vec![parse_url(data["url"].as_str().unwrap().to_owned())];
                 Ok(Node {
                     rid: rid.to_owned(),
                     title: "yqs".to_owned(),
@@ -44,7 +44,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_get_url() {
-        match Yqs::get("100000").await {
+        match Yqs::get("96").await {
             Ok(node) => println!("{}", node.json()),
             Err(e) => println!("{e}"),
         }
