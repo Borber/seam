@@ -22,6 +22,7 @@ pub mod ks;
 pub mod mht;
 pub mod now;
 pub mod qf;
+pub mod wink;
 pub mod yqs;
 
 /// 直播信息模块
