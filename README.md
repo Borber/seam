@@ -29,9 +29,6 @@
 > 因为数据具有时效性, 所以具体链接使用 `url` 进行替换
 
 
-
--   
-
 # 使用
 
 - [Releases · seam](https://github.com/Borber/seam/releases) 下载你对应平台的压缩包

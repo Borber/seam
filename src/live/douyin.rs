@@ -41,7 +41,7 @@ pub async fn get(rid: &str) -> Result<ShowType> {
 
     let room_info = &json["app"]["initialState"]["roomStore"]["roomInfo"];
     let title = room_info["room"]["title"].as_str().unwrap().to_string();
-    println!("{}", &room_info["room"]["stream_url"]);
+    // println!("{}", &room_info["room"]["stream_url"]);
     match room_info["anchor"] {
         serde_json::Value::Null => Ok(ShowType::Error("直播间不存在".to_string())),
         _ => match &room_info["room"]["stream_url"] {
