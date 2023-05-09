@@ -15,10 +15,10 @@ use super::{Live, Node};
 /// winktv
 ///
 /// https://www.winktv.co.kr/
-pub struct Wink;
+pub struct Client;
 
 #[async_trait]
-impl Live for Wink {
+impl Live for Client {
     async fn get(rid: &str) -> Result<Node> {
         let mut form = HashMap::new();
         form.insert("action", "watch");
@@ -51,7 +51,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_panda() {
-        match Wink::get("csp1208").await {
+        match Client::get("csp1208").await {
             Ok(node) => println!("{}", node.json()),
             Err(e) => println!("{e}"),
         }

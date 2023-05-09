@@ -14,10 +14,10 @@ const URL: &str = "https://www.huya.com/";
 /// 虎牙直播
 ///
 /// https://huya.com/
-pub struct Huya;
+pub struct Client;
 
 #[async_trait]
-impl Live for Huya {
+impl Live for Client {
     async fn get(rid: &str) -> Result<Node> {
         let text = CLIENT
             .get(format!("{URL}{rid}"))
@@ -70,7 +70,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_get_url() {
-        match Huya::get("880201").await {
+        match Client::get("880201").await {
             Ok(node) => println!("{}", node.json()),
             Err(e) => println!("{e}"),
         }

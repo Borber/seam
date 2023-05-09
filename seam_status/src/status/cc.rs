@@ -1,12 +1,12 @@
-use crate::{common::CLIENT, error::Result, Client};
+use crate::{common::CLIENT, error::Result, StatusTrait};
 use async_trait::async_trait;
 
-pub struct CcStatusClient {}
+pub struct Status;
 
 const URL: &str = "https://cc.163.com/";
 
 #[async_trait]
-impl Client for CcStatusClient {
+impl StatusTrait for Status {
     async fn status(rid: &str) -> Result<bool> {
         let text = CLIENT
             .get(format!("{URL}{rid}"))
@@ -26,7 +26,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_status() {
-        match CcStatusClient::status("361433").await {
+        match Status::status("361433").await {
             Ok(true) => println!("已开播"),
             _ => println!("未开播"),
         }

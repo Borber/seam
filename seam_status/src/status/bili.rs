@@ -1,12 +1,12 @@
-use crate::{common::CLIENT, error::Result, Client};
+use crate::{common::CLIENT, error::Result, StatusTrait};
 use async_trait::async_trait;
 
-pub struct StatusClient {}
+pub struct Status;
 
 const URL: &str = "https://api.live.bilibili.com/room/v1/Room/room_init";
 
 #[async_trait]
-impl Client for StatusClient {
+impl StatusTrait for Status {
     async fn status(rid: &str) -> Result<bool> {
         let resp: serde_json::Value = CLIENT
             .get(URL)
@@ -25,7 +25,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_status() {
-        match StatusClient::status("6").await {
+        match Status::status("6").await {
             Ok(true) => println!("已开播"),
             _ => println!("未开播"),
         }

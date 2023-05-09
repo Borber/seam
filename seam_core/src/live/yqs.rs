@@ -15,10 +15,10 @@ const URL: &str = "https://www.173.com/room/getVieoUrl";
 /// 艺气山直播
 ///
 /// https://www.173.com/
-pub struct Yqs;
+pub struct Client;
 
 #[async_trait]
-impl Live for Yqs {
+impl Live for Client {
     async fn get(rid: &str) -> Result<Node> {
         let mut params = HashMap::new();
         params.insert("roomId", rid);
@@ -44,7 +44,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_get_url() {
-        match Yqs::get("96").await {
+        match Client::get("96").await {
             Ok(node) => println!("{}", node.json()),
             Err(e) => println!("{e}"),
         }

@@ -5,16 +5,13 @@
 
 mod common;
 pub mod error;
-pub mod live;
+pub mod status;
 
 use async_trait::async_trait;
 use error::Result;
 
-/// 直播状态检测模块
-pub struct StatusClient {}
-
 #[async_trait]
-pub trait Client {
+pub trait StatusTrait {
     // 获取直播间状态
     // rid: 直播间号
     async fn status(rid: &str) -> Result<bool>;

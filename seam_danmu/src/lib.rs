@@ -6,8 +6,8 @@
 //! 本模块提供了基于websocket的标准弹幕工作流。
 //! 如无定制需求，可以直接使用本模块提供的工作流。
 
+pub mod danmu;
 pub mod error;
-pub mod live;
 
 use std::fs::{File, OpenOptions};
 use std::future::Future;
@@ -26,7 +26,7 @@ use tokio_tungstenite::{tungstenite::protocol::Message, MaybeTlsStream, WebSocke
 
 /// 标准化弹幕记录异步接口。
 #[async_trait]
-pub trait Danmu {
+pub trait DanmuTrait {
     /// 运行弹幕记录服务。
     ///
     /// 本函数通常将运行websocket长连接，并按指定方式记录弹幕。
@@ -298,12 +298,12 @@ macro_rules! default_danmu_client {
 
         paste! {
             use async_trait::async_trait;
-            use $crate::{Danmu, DanmuRecorder};
+            use $crate::{DanmuTrait, DanmuRecorder};
 
-            pub struct [<$name DanmuClient>];
+            pub struct Danmu;
 
             #[async_trait]
-            impl Danmu for [<$name DanmuClient>] {
+            impl DanmuTrait for Danmu {
                 async fn start(_rid: &str, _recorder: Vec<&dyn DanmuRecorder>) -> Result<()> {
                     println!("该直播平台暂未实现弹幕功能。");
                     Ok(())

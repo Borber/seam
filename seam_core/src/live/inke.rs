@@ -13,10 +13,10 @@ const URL: &str = "https://webapi.busi.inke.cn/web/live_share_pc?uid=";
 /// 映客直播
 ///
 /// https://www.inke.cn/
-pub struct Inke;
+pub struct Client;
 
 #[async_trait]
-impl Live for Inke {
+impl Live for Client {
     async fn get(rid: &str) -> Result<Node> {
         let json: serde_json::Value = CLIENT
             .get(format!("{URL}{rid}"))
@@ -60,7 +60,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_inke() {
-        match Inke::get("713935849").await {
+        match Client::get("713935849").await {
             Ok(node) => println!("{}", node.json()),
             Err(e) => println!("{e}"),
         }

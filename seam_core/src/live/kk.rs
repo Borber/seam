@@ -14,10 +14,10 @@ const URL: &str = "https://sgapi.kktv8.com/roomApi/room/roomVideoBitrate?roomId=
 /// kk直播
 ///
 /// https://www.kktv5.com/
-pub struct Kk;
+pub struct Client;
 
 #[async_trait]
-impl Live for Kk {
+impl Live for Client {
     async fn get(rid: &str) -> Result<Node> {
         let text = CLIENT
             .get(format!("{URL}{rid}"))
@@ -46,7 +46,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_get_url() {
-        match Kk::get("521").await {
+        match Client::get("521").await {
             Ok(node) => println!("{}", node.json()),
             Err(e) => println!("{e}"),
         }

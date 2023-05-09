@@ -14,11 +14,11 @@ const URL: &str = "https://www.2cq.com/proxy/room/room/info";
 /// 棉花糖直播
 ///
 /// https://www.2cq.com/
-pub struct Mht;
+pub struct Client;
 
 // TODO 似乎某些房间有额外的 flv 地址
 #[async_trait]
-impl Live for Mht {
+impl Live for Client {
     async fn get(rid: &str) -> Result<Node> {
         let resp: serde_json::Value = CLIENT
             .get(URL)
@@ -56,7 +56,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_get_url() {
-        match Mht::get("911038").await {
+        match Client::get("911038").await {
             Ok(node) => println!("{}", node.json()),
             Err(e) => println!("{e}"),
         }

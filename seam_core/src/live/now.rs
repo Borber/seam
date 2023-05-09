@@ -13,10 +13,10 @@ const URL: &str = "https://now.qq.com/cgi-bin/now/web/room/get_live_room_url?pla
 /// NOW直播
 ///
 /// https://now.qq.com/
-pub struct Now;
+pub struct Client;
 
 #[async_trait]
-impl Live for Now {
+impl Live for Client {
     async fn get(rid: &str) -> Result<Node> {
         let json: serde_json::Value = CLIENT
             .get(format!("{URL}{rid}"))
@@ -49,7 +49,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_get_url() {
-        match Now::get("1347547853").await {
+        match Client::get("1347547853").await {
             Ok(node) => println!("{}", node.json()),
             Err(e) => println!("{e}"),
         }

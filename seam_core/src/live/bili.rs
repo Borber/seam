@@ -14,10 +14,10 @@ const URL: &str = "https://api.live.bilibili.com/xlive/web-room/v2/index/getRoom
 /// bilibili直播
 ///
 /// https://live.bilibili.com/
-pub struct Bili;
+pub struct Client;
 
 #[async_trait]
-impl Live for Bili {
+impl Live for Client {
     async fn get(rid: &str) -> Result<Node> {
         let resp: serde_json::Value = CLIENT
             .get(INIT_URL)
@@ -103,7 +103,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_get_url() {
-        match Bili::get("6").await {
+        match Client::get("6").await {
             Ok(node) => println!("{}", node.json()),
             Err(e) => println!("{e}"),
         }

@@ -18,10 +18,10 @@ const CDN: &str = "https://live-global-cdn-v02.afreecatv.com/live-stmc-32/auth_p
 /// afreecatv直播
 ///
 /// https://www.afreecatv.com/
-pub struct Afreeca;
+pub struct Client;
 
 #[async_trait]
-impl Live for Afreeca {
+impl Live for Client {
     async fn get(rid: &str) -> Result<Node> {
         let text = CLIENT
             .get(format!("{URL}{rid}"))
@@ -70,7 +70,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_get() {
-        match Afreeca::get("dasl8121").await {
+        match Client::get("dasl8121").await {
             Ok(node) => println!("{}", node.json()),
             Err(e) => println!("{e}"),
         }

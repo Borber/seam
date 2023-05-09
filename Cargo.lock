@@ -1172,7 +1172,7 @@ dependencies = [
 
 [[package]]
 name = "seam_core"
-version = "0.1.18"
+version = "0.1.19"
 dependencies = [
  "async-trait",
  "chrono",
@@ -1191,7 +1191,7 @@ dependencies = [
 
 [[package]]
 name = "seam_danmu"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "async-trait",
  "colored",

@@ -14,10 +14,10 @@ const URL: &str = "https://qf.56.com/";
 /// 千帆直播
 ///
 /// https://qf.56.com/
-pub struct Qf;
+pub struct Client;
 
 #[async_trait]
-impl Live for Qf {
+impl Live for Client {
     async fn get(rid: &str) -> Result<Node> {
         let text = CLIENT
             .get(format!("{URL}{rid}"))
@@ -47,7 +47,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_get_url() {
-        match Qf::get("520006").await {
+        match Client::get("520006").await {
             Ok(node) => println!("{}", node.json()),
             Err(e) => println!("{e}"),
         }

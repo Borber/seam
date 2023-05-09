@@ -15,10 +15,10 @@ use super::{Live, Node};
 /// pandalive
 ///
 /// https://www.pandalive.co.kr/
-pub struct Panda;
+pub struct Client;
 
 #[async_trait]
-impl Live for Panda {
+impl Live for Client {
     async fn get(rid: &str) -> Result<Node> {
         let mut form = HashMap::new();
         form.insert("action", "watch");
@@ -51,7 +51,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_panda() {
-        match Panda::get("csp1208").await {
+        match Client::get("csp1208").await {
             Ok(node) => println!("{}", node.json()),
             Err(e) => println!("{e}"),
         }
