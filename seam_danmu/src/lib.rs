@@ -6,23 +6,8 @@
 //! 本模块提供了基于websocket的标准弹幕工作流。
 //! 如无定制需求，可以直接使用本模块提供的工作流。
 
-pub mod afreeca;
-pub mod bili;
-pub mod cc;
-pub mod douyin;
 pub mod error;
-pub mod flex;
-pub mod huajiao;
-pub mod huya;
-pub mod inke;
-pub mod kk;
-pub mod ks;
-pub mod mht;
-pub mod now;
-pub mod panda;
-pub mod qf;
-pub mod wink;
-pub mod yqs;
+pub mod live;
 
 use std::fs::{File, OpenOptions};
 use std::future::Future;

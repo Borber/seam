@@ -6,9 +6,9 @@ use clap::{Parser, Subcommand};
 use seam_core::live::bili::Bili;
 use seam_core::live::Live;
 use seam_core::{config::CONFIG, recorder, util::get_datetime};
-use seam_danmu::bili::BiliDanmuClient;
+use seam_danmu::live::bili::DanmuClient;
 use seam_danmu::{Csv, Danmu, DanmuRecorder, Terminal};
-use seam_status::bili::BiliStatusClient;
+use seam_status::live::bili::StatusClient;
 use seam_status::Client;
 
 use crate::Cli;
@@ -66,7 +66,7 @@ pub async fn get_source_url() -> Result<()> {
             if danmu {
                 let rid = node.rid.clone();
                 let h = tokio::spawn(async move {
-                    BiliDanmuClient::start(&rid, vec![&Terminal::try_new(None).unwrap()])
+                    DanmuClient::start(&rid, vec![&Terminal::try_new(None).unwrap()])
                         .await
                         .unwrap();
                 });
@@ -88,12 +88,9 @@ pub async fn get_source_url() -> Result<()> {
                     let path =
                         PathBuf::from(cwd.parent().ok_or(anyhow!("错误的弹幕记录地址。")).unwrap())
                             .join(file_name);
-                    BiliDanmuClient::start(
-                        &node_clone.rid,
-                        vec![&Csv::try_new(Some(path)).unwrap()],
-                    )
-                    .await
-                    .unwrap();
+                    DanmuClient::start(&node_clone.rid, vec![&Csv::try_new(Some(path)).unwrap()])
+                        .await
+                        .unwrap();
                 });
                 thread_handlers.push(h);
             }
@@ -124,7 +121,7 @@ pub async fn get_source_url() -> Result<()> {
                 let h = tokio::spawn(async move {
                     let node = node_clone;
                     loop {
-                        match BiliStatusClient::status(&node.rid).await {
+                        match StatusClient::status(&node.rid).await {
                             Ok(true) => {
                                 let file_name = CONFIG
                                     .video
@@ -163,7 +160,7 @@ pub async fn get_source_url() -> Result<()> {
                     loop {
                         // TODO 是否可优化
                         let rid = rid.clone();
-                        match BiliStatusClient::status(&rid).await {
+                        match StatusClient::status(&rid).await {
                             Ok(true) => {
                                 tokio::time::sleep(tokio::time::Duration::from_secs(10)).await;
                             }

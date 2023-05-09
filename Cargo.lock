@@ -1201,7 +1201,6 @@ dependencies = [
  "paste",
  "rand",
  "seam_status",
- "serde",
  "serde_json",
  "thiserror",
  "tokio",
@@ -1215,13 +1214,10 @@ dependencies = [
  "async-trait",
  "once_cell",
  "openssl",
- "regex",
  "reqwest",
- "serde",
  "serde_json",
  "thiserror",
  "tokio",
- "urlencoding",
 ]
 
 [[package]]

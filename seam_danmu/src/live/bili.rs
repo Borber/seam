@@ -1,12 +1,13 @@
 use async_trait::async_trait;
 use miniz_oxide::inflate::decompress_to_vec_zlib;
 use rand::Rng;
-use seam_status::{bili::BiliStatusClient, Client};
+use seam_status::live::bili::StatusClient;
+use seam_status::Client;
 use serde_json::json;
 
 use crate::error::Result;
 
-use super::{websocket_danmu_work_flow, Danmu, DanmuBody, DanmuRecorder};
+use crate::{websocket_danmu_work_flow, Danmu, DanmuBody, DanmuRecorder};
 
 const WSS_URL: &str = "wss://broadcastlv.chat.bilibili.com/sub";
 const HEART_BEAT: &str = "\x00\x00\x00\x1f\x00\x10\x00\x01\x00\x00\x00\x02\x00\x00\x00\x01\x5b\x6f\x62\x6a\x65\x63\x74\x20\x4f\x62\x6a\x65\x63\x74\x5d ";
@@ -116,15 +117,15 @@ fn decode_and_record_danmu(data: &[u8]) -> Result<Vec<DanmuBody>> {
     Ok(msgs)
 }
 
-pub struct BiliDanmuClient;
+pub struct DanmuClient;
 
 #[async_trait]
-impl Danmu for BiliDanmuClient {
+impl Danmu for DanmuClient {
     async fn start(rid: &str, recorder: Vec<&dyn DanmuRecorder>) -> Result<()> {
         let heart_beat_msg_generator = || HEART_BEAT.as_bytes().to_vec();
         let heart_beat_interval = HEART_BEAT_INTERVAL;
 
-        let is_closed_room = || async { BiliStatusClient::status(rid).await.unwrap() };
+        let is_closed_room = || async { StatusClient::status(rid).await.unwrap() };
 
         websocket_danmu_work_flow(
             rid,
@@ -150,7 +151,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_danmu_terminal() {
-        BiliDanmuClient::start("6", vec![&Terminal::try_new(None).unwrap()])
+        DanmuClient::start("6", vec![&Terminal::try_new(None).unwrap()])
             .await
             .unwrap();
     }
