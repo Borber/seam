@@ -1,21 +1,37 @@
-use boa_engine::Context;
+use crate::live::Format;
+use crate::live::Url;
 use md5::{Digest, Md5};
-
-use crate::live::{Format, Url};
+use std::path::PathBuf;
 
 /// 提取字符串md5值
-#[allow(dead_code)]
 pub fn md5(data: &[u8]) -> String {
     let mut h = Md5::new();
     h.update(data);
     hex::encode(h.finalize())
 }
 
-/// 运行js代码
-#[allow(dead_code)]
+/// js运行时
 pub async fn eval(js: &str) -> String {
-    let mut context = Context::default();
-    context.eval(js).unwrap().as_string().unwrap().to_string()
+    let plugin_path = get_plugin_path();
+    // 调用命令执行并返回字符串
+    let output = tokio::process::Command::new(plugin_path)
+        .arg(js)
+        .output()
+        .await
+        .unwrap();
+    String::from_utf8(output.stdout).unwrap()
+}
+
+// 获取插件地址
+pub fn get_plugin_path() -> PathBuf {
+    let exe_path = std::env::current_exe().unwrap();
+    let exe_dir = exe_path.parent().unwrap();
+    // 通过系统定义插件后缀
+    #[cfg(windows)]
+    let plugin_file = "jin.exe";
+    #[cfg(not(windows))]
+    let plugin_file = "jin";
+    exe_dir.join(plugin_file)
 }
 
 pub fn match_format(url: &str) -> Format {
