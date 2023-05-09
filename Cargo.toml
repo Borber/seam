@@ -1,5 +1,6 @@
 [package]
 name = "seam"
+authors = ["Borber"]
 version = "0.1.24"
 edition = "2021"
 
