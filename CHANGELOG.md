@@ -5,13 +5,54 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.25]
+
+### Changed
+
+-   js runtime 拆分, 优化体积
+
+## [0.1.24]
+
+### Fixed
+
+-   修复抖音错误输出
+
+## [0.1.23]
+
+### Fixed
+
+-   修复斗鱼 CDN
+
+## [0.1.22]
+
+### Fixed
+
+-   修复虎牙 gzip 解压
+
+## [0.1.21]
+
+### Fixed
+
+-   修复抖音 m3u 获取 full_hd 资源
+
+## [0.1.20]
+
+### Fixed
+
+-   修复抖音直播源格式
+
+## [0.1.19]
+
+### Fixed
+
+-   修复抖音直播源获取
+
 ## [0.1.18]
 
 ### Added
 
-- 映客直播源获取
-- 抖音加入即时cookie, 避免cookie检测
-
+-   映客直播源获取
+-   抖音加入即时 cookie, 避免 cookie 检测
 
 ## [0.1.17]
 
