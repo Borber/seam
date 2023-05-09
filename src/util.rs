@@ -1,5 +1,6 @@
+use std::path::PathBuf;
+
 use crate::model::{Format, Node};
-use boa_engine::Context;
 use md5::{Digest, Md5};
 
 /// 提取字符串md5值
@@ -9,11 +10,30 @@ pub fn md5(data: &[u8]) -> String {
     hex::encode(h.finalize())
 }
 
-// TODO 报错信息显示
+// TODO 提取js runtime
 /// js在线运行时
 pub async fn do_js(js: &str) -> String {
-    let mut context = Context::default();
-    context.eval(js).unwrap().as_string().unwrap().to_string()
+    let plugin_path = get_plugin_path();
+
+    // 调用命令执行并返回字符串
+    let output = tokio::process::Command::new(plugin_path)
+        .arg(js)
+        .output()
+        .await
+        .unwrap();
+    String::from_utf8(output.stdout).unwrap()
+}
+
+// 获取插件地址
+pub fn get_plugin_path() -> PathBuf {
+    let exe_path = std::env::current_exe().unwrap();
+    let exe_dir = exe_path.parent().unwrap();
+    // 通过系统定义插件后缀
+    #[cfg(windows)]
+    let plugin_file = "jin.exe";
+    #[cfg(not(windows))]
+    let plugin_file = "jin";
+    exe_dir.join(plugin_file)
 }
 
 pub fn match_format(url: &str) -> Format {

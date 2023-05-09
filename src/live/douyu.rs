@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use crate::model::Detail;
 use crate::{common::CLIENT, default_danmu_client, model::ShowType};
 
-use crate::util::{do_js, md5, parse_url};
+use crate::util::{do_js, get_plugin_path, md5, parse_url};
 use anyhow::{Ok, Result};
 use chrono::prelude::*;
 use regex::Regex;
@@ -22,6 +22,10 @@ default_danmu_client!(Douyu);
 ///
 /// https://www.douyu.com/
 pub async fn get(rid: &str) -> Result<ShowType> {
+    let plugin = get_plugin_path();
+    if !plugin.exists() {
+        return Ok(ShowType::Error("缺少插件:请前往 https://github.com/Borber/Jin/releases/latest 下载对应平台的 jin 可执行文件并解压到 seam 同级目录.\nMissing plugin: Please go to https://github.com/Borber/Jin/releases/latest to download the jin executable for the corresponding platform and extract it to the same level as seam.".to_string()));
+    }
     let rid = match real_rid(rid).await {
         Some(rid) => rid,
         None => return Ok(ShowType::Error("直播间不存在".to_string())),
