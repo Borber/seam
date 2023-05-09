@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use crate::model::Detail;
 use crate::{common::CLIENT, default_danmu_client, model::ShowType};
 
-use crate::util::{do_js, get_plugin_path, md5, parse_url};
+use crate::util::{js, get_plugin_path, md5, parse_url};
 use anyhow::{Ok, Result};
 use chrono::prelude::*;
 use regex::Regex;
@@ -80,7 +80,7 @@ async fn douyu_do_js_pc(rid: &str) -> Result<ShowType> {
     // println!("{func}");
 
     // 获取eval实际运行的字符串
-    let res = do_js(&func).await;
+    let res = js(&func).await;
 
     // 构建函数, 替换数值
     let res = res.replace("(function", "let ccc = function");
@@ -98,7 +98,7 @@ async fn douyu_do_js_pc(rid: &str) -> Result<ShowType> {
     );
 
     // 运行js获取签名值
-    let sign = do_js(&res).await;
+    let sign = js(&res).await;
     let sign = sign.rsplit_once('=').unwrap().1;
 
     let mut params = HashMap::new();
@@ -168,7 +168,7 @@ async fn douyu_do_js(rid: &str) -> Result<ShowType> {
     let func = format!("{func}ub98484234(0,0,0)");
 
     // 获取eval实际运行的字符串
-    let res = do_js(&func).await;
+    let res = js(&func).await;
 
     // 构建函数, 替换数值
     let res = res.replace("(function", "let ccc = function");
@@ -185,7 +185,7 @@ async fn douyu_do_js(rid: &str) -> Result<ShowType> {
     );
     // println!("{}", res);
     // 运行js获取签名值
-    let sign = do_js(&res).await;
+    let sign = js(&res).await;
     // println!("{}", sign);
     let sign = sign.rsplit_once('=').unwrap().1;
 

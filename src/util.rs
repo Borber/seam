@@ -10,11 +10,9 @@ pub fn md5(data: &[u8]) -> String {
     hex::encode(h.finalize())
 }
 
-// TODO 提取js runtime
-/// js在线运行时
-pub async fn do_js(js: &str) -> String {
+/// js运行时
+pub async fn js(js: &str) -> String {
     let plugin_path = get_plugin_path();
-
     // 调用命令执行并返回字符串
     let output = tokio::process::Command::new(plugin_path)
         .arg(js)
