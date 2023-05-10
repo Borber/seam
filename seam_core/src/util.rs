@@ -12,6 +12,7 @@ pub fn md5(data: &[u8]) -> String {
 
 /// js运行时
 pub async fn eval(js: &str) -> String {
+    let js = js.trim_matches('"');
     let plugin_path = get_plugin_path();
     // 调用命令执行并返回字符串
     let output = tokio::process::Command::new(plugin_path)

@@ -177,7 +177,6 @@ async fn douyu_do_js(rid: &str) -> Result<Node> {
     let re = Regex::new(r#"eval.*;}"#).unwrap();
     let func = re.replace(&func, "strc;}");
     let func = format!("{func}ub98484234(0,0,0)");
-
     // 获取eval实际运行的字符串
     let res = eval(&func).await;
 
@@ -196,8 +195,8 @@ async fn douyu_do_js(rid: &str) -> Result<Node> {
     );
     // println!("{}", res);
     // 运行js获取签名值
-    let sign = eval(&res).await;
-    // println!("{}", sign);
+    let res = res.trim().trim_matches('"');
+    let sign = eval(res).await;
     let sign = sign.rsplit_once('=').unwrap().1;
 
     let mut params = HashMap::new();
@@ -214,6 +213,7 @@ async fn douyu_do_js(rid: &str) -> Result<Node> {
         .await?
         .json()
         .await?;
+    println!("{:?}", json);
     match json["code"].as_i64().unwrap() {
         0 => {
             let key = json["data"]["url"].as_str().unwrap();
@@ -243,7 +243,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_get_url() {
-        match Client::get("221869").await {
+        match Client::get("7592343").await {
             Ok(node) => println!("{}", node.json()),
             Err(e) => println!("{e}"),
         }
