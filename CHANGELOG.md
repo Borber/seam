@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.1.25]
 
+### Fixed
+
+-   修复斗鱼直播源获取
+
 ### Changed
 
 -   js runtime 拆分, 优化体积

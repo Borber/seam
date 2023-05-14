@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use crate::model::Detail;
 use crate::{common::CLIENT, default_danmu_client, model::ShowType};
 
-use crate::util::{js, get_plugin_path, md5, parse_url};
+use crate::util::{get_plugin_path, js, md5, parse_url};
 use anyhow::{Ok, Result};
 use chrono::prelude::*;
 use regex::Regex;
@@ -12,8 +12,8 @@ const URL: &str = "https://www.douyu.com/";
 const M_URL: &str = "https://m.douyu.com/";
 const PLAY_URL: &str = "https://www.douyu.com/lapi/live/getH5Play/";
 const PLAY_URL_M: &str = "https://m.douyu.com/api/room/ratestream";
-const CDN_1: &str = "http://hw-tct.douyucdn.cn/live/";
-const CDN_2: &str = "http://hdltc1.douyucdn.cn/live/";
+const CDN_1: &str = "http://hlstct.douyucdn2.cn/dyliveflv1a/";
+const CDN_2: &str = "http://hdltctwk.douyucdn2.cn/live/";
 const DID: &str = "10000000000000000000000000001501";
 
 default_danmu_client!(Douyu);
@@ -185,7 +185,9 @@ async fn douyu_do_js(rid: &str) -> Result<ShowType> {
     );
     // println!("{}", res);
     // 运行js获取签名值
+    let res = res.trim().trim_matches('"');
     let sign = js(&res).await;
+    let sign = sign.trim().trim_matches('"');
     // println!("{}", sign);
     let sign = sign.rsplit_once('=').unwrap().1;
 
@@ -205,18 +207,14 @@ async fn douyu_do_js(rid: &str) -> Result<ShowType> {
         .await?;
     match json["code"].as_i64().unwrap() {
         0 => {
-            let key = json["data"]["url"].as_str().unwrap();
-            let key = key.split_once(".m3u8").unwrap().0;
-            let key = key.rsplit_once('/').unwrap().1;
-            let key = match key.split_once('_') {
-                Some((k, _)) => k,
-                None => key,
-            };
-            let nodes = vec![
-                parse_url(format!("{CDN_1}{key}.flv")),
-                parse_url(format!("{CDN_2}{key}.flv")),
+            let url_origin = json["data"]["url"].as_str().unwrap();
+            let key = url_origin.rsplit_once('/').unwrap().1;
+            let urls = vec![
+                parse_url(url_origin.to_owned()),
+                parse_url(format!("{CDN_1}{key}").replace(".m3u8", ".flv")),
+                parse_url(format!("{CDN_2}{key}").replace(".m3u8", ".flv")),
             ];
-            Ok(ShowType::On(Detail::new(title, nodes)))
+            Ok(ShowType::On(Detail::new(title, urls)))
         }
         _ => Ok(ShowType::Off),
     }
@@ -228,6 +226,6 @@ mod tests {
 
     #[tokio::test]
     async fn test_get_url() {
-        println!("{}", get("221869").await.unwrap());
+        println!("{}", get("591657").await.unwrap());
     }
 }
