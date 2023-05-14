@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, println};
 
 use crate::{
     common::CLIENT,
@@ -197,6 +197,7 @@ async fn douyu_do_js(rid: &str) -> Result<Node> {
     // 运行js获取签名值
     let res = res.trim().trim_matches('"');
     let sign = eval(res).await;
+    let sign = sign.trim().trim_matches('"');
     let sign = sign.rsplit_once('=').unwrap().1;
 
     let mut params = HashMap::new();
@@ -213,10 +214,11 @@ async fn douyu_do_js(rid: &str) -> Result<Node> {
         .await?
         .json()
         .await?;
-    println!("{:?}", json);
+    // println!("{:?}", json);
     match json["code"].as_i64().unwrap() {
         0 => {
             let key = json["data"]["url"].as_str().unwrap();
+            println!("{}", key);
             let key = key.split_once(".m3u8").unwrap().0;
             let key = key.rsplit_once('/').unwrap().1;
             let key = match key.split_once('_') {
@@ -243,7 +245,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_get_url() {
-        match Client::get("7592343").await {
+        match Client::get("11541664").await {
             Ok(node) => println!("{}", node.json()),
             Err(e) => println!("{e}"),
         }
