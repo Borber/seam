@@ -1,4 +1,4 @@
-use std::{collections::HashMap, println};
+use std::collections::HashMap;
 
 use crate::{
     common::CLIENT,
