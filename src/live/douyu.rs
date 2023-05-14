@@ -186,7 +186,7 @@ async fn douyu_do_js(rid: &str) -> Result<ShowType> {
     // println!("{}", res);
     // 运行js获取签名值
     let res = res.trim().trim_matches('"');
-    let sign = js(&res).await;
+    let sign = js(res).await;
     let sign = sign.trim().trim_matches('"');
     // println!("{}", sign);
     let sign = sign.rsplit_once('=').unwrap().1;
