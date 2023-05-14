@@ -16,8 +16,8 @@ const URL: &str = "https://www.douyu.com/";
 const M_URL: &str = "https://m.douyu.com/";
 const PLAY_URL: &str = "https://www.douyu.com/lapi/live/getH5Play/";
 const PLAY_URL_M: &str = "https://m.douyu.com/api/room/ratestream";
-const CDN_1: &str = "http://hw-tct.douyucdn.cn/live/";
-const CDN_2: &str = "http://hdltc1.douyucdn.cn/live/";
+const CDN_1: &str = "http://hlstct.douyucdn2.cn/dyliveflv1a/";
+const CDN_2: &str = "http://hdltctwk.douyucdn2.cn/live/";
 const DID: &str = "10000000000000000000000000001501";
 
 /// 斗鱼直播
@@ -217,17 +217,12 @@ async fn douyu_do_js(rid: &str) -> Result<Node> {
     // println!("{:?}", json);
     match json["code"].as_i64().unwrap() {
         0 => {
-            let key = json["data"]["url"].as_str().unwrap();
-            println!("{}", key);
-            let key = key.split_once(".m3u8").unwrap().0;
-            let key = key.rsplit_once('/').unwrap().1;
-            let key = match key.split_once('_') {
-                Some((k, _)) => k,
-                None => key,
-            };
+            let url_origin = json["data"]["url"].as_str().unwrap();
+            let key = url_origin.rsplit_once('/').unwrap().1;
             let urls = vec![
-                parse_url(format!("{CDN_1}{key}.flv")),
-                parse_url(format!("{CDN_2}{key}.flv")),
+                parse_url(url_origin.to_owned()),
+                parse_url(format!("{CDN_1}{key}").replace(".m3u8", ".flv")),
+                parse_url(format!("{CDN_2}{key}").replace(".m3u8", ".flv")),
             ];
             Ok(Node {
                 rid: rid.to_owned(),
@@ -245,7 +240,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_get_url() {
-        match Client::get("11541664").await {
+        match Client::get("5040227").await {
             Ok(node) => println!("{}", node.json()),
             Err(e) => println!("{e}"),
         }
