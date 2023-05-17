@@ -35,10 +35,13 @@ pub async fn get(rid: &str) -> Result<ShowType> {
     header_map.insert("cookie", cookie.parse()?);
     let text = CLIENT
         .get(format!("{URL}{rid}"))
+        .headers(header_map)
         .send()
         .await?
         .text()
         .await?;
+    // 暂停一秒
+    tokio::time::sleep(tokio::time::Duration::from_secs(1)).await;
     let re = Regex::new(r#"<script>window.__INITIAL_STATE__=([\s\S]*?);\(function"#).unwrap();
     let stream = match re.captures(&text) {
         Some(caps) => caps.get(1).unwrap().as_str(),
@@ -65,6 +68,6 @@ mod tests {
 
     #[tokio::test]
     async fn test_kuaishou() {
-        println!("{}", get("3xgexgpig9gwwi2").await.unwrap());
+        println!("{}", get("3xmn95zztbxicse").await.unwrap());
     }
 }
