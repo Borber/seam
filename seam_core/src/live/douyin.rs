@@ -45,7 +45,6 @@ impl Live for Client {
         let json: serde_json::Value = serde_json::from_str(&json)?;
 
         let room_info = &json["app"]["initialState"]["roomStore"]["roomInfo"];
-        let title = room_info["room"]["title"].as_str().unwrap().to_string();
         match room_info["anchor"] {
             // 主播不存在
             serde_json::Value::Null => Err(SeamError::None),
@@ -53,6 +52,10 @@ impl Live for Client {
                 // 未开播
                 Value::Null => Err(SeamError::None),
                 stream_url => {
+                    let title = room_info["room"]["title"]
+                        .as_str()
+                        .unwrap_or("douyin")
+                        .to_string();
                     // 返回最高清晰度的直播地址 flv 和 hls
                     let urls = vec![
                         parse_url(
