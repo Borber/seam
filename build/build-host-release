@@ -19,7 +19,7 @@ done
 BUILD_FEATURES+=${BUILD_EXTRA_FEATURES}
 
 ROOT_DIR=$(cd $(dirname $0) && pwd)
-VERSION=$(grep -E '^version' "${ROOT_DIR}/../Cargo.toml" | awk '{print $3}' | sed 's/"//g')
+VERSION=$(grep -E '^version' "${ROOT_DIR}/../seam/Cargo.toml" | awk '{print $3}' | sed 's/"//g')
 HOST_TRIPLE=$(rustc -Vv | grep 'host:' | awk '{print $2}')
 
 echo "Started build release ${VERSION} for ${HOST_TRIPLE} (target: ${BUILD_TARGET}) with features \"${BUILD_FEATURES}\"..."
