@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.28]
+
+### Changed
+
+-   拆分 core danmu status 模块
+-   调整 clap 结构
+-   添加 过程宏模块
+-   优化代码结构
+-   暂时移除弹幕文件输出功能
+-   暂时移除录播功能, 待后续重构完整版功能
+-   更新依赖
+
 ## [0.1.27]
 
 ### Fixed
