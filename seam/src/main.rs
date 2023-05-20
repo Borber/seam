@@ -1,6 +1,7 @@
 mod declarative;
+mod recorder;
 
-use crate::declarative::{get_source_url, Commands};
+use crate::declarative::{cli, Commands};
 use anyhow::Result;
 use clap::Parser;
 
@@ -32,6 +33,6 @@ struct Cli {
 
 #[tokio::main]
 async fn main() -> Result<()> {
-    get_source_url().await?;
+    cli().await?;
     Ok(())
 }

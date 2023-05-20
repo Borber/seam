@@ -3,11 +3,12 @@ use std::collections::HashMap;
 use crate::{
     common::CLIENT,
     error::{Result, SeamError},
-    util::{eval, get_plugin_path, md5, parse_url},
+    util::{eval, get_plugin_path, parse_url},
 };
 
 use async_trait::async_trait;
 use chrono::prelude::*;
+use md5::{Digest, Md5};
 use regex::Regex;
 
 use super::{Live, Node};
@@ -98,7 +99,11 @@ async fn douyu_do_js_pc(rid: &str) -> Result<Node> {
 
     // 替换md5值避免js依赖
     let cb = format!("{rid}{DID}{dt}{v}");
-    let rb = md5(cb.as_bytes());
+    let rb = {
+        let mut h = Md5::new();
+        h.update(cb);
+        hex::encode(h.finalize())
+    };
     let res = res.replace(
         "CryptoJS.MD5(cb).toString();",
         format!("\"{}\";", &rb).as_str(),
@@ -188,7 +193,11 @@ async fn douyu_do_js(rid: &str) -> Result<Node> {
 
     // 替换md5值避免js依赖
     let cb = format!("{rid}{DID}{dt}{v}");
-    let rb = md5(cb.as_bytes());
+    let rb = {
+        let mut h = Md5::new();
+        h.update(cb);
+        hex::encode(h.finalize())
+    };
     let res = res.replace(
         "CryptoJS.MD5(cb).toString();",
         format!("\"{}\";", &rb).as_str(),

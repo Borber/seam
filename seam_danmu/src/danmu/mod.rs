@@ -2,6 +2,7 @@ pub mod afreeca;
 pub mod bili;
 pub mod cc;
 pub mod douyin;
+pub mod douyu;
 pub mod flex;
 pub mod huajiao;
 pub mod huya;

@@ -1,18 +1,9 @@
 use crate::live::Format;
 use crate::live::Url;
-use md5::{Digest, Md5};
 use std::path::PathBuf;
-
-/// 提取字符串md5值
-pub fn md5(data: &[u8]) -> String {
-    let mut h = Md5::new();
-    h.update(data);
-    hex::encode(h.finalize())
-}
 
 /// js运行时
 pub async fn eval(js: &str) -> String {
-    let js = js.trim_matches('"');
     let plugin_path = get_plugin_path();
     // 调用命令执行并返回字符串
     let output = tokio::process::Command::new(plugin_path)

@@ -7,9 +7,11 @@ edition = "2021"
 
 [dependencies]
 seam_core = { path = "../seam_core" }
+seam_cli_marcos = { path = "../seam_cli_marcos" }
 seam_danmu = { path = "../seam_danmu" }
 seam_status = { path = "../seam_status" }
 anyhow = "1.0"
 tokio = { version = "1", features = ["full"] }
 clap = { version = "4", features = ["derive"] }
 paste = "1.0"
+chrono = "0.4"
