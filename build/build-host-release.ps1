@@ -28,7 +28,7 @@ if (!$?) {
     exit $LASTEXITCODE
 }
 
-$Version = (Select-String -Pattern '^version *= *"([^"]*)"$' -Path "${PSScriptRoot}\..\Cargo.toml" | ForEach-Object { $_.Matches.Value }).split()[-1]
+$Version = (Select-String -Pattern '^version *= *"([^"]*)"$' -Path "${PSScriptRoot}\..\seam\Cargo.toml" | ForEach-Object { $_.Matches.Value }).split()[-1]
 $Version = $Version -replace '"'
 
 $PackageReleasePath = "${PSScriptRoot}\release"
