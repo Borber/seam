@@ -75,7 +75,7 @@ function build() {
 
     PKG_DIR="${CUR_DIR}/release"
     mkdir -p "${PKG_DIR}"
-    cp "${CUR_DIR}/../config.json" "${RELEASE_DIR}"
+    cp "${CUR_DIR}/../config.toml" "${RELEASE_DIR}"
     if [[ "$TARGET" == *"-linux-"* ]]; then
         PKG_NAME="seam-v${VERSION}.${TARGET}.tar.xz"
         PKG_PATH="${PKG_DIR}/${PKG_NAME}"
@@ -90,7 +90,7 @@ function build() {
         echo "* Packaging XZ in ${PKG_PATH} ..."
         tar -cJf ${PKG_PATH} \
             "seam" \
-            "config.json"
+            "config.toml"
 
         if [[ $? != "0" ]]; then
             exit 1
@@ -106,7 +106,7 @@ function build() {
         cd ${RELEASE_DIR}
         zip ${PKG_PATH} \
             "seam.exe" \
-            "config.json"
+            "config.toml"
 
         if [[ $? != "0" ]]; then
             exit 1

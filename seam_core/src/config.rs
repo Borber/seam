@@ -19,9 +19,10 @@ pub struct DanmuConfig {
     pub name: String,
 }
 
+/// 配置文件
 pub static CONFIG: Lazy<Config> = Lazy::new(|| {
-    let config = std::fs::read_to_string(format!("{}config.json", bin_dir(),)).unwrap();
-    serde_json::from_str::<Config>(&config).unwrap()
+    let config = std::fs::read_to_string(format!("{}config.toml", bin_dir(),)).unwrap();
+    toml::from_str::<Config>(&config).unwrap()
 });
 
 #[cfg(test)]
@@ -30,6 +31,8 @@ mod tests {
 
     #[test]
     fn test_config() {
-        println!("{:?}", CONFIG);
+        // 初始化 CONFIG
+        let _ = CONFIG.video.name.clone();
+        println!("{:#?}", CONFIG);
     }
 }

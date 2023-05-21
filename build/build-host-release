@@ -65,14 +65,14 @@ else
     cd "${ROOT_DIR}/../target/release"
 fi
 
-cp "${ROOT_DIR}/../config.json" ./
+cp "${ROOT_DIR}/../config.toml" ./
 
 if [[ "${BUILD_TARGET}" == *"-windows-"* ]]; then
     # For Windows, use zip
 
     RELEASE_PACKAGE_FILE_NAME="${RELEASE_PACKAGE_NAME}.zip"
     RELEASE_PACKAGE_FILE_PATH="${RELEASE_FOLDER}/${RELEASE_PACKAGE_FILE_NAME}"
-    zip "${RELEASE_PACKAGE_FILE_PATH}" "${TARGETS[@]}" "config.json"
+    zip "${RELEASE_PACKAGE_FILE_PATH}" "${TARGETS[@]}" "config.toml"
 
     if [[ $? != "0" ]]; then
         exit 1
@@ -91,7 +91,7 @@ else
 
     RELEASE_PACKAGE_FILE_NAME="${RELEASE_PACKAGE_NAME}.tar.xz"
     RELEASE_PACKAGE_FILE_PATH="${RELEASE_FOLDER}/${RELEASE_PACKAGE_FILE_NAME}"
-    tar -cJf "${RELEASE_PACKAGE_FILE_PATH}" "${TARGETS[@]}" "config.json"
+    tar -cJf "${RELEASE_PACKAGE_FILE_PATH}" "${TARGETS[@]}" "config.toml"
 
     if [[ $? != "0" ]]; then
         exit 1

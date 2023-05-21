@@ -25,10 +25,10 @@ pub fn my_enum(input: TokenStream) -> TokenStream {
                     }
                 });
                 node.push(quote! {
-                    Commands::#variant_name{ rid } => seam_core::live::#lower::Client::get(&rid).await,
+                    Commands::#variant_name{ rid } => seam_core::live::#lower::Client::get(&rid).await
                 });
                 danmu.push(quote! {
-                    Commands::#variant_name{ rid } => seam_danmu::danmu::#lower::Danmu::start(&rid, recorder).await,
+                    Commands::#variant_name{ rid } => seam_danmu::danmu::#lower::Danmu::start(&rid, recorder).await
                 });
             });
 
@@ -42,19 +42,19 @@ pub fn my_enum(input: TokenStream) -> TokenStream {
                 impl Commands {
                     pub async fn get(&self) -> seam_core::error::Result<seam_core::live::Node>  {
                         match self {
-                            #(#node)*
+                            #(#node),*
                         }
                     }
 
                     pub async fn danmu(&self, recorder: Vec<&dyn DanmuRecorder>) -> seam_danmu::error::Result<()>{
                         match self {
-                            #(#danmu)*
+                            #(#danmu),*
                         }
                     }
                 }
             }
         }
-        _ => panic!("#[derive(MyEnum)] can only be usedon enums."),
+        _ => panic!("#[derive(LivesToCommands)] can only be used on enums."),
     };
 
     TokenStream::from(expanded)

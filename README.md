@@ -64,24 +64,21 @@
 
 # 设置
 
-`config.json` 放置在 `seam` 可执行文件所在目录下
+`config.toml` 放置在 `seam` 可执行文件所在目录下
 
-```json
-{
-    "video": {
-        "name": "rid-title-time"
-    },
-    "danmu": {
-        "name": "rid-title-time"
-    }
-}
+```toml
+# [rid]: 房间号
+# [title]: 标题
+# [time]: 时间戳
+# [date]: 日期
+
+# 录制文件标题
+[video]
+name = "[rid]-[title]-[date]-[time]"
+# 录制文件标题
+[danmu]
+name = "[rid]-[title]-[date]-[time]"
 ```
-
--   video: 视频文件名设置
--   danmu: 弹幕文件名设置
--   rid: 直播间号
--   title: 直播间标题
--   time: 当前时间
 
 # 路线
 

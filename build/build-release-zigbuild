@@ -55,7 +55,7 @@ function build() {
     RELEASE_DIR="target/${TARGET}/release"
     TARGET_FEATURES="${features[@]}"
 
-    cp "config.json" "${RELEASE_DIR}"
+    cp "config.toml" "${RELEASE_DIR}"
 
     if [[ "${TARGET_FEATURES}" != "" ]]; then
         echo "* Building ${TARGET} package ${VERSION} with features \"${TARGET_FEATURES}\" ..."
@@ -91,7 +91,7 @@ function build() {
         echo "* Packaging XZ in ${PKG_PATH} ..."
         tar -cJf ${PKG_PATH} \
         "seam" \
-        "config.json"
+        "config.toml"
 
         if [[ $? != "0" ]]; then
             exit 1
@@ -107,7 +107,7 @@ function build() {
         cd ${RELEASE_DIR}
         zip ${PKG_PATH} \
         "seam.exe" \
-        "config.json"
+        "config.toml"
 
         if [[ $? != "0" ]]; then
             exit 1
