@@ -1,5 +1,6 @@
 [workspace]
 members = ["seam", "seam_cli_marcos", "seam_core", "seam_danmu", "seam_status"]
+resolver = "2"
 
 [profile.release]
 opt-level = "z"
