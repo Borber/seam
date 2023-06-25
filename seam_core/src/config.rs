@@ -22,7 +22,7 @@ pub struct DanmuConfig {
 /// 配置文件
 pub static CONFIG: Lazy<Config> = Lazy::new(|| {
     let config = std::fs::read_to_string(format!("{}config.toml", bin_dir(),)).unwrap();
-    toml::from_str::<Config>(&config).unwrap()
+    basic_toml::from_str::<Config>(&config).unwrap()
 });
 
 #[cfg(test)]
