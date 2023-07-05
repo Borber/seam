@@ -19,7 +19,7 @@ pub struct Client;
 
 #[async_trait]
 impl Live for Client {
-    async fn get(rid: &str) -> Result<Node> {
+    async fn get(&self, rid: &str) -> Result<Node> {
         let mut form = HashMap::new();
         form.insert("action", "watch");
         form.insert("userId", rid);
@@ -51,7 +51,8 @@ mod tests {
 
     #[tokio::test]
     async fn test_panda() {
-        match Client::get("csp1208").await {
+        let cli = Client {};
+        match cli.get("csp1208").await {
             Ok(node) => println!("{}", node.json()),
             Err(e) => println!("{e}"),
         }

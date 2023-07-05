@@ -17,7 +17,7 @@ pub struct Client;
 
 #[async_trait]
 impl Live for Client {
-    async fn get(rid: &str) -> Result<Node> {
+    async fn get(&self, rid: &str) -> Result<Node> {
         let json: serde_json::Value = CLIENT
             .get(URL.replace("rid", rid))
             .send()
@@ -44,7 +44,8 @@ mod tests {
 
     #[tokio::test]
     async fn test_flex() {
-        match Client::get("399291").await {
+        let cli = Client {};
+        match cli.get("399291").await {
             Ok(node) => println!("{}", node.json()),
             Err(e) => println!("{e}"),
         }

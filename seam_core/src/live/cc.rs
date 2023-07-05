@@ -16,7 +16,7 @@ pub struct Client;
 
 #[async_trait]
 impl Live for Client {
-    async fn get(rid: &str) -> Result<Node> {
+    async fn get(&self, rid: &str) -> Result<Node> {
         let text = CLIENT
             .get(format!("{URL}{rid}"))
             .send()
@@ -71,7 +71,8 @@ mod tests {
 
     #[tokio::test]
     async fn test_get_url() {
-        match Client::get("361433").await {
+        let cli = Client {};
+        match cli.get("361433").await {
             Ok(node) => println!("{}", node.json()),
             Err(e) => println!("{e}"),
         };

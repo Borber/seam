@@ -31,7 +31,7 @@ pub mod yqs;
 pub trait Live {
     // 获取直播源
     // rid: 直播间号
-    async fn get(rid: &str) -> Result<Node>;
+    async fn get(&self, rid: &str) -> Result<Node>;
 }
 
 /// 直播源
