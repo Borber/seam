@@ -28,7 +28,7 @@ pub fn my_enum(input: TokenStream) -> TokenStream {
                 });
                 node.push(quote! {
                     Commands::#variant_name{ rid } => {
-                        let cli = seam_core::live::#lower::Client{};
+                        let cli = seam_core::live::#lower::Client;
                         cli.get(&rid).await
                     }
                 });

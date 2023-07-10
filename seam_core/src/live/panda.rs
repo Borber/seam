@@ -51,7 +51,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_panda() {
-        let cli = Client {};
+        let cli = Client;
         match cli.get("csp1208").await {
             Ok(node) => println!("{}", node.json()),
             Err(e) => println!("{e}"),

@@ -70,7 +70,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_get_url() {
-        let cli = Client {};
+        let cli = Client;
         match cli.get("880201").await {
             Ok(node) => println!("{}", node.json()),
             Err(e) => println!("{e}"),

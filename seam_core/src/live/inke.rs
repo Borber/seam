@@ -60,7 +60,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_inke() {
-        let cli = Client {};
+        let cli = Client;
         match cli.get("713935849").await {
             Ok(node) => println!("{}", node.json()),
             Err(e) => println!("{e}"),

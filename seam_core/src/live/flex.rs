@@ -44,7 +44,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_flex() {
-        let cli = Client {};
+        let cli = Client;
         match cli.get("399291").await {
             Ok(node) => println!("{}", node.json()),
             Err(e) => println!("{e}"),
