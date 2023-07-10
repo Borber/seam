@@ -4,6 +4,8 @@ use proc_macro::TokenStream;
 use quote::quote;
 use syn::{parse_macro_input, Data, DeriveInput};
 
+// TODO 尝试动态派发
+
 #[proc_macro_derive(LivesToCommands)]
 pub fn my_enum(input: TokenStream) -> TokenStream {
     let expr = parse_macro_input!(input as DeriveInput);
