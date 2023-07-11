@@ -45,23 +45,6 @@ pub fn parse_url(url: String) -> Url {
     }
 }
 
-#[cfg(windows)]
-const SEPARATOR: &str = "\\";
-
-#[cfg(not(windows))]
-const SEPARATOR: &str = "/";
-
-pub fn bin_dir() -> String {
-    let p = std::env::current_exe()
-        .unwrap()
-        .parent()
-        .unwrap()
-        .to_str()
-        .unwrap()
-        .to_owned();
-    format!("{p}{SEPARATOR}")
-}
-
 /// 获取当前时间
 /// 格式：20230121-000000-000 (年月日-时分秒-毫秒)
 #[inline]

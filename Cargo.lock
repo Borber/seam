@@ -1126,13 +1126,14 @@ name = "seam"
 version = "0.1.28"
 dependencies = [
  "anyhow",
- "chrono",
+ "basic-toml",
  "clap",
- "paste",
+ "once_cell",
  "seam_cli_marcos",
  "seam_core",
  "seam_danmu",
  "seam_status",
+ "serde",
  "tokio",
 ]
 
@@ -1151,7 +1152,6 @@ name = "seam_core"
 version = "0.1.19"
 dependencies = [
  "async-trait",
- "basic-toml",
  "chrono",
  "hex",
  "md-5",
@@ -1202,10 +1202,12 @@ dependencies = [
  "async-trait",
  "once_cell",
  "openssl",
+ "regex",
  "reqwest",
  "serde_json",
  "thiserror",
  "tokio",
+ "urlencoding",
 ]
 
 [[package]]

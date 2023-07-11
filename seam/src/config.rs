@@ -3,6 +3,8 @@ use serde::Deserialize;
 
 use crate::util::bin_dir;
 
+// TODO 接受 headermap 传入, 由具体实现选择是否使用
+
 #[derive(Deserialize, Debug)]
 pub struct Config {
     pub video: VideoConfig,

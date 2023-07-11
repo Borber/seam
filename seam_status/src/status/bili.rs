@@ -15,7 +15,8 @@ impl StatusTrait for Status {
             .await?
             .json()
             .await?;
-        Ok(resp["data"]["live_status"].as_i64().is_some())
+        println!("{:#?}", resp);
+        Ok(resp["data"]["live_status"].as_i64() == Some(1))
     }
 }
 
