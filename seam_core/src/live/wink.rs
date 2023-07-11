@@ -19,7 +19,7 @@ pub struct Client;
 
 #[async_trait]
 impl Live for Client {
-    async fn get(&self, rid: &str) -> Result<Node> {
+    async fn get(rid: &str) -> Result<Node> {
         let mut form = HashMap::new();
         form.insert("action", "watch");
         form.insert("userId", rid);
@@ -46,15 +46,4 @@ impl Live for Client {
 }
 
 #[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[tokio::test]
-    async fn test_panda() {
-        let cli = Client;
-        match cli.get("csp1208").await {
-            Ok(node) => println!("{}", node.json()),
-            Err(e) => println!("{e}"),
-        }
-    }
-}
+macros::gen_test!(csp1208);

@@ -18,7 +18,7 @@ pub struct Client;
 
 #[async_trait]
 impl Live for Client {
-    async fn get(&self, rid: &str) -> Result<Node> {
+    async fn get(rid: &str) -> Result<Node> {
         let resp: serde_json::Value = CLIENT
             .get(INIT_URL)
             .query(&[("id", rid)])
@@ -98,15 +98,4 @@ pub async fn get_bili_stream_info(rid: &str, qn: u64) -> Result<serde_json::Valu
 }
 
 #[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[tokio::test]
-    async fn test_get_url() {
-        let cli = Client;
-        match cli.get("6").await {
-            Ok(node) => println!("{}", node.json()),
-            Err(e) => println!("{e}"),
-        }
-    }
-}
+macros::gen_test!(6);

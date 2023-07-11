@@ -19,7 +19,7 @@ pub struct Client;
 
 #[async_trait]
 impl Live for Client {
-    async fn get(&self, rid: &str) -> Result<Node> {
+    async fn get(rid: &str) -> Result<Node> {
         let mut params = HashMap::new();
         params.insert("roomId", rid);
         let resp: serde_json::Value = CLIENT.post(URL).form(&params).send().await?.json().await?;
@@ -39,15 +39,4 @@ impl Live for Client {
 }
 
 #[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[tokio::test]
-    async fn test_get_url() {
-        let cli = Client;
-        match cli.get("96").await {
-            Ok(node) => println!("{}", node.json()),
-            Err(e) => println!("{e}"),
-        }
-    }
-}
+macros::gen_test!(96);

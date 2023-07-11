@@ -18,7 +18,7 @@ pub struct Client;
 
 #[async_trait]
 impl Live for Client {
-    async fn get(&self, rid: &str) -> Result<Node> {
+    async fn get(rid: &str) -> Result<Node> {
         let text = CLIENT
             .get(format!("{URL}{rid}"))
             .send()
@@ -41,15 +41,4 @@ impl Live for Client {
 }
 
 #[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[tokio::test]
-    async fn test_get_url() {
-        let cli = Client;
-        match cli.get("521").await {
-            Ok(node) => println!("{}", node.json()),
-            Err(e) => println!("{e}"),
-        }
-    }
-}
+macros::gen_test!(521);

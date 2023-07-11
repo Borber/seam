@@ -22,3 +22,6 @@ basic-toml = "0.1"
 
 [target.'cfg(unix)'.dependencies]
 openssl = { version = '0.10', features = ["vendored"] }
+
+[dev-dependencies]
+macros = { package = "seam_core_marcos", path = "../seam_core_marcos" }

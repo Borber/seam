@@ -1159,11 +1159,22 @@ dependencies = [
  "openssl",
  "regex",
  "reqwest",
+ "seam_core_marcos",
  "serde",
  "serde_json",
  "thiserror",
  "tokio",
  "urlencoding",
+]
+
+[[package]]
+name = "seam_core_marcos"
+version = "0.1.0"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "regex",
+ "syn",
 ]
 
 [[package]]

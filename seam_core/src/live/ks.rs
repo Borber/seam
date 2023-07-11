@@ -19,7 +19,7 @@ pub struct Client;
 
 #[async_trait]
 impl Live for Client {
-    async fn get(&self, rid: &str) -> Result<Node> {
+    async fn get(rid: &str) -> Result<Node> {
         let mut header_map = HeaderMap::new();
         header_map.insert("user-agent", USER_AGENT.parse()?);
         // TODO 需要保存cookie 避免快速请求
@@ -70,15 +70,4 @@ impl Live for Client {
 }
 
 #[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[tokio::test]
-    async fn test_kuaishou() {
-        let cli = Client;
-        match cli.get("3xgexgpig9gwwi2").await {
-            Ok(node) => println!("{}", node.json()),
-            Err(e) => println!("{e}"),
-        }
-    }
-}
+macros::gen_test!(3xgexgpig9gwwi2);
