@@ -84,8 +84,12 @@ name = "[rid]-[title]-[date]-[time]"
 
 [seam](https://github.com/users/Borber/projects/4/views/1)
 
+# 相关项目
+
+-   [seamui](https://github.com/kirito41dd/seamui) 由 [kirito41dd](https://github.com/kirito41dd) 开发的`seam`图形化界面
+
 # 感谢
 
-1. [wbt5/real-url](https://github.com/wbt5/real-url/)
-2. [banner](https://textkool.com/en/ascii-art-generator?hl=default&vl=default&font=Chunky&text=SEAM)
-3. [手把手教你破解斗鱼 sign 算法](https://zhuanlan.zhihu.com/p/107330805)
+-   [wbt5/real-url](https://github.com/wbt5/real-url/)
+-   [banner](https://textkool.com/en/ascii-art-generator?hl=default&vl=default&font=Chunky&text=SEAM)
+-   [手把手教你破解斗鱼 sign 算法](https://zhuanlan.zhihu.com/p/107330805)
