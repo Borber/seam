@@ -45,6 +45,8 @@ pub trait Live {
 
 // TODO 保持 cli 的纯洁性, 去除不相干的字段, 如 rid, title, 在 GUI 阶段返回体中再进行包装
 
+// TODO 整理代码中的注释, 使其更加规范
+
 /// 直播源
 ///
 /// - rid: 直播间号
@@ -65,9 +67,9 @@ impl Node {
 
 #[derive(Serialize, Debug, Clone, PartialEq)]
 pub struct Url {
-    // 直播源格式
+    /// 直播源格式
     pub format: Format,
-    // 直播源地址, 默认均为最高清晰度, 故而无需额外标注清晰度
+    /// 直播源地址, 默认均为最高清晰度, 故而无需额外标注清晰度
     pub url: String,
 }
 
