@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use once_cell::sync::Lazy;
 use serde::Deserialize;
 
@@ -9,6 +11,7 @@ use crate::util::bin_dir;
 pub struct Config {
     pub video: VideoConfig,
     pub danmu: DanmuConfig,
+    pub cookie: Option<HashMap<String, String>>,
 }
 
 #[derive(Deserialize, Debug)]

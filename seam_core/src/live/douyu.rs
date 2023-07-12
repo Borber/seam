@@ -28,7 +28,7 @@ pub struct Client;
 
 #[async_trait]
 impl Live for Client {
-    async fn get(rid: &str) -> Result<Node> {
+    async fn get(&self, rid: &str) -> Result<Node> {
         let plugin = get_plugin_path();
         if !plugin.exists() {
             return Err(SeamError::Plugin("缺少插件:请前往 https://github.com/Borber/Jin/releases/latest 下载对应平台的 jin 可执行文件并解压到 seam 同级目录.\nMissing plugin: Please go to https://github.com/Borber/Jin/releases/latest to download the jin executable for the corresponding platform and extract it to the same level as seam.".to_string()));

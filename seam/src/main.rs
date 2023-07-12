@@ -1,6 +1,6 @@
+mod config;
 mod declarative;
 mod recorder;
-mod config;
 mod util;
 
 use crate::declarative::{cli, Commands};

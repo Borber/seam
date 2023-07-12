@@ -31,7 +31,7 @@ pub mod yqs;
 pub trait Live {
     // 获取直播源
     // rid: 直播间号
-    async fn get(rid: &str) -> Result<Node>;
+    async fn get(&self, rid: &str) -> Result<Node>;
 }
 
 /// TODO 拆分独立模块
@@ -43,7 +43,7 @@ pub trait Live {
 /// 3. 直播源地址模块
 /// 4. 弹幕模块
 
-// TODO 保持 cli 的纯洁性, 去除不相干的字段, 如 rid, title, 在 GUI 阶段返回体中再进行包装
+// TODO 去除 core 中多余功能, 保持 core 的纯洁性, 去除不相干的字段, 如 rid, title, 在 GUI 阶段返回体中再进行包装
 
 // TODO 整理代码中的注释, 使其更加规范
 

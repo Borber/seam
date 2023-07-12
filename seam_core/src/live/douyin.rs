@@ -21,7 +21,7 @@ pub struct Client;
 
 #[async_trait]
 impl Live for Client {
-    async fn get(rid: &str) -> Result<Node> {
+    async fn get(&self, rid: &str) -> Result<Node> {
         let mut header_map = HeaderMap::new();
         // 更新 cookie
         header_map.insert("user-agent", USER_AGENT.parse()?);

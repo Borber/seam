@@ -6,6 +6,13 @@
 # 录制文件标题
 [video]
 name = "[rid]-[title]-[date]-[time]"
+
 # 录制文件标题
 [danmu]
 name = "[rid]-[title]-[date]-[time]"
+
+# 各平台cookie
+[cookie]
+bili = "xxxx"
+douyu = "xxxx"
+huya = "xxxx"

@@ -17,7 +17,7 @@ pub struct Client;
 
 #[async_trait]
 impl Live for Client {
-    async fn get(rid: &str) -> Result<Node> {
+    async fn get(&self, rid: &str) -> Result<Node> {
         let json: serde_json::Value = CLIENT
             .get(URL.replace("rid", rid))
             .send()
