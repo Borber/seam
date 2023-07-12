@@ -4,6 +4,8 @@
 //! 标准化的直播源信息和直播状态enum
 
 use async_trait::async_trait;
+use hashbrown::HashMap;
+use macros::gen_all;
 use serde::{Serialize, Serializer};
 
 use crate::error::{Result, SeamError};
@@ -32,6 +34,19 @@ pub trait Live {
     // 获取直播源
     // rid: 直播间号
     async fn get(&self, rid: &str) -> Result<Node>;
+}
+
+// 返回所有受支持的直播平台 对应的 hashmap
+gen_all!();
+
+#[cfg(test)]
+mod test {
+    use super::all;
+
+    #[tokio::test]
+    async fn test_get() {
+        println!("{:#?}", all().get("bili").unwrap().get("6").await.unwrap());
+    }
 }
 
 /// TODO 拆分独立模块
