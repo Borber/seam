@@ -3,7 +3,7 @@ mod config;
 mod declarative;
 mod util;
 
-use crate::declarative::{cli, Commands};
+use crate::declarative::cli;
 use anyhow::Result;
 use clap::Parser;
 
@@ -16,9 +16,12 @@ ________ _______ _______ _______
 |__     |    ___|       |       |
 |_______|_______|___|___|__|_|__|", long_about = None)]
 struct Cli {
-    // 子命令
-    #[command(subcommand)]
-    command: Commands,
+    /// 平台名称
+    #[arg(short = 'l', global = true)]
+    live: String,
+    /// 直播间号
+    #[arg(short = 'i', global = true)]
+    id: String,
     /// 直接录播功能
     #[arg(short = 'r', global = true)]
     record: bool,
