@@ -13,23 +13,34 @@ pub fn my_enum(input: TokenStream) -> TokenStream {
             let mut add_filed = vec![];
             let mut node = vec![];
             let mut danmu = vec![];
+            let mut name = vec![];
             data_enum.variants.iter().for_each(|variant| {
+                // 获取每个枚举元素
                 let variant_name = &variant.ident;
-                let lower = variant_name.to_string().to_lowercase();
-                let lower = syn::Ident::new(&lower, variant_name.span());
+                // 获取每个枚举元素的名称
+                let lower_s = variant_name.to_string().to_lowercase();
+                let lower = syn::Ident::new(&lower_s, variant_name.span());
                 let attrs = &variant.attrs;
+                // 生成新的枚举元素
                 add_filed.push(quote! {
                     #(#attrs)*
                     #variant_name {
                         rid: String
                     }
                 });
+                // 每个枚举元素对应的名称
+                name.push(quote! {
+                    Commands::#variant_name{ rid } => #lower_s
+                });
+                // 对应名称平台的 Client 对象
                 node.push(quote! {
                     Commands::#variant_name{ rid } => {
                         let cli = seam_core::live::#lower::Client;
                         cli.get(&rid).await
                     }
                 });
+
+                // 对应平台名称的 Danmu 对象
                 danmu.push(quote! {
                     Commands::#variant_name{ rid } => seam_danmu::danmu::#lower::Danmu::start(&rid, recorder).await
                 });
@@ -53,6 +64,15 @@ pub fn my_enum(input: TokenStream) -> TokenStream {
                         match self {
                             #(#danmu),*
                         }
+                    }
+                }
+
+                impl std::fmt::Display for Commands {
+                    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+                        let s = match self {
+                            #(#name),*
+                        };
+                        write!(f, "{}", s)
                     }
                 }
             }

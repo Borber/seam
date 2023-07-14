@@ -48,8 +48,11 @@ pub enum Lives {
 // 获取直播源的实现
 pub async fn cli() -> Result<()> {
     let args = Cli::parse();
+    println!("{:#?}", args.command.to_string());
+
     let node = args.command.get().await?;
     let record = args.record;
+
     // 无参数情况下，直接输出直播源信息
     if !(args.danmu || args.config_danmu || record || args.auto_record) {
         println!("{}", &node.json());
