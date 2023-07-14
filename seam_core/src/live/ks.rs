@@ -43,7 +43,7 @@ impl Live for Client {
             .await?
             .text()
             .await?;
-        let re = Regex::new(r#"<script>window.__INITIAL_STATE__=([\s\S]*?);\(function"#).unwrap();
+        let re = Regex::new(r"<script>window.__INITIAL_STATE__=([\s\S]*?);\(function").unwrap();
         let stream = match re.captures(&text) {
             Some(caps) => caps.get(1).unwrap().as_str(),
             None => {

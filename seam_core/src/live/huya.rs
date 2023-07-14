@@ -25,7 +25,7 @@ impl Live for Client {
             .await?
             .text()
             .await?;
-        let re = Regex::new(r#"stream:([\s\S]*)window.TT_LIVE_TIMING"#).unwrap();
+        let re = Regex::new(r"stream:([\s\S]*)window.TT_LIVE_TIMING").unwrap();
         let stream = match re.captures(&text) {
             Some(caps) => caps.get(1).unwrap().as_str().rsplit_once('}').unwrap().0,
             None => return Err(SeamError::None),

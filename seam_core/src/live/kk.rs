@@ -25,7 +25,7 @@ impl Live for Client {
             .await?
             .text()
             .await?;
-        let re = Regex::new(r#"http[\s\S]*?flv"#).unwrap();
+        let re = Regex::new(r"http[\s\S]*?flv").unwrap();
         match re.captures(&text) {
             Some(cap) => {
                 let urls = vec![parse_url(cap.get(0).unwrap().as_str().to_string())];

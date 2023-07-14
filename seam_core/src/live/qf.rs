@@ -25,7 +25,7 @@ impl Live for Client {
             .await?
             .text()
             .await?;
-        let re = Regex::new(r#"flvUrl:'([\s\S]*?)'"#).unwrap();
+        let re = Regex::new(r"flvUrl:'([\s\S]*?)'").unwrap();
         // TODO title
         match re.captures(&text) {
             Some(cap) => {

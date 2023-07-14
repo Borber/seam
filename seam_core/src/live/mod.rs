@@ -4,9 +4,10 @@
 //! 标准化的直播源信息和直播状态enum
 
 use async_trait::async_trait;
-use hashbrown::HashMap;
 use macros::gen_all;
 use serde::{Serialize, Serializer};
+use std::collections::HashMap;
+use std::sync::Arc;
 
 use crate::error::{Result, SeamError};
 
@@ -30,7 +31,7 @@ pub mod yqs;
 
 /// 直播信息模块
 #[async_trait]
-pub trait Live {
+pub trait Live: Send + Sync {
     // 获取直播源
     // rid: 直播间号
     async fn get(&self, rid: &str) -> Result<Node>;

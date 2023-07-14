@@ -18,3 +18,4 @@ clap = { version = "4", features = ["derive"] }
 once_cell = "1"
 serde = { version = "1", features = ["derive"] }
 basic-toml = "0.1"
+parking_lot = { version = "0.12", features = ["nightly"] }
