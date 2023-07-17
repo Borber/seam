@@ -7,18 +7,18 @@ use crate::util::bin_dir;
 
 #[derive(Deserialize, Debug)]
 pub struct Config {
-    pub video: VideoConfig,
-    pub danmu: DanmuConfig,
+    pub video: Video,
+    pub danmu: Danmu,
     pub cookie: Option<HashMap<String, String>>,
 }
 
 #[derive(Deserialize, Debug)]
-pub struct VideoConfig {
+pub struct Video {
     pub name: String,
 }
 
 #[derive(Deserialize, Debug)]
-pub struct DanmuConfig {
+pub struct Danmu {
     pub name: String,
 }
 

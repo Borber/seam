@@ -1,12 +1,5 @@
 [workspace]
-members = [
-    "seam",
-    "seam_cli_marcos",
-    "seam_core",
-    "seam_core_marcos",
-    "seam_danmu",
-    "seam_status",
-]
+members = ["seam", "seam_core", "seam_core_marcos", "seam_danmu", "seam_status"]
 resolver = "2"
 
 [profile.release]

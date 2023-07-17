@@ -29,6 +29,8 @@ pub mod qf;
 pub mod wink;
 pub mod yqs;
 
+// TODO 新增 可选 headermap 参数, 用于设置请求头
+
 /// 直播信息模块
 #[async_trait]
 pub trait Live: Send + Sync {

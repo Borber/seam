@@ -10,6 +10,7 @@ use quote::quote;
 /// 需要引入:
 ///     - HashMap: std::collections::HashMap 或 hashbrown::HashMap 均可
 ///     - Live: seam_core::live::Live
+///     - Arc: std::sync::Arc
 ///
 /// 因为固定了扫描 live 文件夹，所以这个宏只能在 seam_core 中使用
 #[proc_macro]

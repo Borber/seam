@@ -7,7 +7,6 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-seam_cli_marcos = { path = "../seam_cli_marcos" }
 seam_core = { path = "../seam_core" }
 seam_danmu = { path = "../seam_danmu" }
 seam_status = { path = "../seam_status" }
