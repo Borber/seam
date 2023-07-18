@@ -88,6 +88,11 @@ name = "[rid]-[title]-[date]-[time]"
 
 -   [seamui](https://github.com/kirito41dd/seamui) 由 [kirito41dd](https://github.com/kirito41dd) 开发的`seam`图形化界面
 
+## 贡献者
+
+[![GitHub
+Contributors](https://contrib.rocks/image?repo=Borber/seam)](https://github.com/Borber/seam/graphs/contributors)
+
 # 感谢
 
 -   [wbt5/real-url](https://github.com/wbt5/real-url/)
