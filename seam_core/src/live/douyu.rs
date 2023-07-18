@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use crate::{
     common::CLIENT,
     error::{Result, SeamError},
-    util::{eval, get_plugin_path, parse_url},
+    util::{eval, get_plugin_path, hash2header, parse_url},
 };
 
 use async_trait::async_trait;
@@ -28,7 +28,7 @@ pub struct Client;
 
 #[async_trait]
 impl Live for Client {
-    async fn get(&self, rid: &str) -> Result<Node> {
+    async fn get(&self, rid: &str, headers: Option<HashMap<String, String>>) -> Result<Node> {
         let plugin = get_plugin_path();
         if !plugin.exists() {
             return Err(SeamError::Plugin("缺少插件:请前往 https://github.com/Borber/Jin/releases/latest 下载对应平台的 jin 可执行文件并解压到 seam 同级目录.\nMissing plugin: Please go to https://github.com/Borber/Jin/releases/latest to download the jin executable for the corresponding platform and extract it to the same level as seam.".to_string()));
@@ -37,7 +37,7 @@ impl Live for Client {
             Some(rid) => rid,
             None => return Err(SeamError::None),
         };
-        douyu_do_js(&rid).await
+        douyu_do_js(&rid, headers).await
     }
 }
 
@@ -148,7 +148,7 @@ async fn douyu_do_js_pc(rid: &str) -> Result<Node> {
     }
 }
 
-async fn douyu_do_js(rid: &str) -> Result<Node> {
+async fn douyu_do_js(rid: &str, headers: Option<HashMap<String, String>>) -> Result<Node> {
     // 构造时间戳
     let binding = Local::now().timestamp_millis().to_string();
     let dt = &binding.as_str()[0..10];
@@ -156,6 +156,7 @@ async fn douyu_do_js(rid: &str) -> Result<Node> {
     // 获取指定直播间的首页源代码, 认证的sign和直播间是绑定的
     let text = CLIENT
         .get(format!("{M_URL}{rid}"))
+        .headers(hash2header(headers))
         .send()
         .await?
         .text()

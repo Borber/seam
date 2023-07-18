@@ -1,7 +1,9 @@
+use std::collections::HashMap;
+
 use crate::{
     common::CLIENT,
     error::{Result, SeamError},
-    util::parse_url,
+    util::{hash2header, parse_url},
 };
 
 use async_trait::async_trait;
@@ -19,10 +21,11 @@ pub struct Client;
 // TODO 似乎某些房间有额外的 flv 地址
 #[async_trait]
 impl Live for Client {
-    async fn get(&self, rid: &str) -> Result<Node> {
+    async fn get(&self, rid: &str, headers: Option<HashMap<String, String>>) -> Result<Node> {
         let resp: serde_json::Value = CLIENT
             .get(URL)
             .query(&[("roomId", rid), ("appId", "1004")])
+            .headers(hash2header(headers))
             .send()
             .await?
             .json()

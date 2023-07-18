@@ -1,11 +1,12 @@
+use std::collections::HashMap;
+
 use async_trait::async_trait;
 use regex::Regex;
-use reqwest::header::HeaderMap;
 
 use crate::{
-    common::{CLIENT, USER_AGENT},
+    common::CLIENT,
     error::{Result, SeamError},
-    util::parse_url,
+    util::{hash2header, parse_url},
 };
 
 use super::{Live, Node};
@@ -19,26 +20,28 @@ pub struct Client;
 
 #[async_trait]
 impl Live for Client {
-    async fn get(&self, rid: &str) -> Result<Node> {
-        let mut header_map = HeaderMap::new();
-        header_map.insert("user-agent", USER_AGENT.parse()?);
+    async fn get(&self, rid: &str, headers: Option<HashMap<String, String>>) -> Result<Node> {
+        // TODO 提取到 cookie 中
+        // let mut header_map = HeaderMap::new();
+        // header_map.insert("user-agent", USER_AGENT.parse()?);
         // TODO 需要保存cookie 避免快速请求
-        let resp = CLIENT
-            .get(format!("{URL}{rid}"))
-            .headers(header_map.clone())
-            .send()
-            .await?;
-        let cookie = resp
-            .headers()
-            .get_all("set-cookie")
-            .iter()
-            .map(|x| x.to_str().unwrap().to_string())
-            .collect::<Vec<String>>()
-            .join("; ")
-            .to_string();
-        header_map.insert("cookie", cookie.parse()?);
+        // let resp = CLIENT
+        //     .get(format!("{URL}{rid}"))
+        //     .headers(header_map.clone())
+        //     .send()
+        //     .await?;
+        // let cookie = resp
+        //     .headers()
+        //     .get_all("set-cookie")
+        //     .iter()
+        //     .map(|x| x.to_str().unwrap().to_string())
+        //     .collect::<Vec<String>>()
+        //     .join("; ")
+        //     .to_string();
+        // header_map.insert("cookie", cookie.parse()?);
         let text = CLIENT
             .get(format!("{URL}{rid}"))
+            .headers(hash2header(headers))
             .send()
             .await?
             .text()

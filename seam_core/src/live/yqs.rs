@@ -3,7 +3,7 @@ use async_trait::async_trait;
 use crate::{
     common::CLIENT,
     error::{Result, SeamError},
-    util::parse_url,
+    util::{hash2header, parse_url},
 };
 
 use std::collections::HashMap;
@@ -19,10 +19,17 @@ pub struct Client;
 
 #[async_trait]
 impl Live for Client {
-    async fn get(&self, rid: &str) -> Result<Node> {
+    async fn get(&self, rid: &str, headers: Option<HashMap<String, String>>) -> Result<Node> {
         let mut params = HashMap::new();
         params.insert("roomId", rid);
-        let resp: serde_json::Value = CLIENT.post(URL).form(&params).send().await?.json().await?;
+        let resp: serde_json::Value = CLIENT
+            .post(URL)
+            .form(&params)
+            .headers(hash2header(headers))
+            .send()
+            .await?
+            .json()
+            .await?;
         let data = &resp["data"];
         match data["status"].as_i64() {
             Some(2) => {

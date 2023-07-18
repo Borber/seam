@@ -68,7 +68,7 @@ pub fn gen_test(input: TokenStream) -> TokenStream {
             #[tokio::test]
             async fn test_get() {
                 let cli = Client;
-                match cli.get(#arg).await {
+                match cli.get(#arg, None).await {
                     Ok(node) => println!("{}", node.json()),
                     Err(e) => println!("{e}"),
                 }

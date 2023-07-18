@@ -1,13 +1,14 @@
+use std::collections::HashMap;
+
 use async_trait::async_trait;
 use regex::Regex;
-use reqwest::header::HeaderMap;
 use serde_json::Value;
 use urlencoding::decode;
 
 use crate::{
-    common::{CLIENT, USER_AGENT},
+    common::CLIENT,
     error::{Result, SeamError},
-    util::parse_url,
+    util::{hash2header, parse_url},
 };
 
 use super::{Live, Node};
@@ -21,20 +22,21 @@ pub struct Client;
 
 #[async_trait]
 impl Live for Client {
-    async fn get(&self, rid: &str) -> Result<Node> {
-        let mut header_map = HeaderMap::new();
-        // 更新 cookie
-        header_map.insert("user-agent", USER_AGENT.parse()?);
-        let resp = CLIENT
-            .get(format!("{URL}{rid}"))
-            .headers(header_map.clone())
-            .send()
-            .await?;
-        header_map.insert("cookie", resp.headers().get("set-cookie").unwrap().clone());
+    async fn get(&self, rid: &str, headers: Option<HashMap<String, String>>) -> Result<Node> {
+        // 后续应提取到获取 cookie 的逻辑中
+        // let mut headers = hash2header(headers);
+        // // 更新 cookie
+        // headers.insert("user-agent", USER_AGENT.parse()?);
+        // let resp = CLIENT
+        //     .get(format!("{URL}{rid}"))
+        //     .headers(headers.clone())
+        //     .send()
+        //     .await?;
+        // header_map.insert("cookie", resp.headers().get("set-cookie").unwrap().clone());
         // 通过网页内容获取直播地址
         let resp = CLIENT
             .get(format!("{URL}{rid}"))
-            .headers(header_map)
+            .headers(hash2header(headers))
             .send()
             .await?;
         let resp_text = resp.text().await?;

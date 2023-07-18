@@ -8,7 +8,7 @@ pub async fn cli() -> Result<()> {
     let args = Cli::parse();
     let live = args.live;
     let rid = args.id;
-    let node = GLOBAL_CLIENT.get(&live).unwrap().get(&rid).await;
+    let node = GLOBAL_CLIENT.get(&live).unwrap().get(&rid, None).await;
 
     let node = match node {
         Ok(node) => node,

@@ -1,7 +1,10 @@
+use std::collections::HashMap;
+
 use async_trait::async_trait;
 
 use super::{Live, Node};
 use crate::error::{Result, SeamError};
+use crate::util::hash2header;
 use crate::{
     common::{CLIENT, USER_AGENT},
     util::parse_url,
@@ -18,10 +21,11 @@ pub struct Client;
 
 #[async_trait]
 impl Live for Client {
-    async fn get(&self, rid: &str) -> Result<Node> {
+    async fn get(&self, rid: &str, headers: Option<HashMap<String, String>>) -> Result<Node> {
         let resp: serde_json::Value = CLIENT
             .get(INIT_URL)
             .query(&[("id", rid)])
+            .headers(hash2header(headers))
             .send()
             .await?
             .json()

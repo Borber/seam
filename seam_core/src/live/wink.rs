@@ -7,7 +7,7 @@ use async_trait::async_trait;
 use crate::{
     common::CLIENT,
     error::{Result, SeamError},
-    util::parse_url,
+    util::{hash2header, parse_url},
 };
 
 use super::{Live, Node};
@@ -19,11 +19,18 @@ pub struct Client;
 
 #[async_trait]
 impl Live for Client {
-    async fn get(&self, rid: &str) -> Result<Node> {
+    async fn get(&self, rid: &str, headers: Option<HashMap<String, String>>) -> Result<Node> {
         let mut form = HashMap::new();
         form.insert("action", "watch");
         form.insert("userId", rid);
-        let json: serde_json::Value = CLIENT.post(URL).form(&form).send().await?.json().await?;
+        let json: serde_json::Value = CLIENT
+            .post(URL)
+            .form(&form)
+            .headers(hash2header(headers))
+            .send()
+            .await?
+            .json()
+            .await?;
         match &json["PlayList"] {
             serde_json::Value::Null => Err(SeamError::None),
             list => {
