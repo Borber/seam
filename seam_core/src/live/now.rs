@@ -27,7 +27,6 @@ impl Live for Client {
             .await?
             .json()
             .await?;
-        println!("{}", format!("{URL}{rid}"));
         match &json["result"]["is_on_live"].as_bool().unwrap() {
             true => {
                 let mut urls = vec![];

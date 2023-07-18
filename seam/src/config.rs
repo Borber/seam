@@ -5,37 +5,43 @@ use serde::Deserialize;
 
 use crate::util::bin_dir;
 
+// TODO 可能需要区分全局配置和平台单独配置
+
 #[derive(Deserialize, Debug)]
-pub struct ConfigFile {
-    pub video: Option<Video>,
-    pub danmu: Option<Danmu>,
+pub struct ConfigOption {
+    pub file_name: Option<FileNameOption>,
     pub cookie: Option<HashMap<String, HashMap<String, String>>>,
 }
 
 #[derive(Debug)]
 pub struct Config {
-    pub video: Video,
-    pub danmu: Danmu,
+    pub file_name: FileNameConfig,
     pub cookie: HashMap<String, HashMap<String, String>>,
 }
 
-#[derive(Deserialize, Debug)]
-pub struct Video {
-    pub name: String,
+#[derive(Debug)]
+pub struct FileNameConfig {
+    pub video: String,
+    pub danmu: String,
 }
 
 #[derive(Deserialize, Debug)]
-pub struct Danmu {
-    pub name: String,
+pub struct FileNameOption {
+    pub video: Option<String>,
+    pub danmu: Option<String>,
 }
 
 /// 配置文件
 pub static CONFIG: Lazy<Config> = Lazy::new(|| {
     let config = std::fs::read_to_string(format!("{}config.toml", bin_dir(),)).unwrap();
-    let config_file = basic_toml::from_str::<ConfigFile>(&config).unwrap();
+    let config_file = basic_toml::from_str::<ConfigOption>(&config).unwrap();
     Config {
-        video: config_file.video.unwrap(),
-        danmu: config_file.danmu.unwrap(),
+        file_name: {
+            let FileNameOption { video, danmu } = config_file.file_name.unwrap();
+            let video = video.unwrap_or_else(|| "[rid]-[title]-[date]-[time]".to_string());
+            let danmu = danmu.unwrap_or_else(|| "[rid]-[title]-[date]-[time]".to_string());
+            FileNameConfig { video, danmu }
+        },
         cookie: config_file.cookie.unwrap(),
     }
 });
@@ -49,7 +55,7 @@ mod tests {
     #[test]
     fn test_config() {
         // 初始化 CONFIG
-        let _ = CONFIG.video;
+        let _ = CONFIG.file_name.video;
         println!("{:#?}", CONFIG);
     }
 }

@@ -22,6 +22,7 @@ pub struct Client;
 
 #[async_trait]
 impl Live for Client {
+    // TODO 说明所需 cookie
     async fn get(&self, rid: &str, headers: Option<HashMap<String, String>>) -> Result<Node> {
         // 后续应提取到获取 cookie 的逻辑中
         // let mut headers = hash2header(headers);

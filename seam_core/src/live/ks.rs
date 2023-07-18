@@ -20,6 +20,7 @@ pub struct Client;
 
 #[async_trait]
 impl Live for Client {
+    // TODO 说明所需 cookie
     async fn get(&self, rid: &str, headers: Option<HashMap<String, String>>) -> Result<Node> {
         // TODO 提取到 cookie 中
         // let mut header_map = HeaderMap::new();
