@@ -72,12 +72,20 @@
 # [time]: 时间戳
 # [date]: 日期
 
+[file_name]
 # 录制文件标题
-[video]
-name = "[rid]-[title]-[date]-[time]"
-# 录制文件标题
-[danmu]
-name = "[rid]-[title]-[date]-[time]"
+video = "[rid]-[title]-[date]-[time]"
+# danmu文件标题
+danmu = "[rid]-[title]-[date]-[time]"
+
+# 各平台cookie
+[cookie.bili]
+cookie = "xxxx"
+user-agent = "xxxx"
+
+[cookie.huya]
+cookie = "xxxx"
+user-agent = "xxxx"
 ```
 
 # 路线
