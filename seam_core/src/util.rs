@@ -23,11 +23,12 @@ pub async fn eval(js: &str) -> String {
 pub fn get_plugin_path() -> PathBuf {
     let exe_path = std::env::current_exe().unwrap();
     let exe_dir = exe_path.parent().unwrap();
-    // 通过系统定义插件后缀
-    #[cfg(windows)]
-    let plugin_file = "jin.exe";
-    #[cfg(not(windows))]
-    let plugin_file = "jin";
+    // 获取插件文件名
+    let plugin_file = if cfg!(target_os = "windows") {
+        "jin.exe"
+    } else {
+        "jin"
+    };
     exe_dir.join(plugin_file)
 }
 
