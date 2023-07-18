@@ -90,8 +90,7 @@ name = "[rid]-[title]-[date]-[time]"
 
 ## 贡献者
 
-[![GitHub
-Contributors](https://contrib.rocks/image?repo=Borber/seam)](https://github.com/Borber/seam/graphs/contributors)
+[![GitHub Contributors](https://contrib.rocks/image?repo=Borber/seam)](https://github.com/Borber/seam/graphs/contributors)
 
 # 感谢
 
