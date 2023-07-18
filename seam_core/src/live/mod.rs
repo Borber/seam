@@ -36,7 +36,7 @@ pub mod yqs;
 pub trait Live: Send + Sync {
     // 获取直播源
     // rid: 直播间号
-    async fn get(&self, rid: &str, headers: Option<HashMap<String, String>>) -> Result<Node>;
+    async fn get(&self, rid: &str, headers: &Option<HashMap<String, String>>) -> Result<Node>;
 }
 
 // 返回所有受支持的直播平台 对应的 hashmap
@@ -50,7 +50,7 @@ mod test {
     async fn test_get() {
         println!(
             "{:#?}",
-            all().get("bili").unwrap().get("6", None).await.unwrap()
+            all().get("bili").unwrap().get("6", &None).await.unwrap()
         );
     }
 }

@@ -14,7 +14,7 @@ mod tests {
             super::GLOBAL_CLIENT
                 .get("bili")
                 .unwrap()
-                .get("6", None)
+                .get("6", &None)
                 .await
                 .unwrap()
         );
