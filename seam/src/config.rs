@@ -6,10 +6,17 @@ use serde::Deserialize;
 use crate::util::bin_dir;
 
 #[derive(Deserialize, Debug)]
+pub struct ConfigFile {
+    pub video: Option<Video>,
+    pub danmu: Option<Danmu>,
+    pub cookie: Option<HashMap<String, HashMap<String, String>>>,
+}
+
+#[derive(Debug)]
 pub struct Config {
     pub video: Video,
     pub danmu: Danmu,
-    pub cookie: Option<HashMap<String, String>>,
+    pub cookie: HashMap<String, HashMap<String, String>>,
 }
 
 #[derive(Deserialize, Debug)]
@@ -25,8 +32,15 @@ pub struct Danmu {
 /// 配置文件
 pub static CONFIG: Lazy<Config> = Lazy::new(|| {
     let config = std::fs::read_to_string(format!("{}config.toml", bin_dir(),)).unwrap();
-    basic_toml::from_str::<Config>(&config).unwrap()
+    let config_file = basic_toml::from_str::<ConfigFile>(&config).unwrap();
+    Config {
+        video: config_file.video.unwrap(),
+        danmu: config_file.danmu.unwrap(),
+        cookie: config_file.cookie.unwrap(),
+    }
 });
+
+// TODO 默认配置文件
 
 #[cfg(test)]
 mod tests {
@@ -35,7 +49,7 @@ mod tests {
     #[test]
     fn test_config() {
         // 初始化 CONFIG
-        let _ = CONFIG.video.name.clone();
+        let _ = CONFIG.video;
         println!("{:#?}", CONFIG);
     }
 }

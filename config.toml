@@ -12,7 +12,10 @@ name = "[rid]-[title]-[date]-[time]"
 name = "[rid]-[title]-[date]-[time]"
 
 # 各平台cookie
-[cookie]
-bili = "xxxx"
-douyu = "xxxx"
-huya = "xxxx"
+[cookie.bili]
+cookie = "xxxx"
+user-agent = "xxxx"
+
+[cookie.huya]
+cookie = "xxxx"
+user-agent = "xxxx"
