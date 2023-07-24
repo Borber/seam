@@ -30,6 +30,7 @@ pub mod wink;
 pub mod yqs;
 
 // TODO 新增 可选 headermap 参数, 用于设置请求头
+// TODO 调整平台名称缩写， 尽量使用官方完整名称
 
 /// 直播信息模块
 #[async_trait]
