@@ -10,7 +10,7 @@ seam_status = { path = "../seam_status" }
 thiserror = "1"
 serde_json = "1"
 tokio = { version = "1", features = ["full"] }
-tokio-tungstenite = { version = "0.19", features = ["native-tls"] }
+tokio-tungstenite = { version = "0.20", features = ["native-tls"] }
 futures-sink = "0.3"
 futures-util = { version = "0.3", default-features = false, features = [
     "sink",

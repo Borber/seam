@@ -105,3 +105,13 @@ user-agent = "xxxx"
 -   [wbt5/real-url](https://github.com/wbt5/real-url/)
 -   [banner](https://textkool.com/en/ascii-art-generator?hl=default&vl=default&font=Chunky&text=SEAM)
 -   [手把手教你破解斗鱼 sign 算法](https://zhuanlan.zhihu.com/p/107330805)
+
+## Star History
+
+<a href="https://github.com/Borber/seam/stargazers">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=Borber/seam&type=Date&theme=dark" />
+    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=Borber/seam&type=Date" />
+    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=Borber/seam&type=Date" />
+  </picture>
+</a>
