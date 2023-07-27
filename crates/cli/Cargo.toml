@@ -7,9 +7,9 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-seam_core = { path = "../seam_core" }
-seam_danmu = { path = "../seam_danmu" }
-seam_status = { path = "../seam_status" }
+seam_core = { path = "../core" }
+seam_danmu = { path = "../danmu" }
+seam_status = { path = "../status" }
 
 anyhow = "1.0"
 tokio = { version = "1", features = ["full"] }

@@ -6,7 +6,7 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-seam_status = { path = "../seam_status" }
+seam_status = { path = "../status" }
 thiserror = "1"
 serde_json = "1"
 tokio = { version = "1", features = ["full"] }

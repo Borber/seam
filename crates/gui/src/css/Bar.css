@@ -1,0 +1,29 @@
+.top-bar {
+    width: 100%;
+    height: 35px;
+    background-color: #1e1e1e;
+    text-align: right;
+}
+
+.top-bar-button-container {
+    float: right;
+    display: flex;
+    text-align: center;
+    justify-content: center;
+}
+
+.top-bar-button {
+    color: #5b595c;
+    box-sizing: border-box;
+    padding: 10px 15px;
+}
+
+.top-bar-button:hover {
+    color: #fff;
+    background-color: #373737;
+}
+
+.top-bar-button.top-bar-close:hover {
+    color: #fff;
+    background-color: #cd1a2b;
+}

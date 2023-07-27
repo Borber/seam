@@ -1,5 +1,12 @@
 [workspace]
-members = ["seam", "seam_core", "seam_core_marcos", "seam_danmu", "seam_status"]
+members = [
+    "crates/cli",
+    "crates/gui/src-tauri",
+    "crates/core",
+    "crates/danmu",
+    "crates/marcos",
+    "crates/status",
+]
 resolver = "2"
 
 [profile.release]

@@ -1,0 +1,30 @@
+{
+    "name": "uase",
+    "version": "0.1.0",
+    "description": "",
+    "scripts": {
+        "start": "vite",
+        "dev": "vite",
+        "build": "vite build",
+        "serve": "vite preview",
+        "tauri": "tauri",
+        "fix": "eslint --fix src/**"
+    },
+    "license": "MIT",
+    "dependencies": {
+        "@tauri-apps/api": "^1.4.0",
+        "solid-js": "^1.7.8"
+    },
+    "devDependencies": {
+        "@tauri-apps/cli": "^1.4.0",
+        "@types/node": "^20.4.5",
+        "@typescript-eslint/eslint-plugin": "^6.2.0",
+        "@typescript-eslint/parser": "^6.2.0",
+        "eslint": "^8.45.0",
+        "eslint-plugin-simple-import-sort": "^10.0.0",
+        "eslint-plugin-solid": "^0.12.1",
+        "typescript": "^5.1.6",
+        "vite": "^4.4.7",
+        "vite-plugin-solid": "^2.7.0"
+    }
+}

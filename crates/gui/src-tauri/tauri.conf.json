@@ -1,0 +1,56 @@
+{
+    "build": {
+        "beforeDevCommand": "yarn dev",
+        "beforeBuildCommand": "yarn build",
+        "devPath": "http://localhost:1420",
+        "distDir": "../dist",
+        "withGlobalTauri": false
+    },
+    "package": {
+        "productName": "seam",
+        "version": "0.1.0"
+    },
+    "tauri": {
+        "bundle": {
+            "active": true,
+            "targets": "all",
+            "identifier": "com.borber.seam",
+            "icon": [
+                "icons/32x32.png",
+                "icons/128x128.png",
+                "icons/128x128@2x.png",
+                "icons/icon.icns",
+                "icons/icon.ico"
+            ]
+        },
+        "allowlist": {
+            "all": false,
+            "shell": {
+                "all": false,
+                "open": true
+            },
+            "window": {
+                "startDragging": true,
+                "show": true,
+                "maximize": true,
+                "minimize": true,
+                "close": true
+            }
+        },
+        "security": {
+            "csp": null
+        },
+        "windows": [
+            {
+                "fullscreen": false,
+                "resizable": false,
+                "title": "Seam",
+                "width": 666,
+                "height": 412,
+                "decorations": false,
+                "center": true,
+                "visible": false
+            }
+        ]
+    }
+}

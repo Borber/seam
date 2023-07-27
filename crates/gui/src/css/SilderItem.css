@@ -1,0 +1,47 @@
+.sider-item {
+    width: calc(100% - 20px);
+    box-sizing: border-box;
+    padding: 10px;
+    margin: 3px 10px;
+    display: flex;
+}
+
+.sider-item:hover {
+    background-color: #363636;
+    border-radius: 5px;
+}
+
+.sider-item-info {
+    flex: 1;
+}
+
+.sider-item-name {
+    color: #fff;
+    font-size: 15px;
+}
+
+.sider-item-path {
+    padding-top: 3px;
+    color: #aaa9a9;
+    font-size: 12px;
+}
+
+.sider-item-menu {
+    display: inline;
+    justify-items: center;
+    padding: 7px 0;
+}
+
+.sider-item-svg-menu-icon {
+    height: 18px;
+    width: 18px;
+    stroke-width: 1.75px;
+    cursor: pointer;
+    color: #aaa9a9;
+    text-align: center;
+    justify-content: center;
+}
+
+.sider-item-svg-menu-icon:hover {
+    color: #fff;
+}

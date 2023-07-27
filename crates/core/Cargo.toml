@@ -4,7 +4,7 @@ version = "0.1.20"
 edition = "2021"
 
 [dependencies]
-macros = { package = "seam_core_marcos", path = "../seam_core_marcos" }
+macros = { package = "seam_marcos", path = "../marcos" }
 
 thiserror = "1"
 serde = { version = "1", features = ["derive"] }
