@@ -1,39 +1,34 @@
 import "../css/SilderItem.css";
 
+import toast from "solid-toast";
+
 export interface SilderItemProps {
-    name: string;
-    path: string;
+    live: string;
+    rid: string;
+    title: string;
+    url: string;
 }
 
-const More = () => {
-    return (
-        <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="sider-item-svg-menu-icon">
-            <circle cx="12" cy="12" r="1" />
-            <circle cx="12" cy="5" r="1" />
-            <circle cx="12" cy="19" r="1" />
-        </svg>
-    );
+const copy = async (text: string) => {
+    try {
+        await navigator.clipboard.writeText(text);
+        toast.success("复制成功");
+    } catch (err) {
+        toast.error("复制失败");
+    }
 };
 
 const SilderItem = (props: SilderItemProps) => {
     return (
         <div class="sider-item">
             <div class="sider-item-info">
-                <div class="sider-item-name">{props.name}</div>
-                <div class="sider-item-path">{props.path}</div>
+                <div class="sider-item-title">{props.title}</div>
+                <div class="sider-item-live-rid">
+                    {props.live} ◆ {props.rid}
+                </div>
             </div>
-            <div class="sider-item-menu">
-                <More />
+            <div class="sider-item-button">
+                <button onClick={() => copy(props.url)}>复制</button>
             </div>
         </div>
     );

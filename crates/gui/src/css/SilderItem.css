@@ -15,33 +15,18 @@
     flex: 1;
 }
 
-.sider-item-name {
+.sider-item-title {
     color: #fff;
-    font-size: 15px;
+    font-size: 14px;
 }
 
-.sider-item-path {
-    padding-top: 3px;
+.sider-item-live-rid {
     color: #aaa9a9;
     font-size: 12px;
 }
 
-.sider-item-menu {
-    display: inline;
-    justify-items: center;
-    padding: 7px 0;
-}
-
-.sider-item-svg-menu-icon {
-    height: 18px;
-    width: 18px;
-    stroke-width: 1.75px;
-    cursor: pointer;
-    color: #aaa9a9;
-    text-align: center;
-    justify-content: center;
-}
-
-.sider-item-svg-menu-icon:hover {
-    color: #fff;
+/* 垂直居中 */
+.sider-item-button {
+    display: flex;
+    align-items: center;
 }

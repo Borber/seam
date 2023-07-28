@@ -48,7 +48,7 @@ const Bar = (props: BarProps) => {
     const setting = { ...defaultProps, ...props };
     return (
         <>
-            <div class="top-bar">
+            <div data-tauri-drag-region class="top-bar">
                 <div class="top-bar-button-container">
                     <Show when={setting.minimize}>
                         <div
