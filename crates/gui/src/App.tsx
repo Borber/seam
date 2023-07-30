@@ -9,10 +9,25 @@ import Bar from "./components/Bar";
 import SilderItem, { SilderItemProps } from "./components/SilderItem";
 import allLives from "./model/Live";
 
+interface Node {
+    rid: string;
+    title: string;
+    urls: Url[];
+}
+
+interface Url {
+    format: string;
+    url: string;
+}
+
+interface Resp<T> {
+    code: number;
+    msg: string;
+    data: T;
+}
+
 const App = () => {
-    const [repos, setRepos] = createSignal<SilderItemProps[]>([
-        { live: "bili", rid: "12345", title: "BBBBB", url: "https://123.com" },
-    ]);
+    const [repos, setRepos] = createSignal<SilderItemProps[]>([]);
     const [live, setLive] = createSignal<string>("bili");
     const [rid, setRid] = createSignal<string>("");
 
@@ -34,24 +49,36 @@ const App = () => {
         appWindow.show();
     };
 
-    invoke<string>("greet");
+    // 向侧边栏顶部添加一个新的item
+    const addSiderItem = (node: Node) => {
+        console.log(node);
+        const newRepos = [
+            {
+                live: live(),
+                rid: rid(),
+                title: node.title,
+                url: node.urls[0].url,
+            },
+            ...repos(),
+        ];
+        setRepos(newRepos);
+    };
 
-    const onFuck = () => {
+    const onFuck = async () => {
         if (rid() == "") {
             toast.error("房间号不能为空");
         } else {
-            // TODO 调用服务获取信息
-            const newRepos = [
-                {
-                    live: live(),
-                    rid: rid(),
-                    title: rid(),
-                    url: "https://bilibili.com/" + rid(),
-                },
-                ...repos(),
-            ];
-            setRepos(newRepos);
-            toast.success("获取成功");
+            const result = await invoke<Resp<Node>>("url", {
+                live: live(),
+                rid: rid(),
+            });
+
+            if (result.code == 0) {
+                toast.success("获取成功");
+                addSiderItem(result.data);
+            } else {
+                toast.error(result.msg);
+            }
         }
     };
 

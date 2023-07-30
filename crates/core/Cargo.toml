@@ -7,17 +7,23 @@ edition = "2021"
 macros = { package = "seam_marcos", path = "../marcos" }
 
 thiserror = "1"
+once_cell = "1"
+async-trait = "0.1"
+
+tokio = { version = "1", features = ["full"] }
+
+
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
-tokio = { version = "1", features = ["full"] }
-reqwest = { version = "0.11", features = ["json", "gzip", "deflate"] }
 regex = "1"
 urlencoding = "2"
 chrono = "0.4"
 md-5 = "0.10"
 hex = "0.4"
-once_cell = "1"
-async-trait = "0.1"
+
+reqwest = { version = "0.11", features = ["json", "gzip", "deflate"] }
+
+boa_engine = "0.16"
 
 [target.'cfg(unix)'.dependencies]
 openssl = { version = '0.10', features = ["vendored"] }

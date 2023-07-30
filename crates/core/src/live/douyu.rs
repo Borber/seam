@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use crate::{
     common::CLIENT,
     error::{Result, SeamError},
-    util::{eval, get_plugin_path, hash2header, parse_url},
+    util::{eval, hash2header, parse_url},
 };
 
 use async_trait::async_trait;
@@ -30,10 +30,6 @@ pub struct Client;
 impl Live for Client {
     // TODO 说明所需 cookie
     async fn get(&self, rid: &str, headers: &Option<HashMap<String, String>>) -> Result<Node> {
-        let plugin = get_plugin_path();
-        if !plugin.exists() {
-            return Err(SeamError::Plugin("缺少插件:请前往 https://github.com/Borber/Jin/releases/latest 下载对应平台的 jin 可执行文件并解压到 seam 同级目录.\nMissing plugin: Please go to https://github.com/Borber/Jin/releases/latest to download the jin executable for the corresponding platform and extract it to the same level as seam.".to_string()));
-        }
         let rid = match real_rid(rid).await {
             Some(rid) => rid,
             None => return Err(SeamError::None),
@@ -86,7 +82,6 @@ async fn douyu_do_js_pc(rid: &str) -> Result<Node> {
     let re3 = Regex::new(r"eval\(strc\)[\s\S]*?\)").unwrap();
     let func = re3.replace_all(&func, "strc").to_string();
     let func = format!("{func}ub98484234(0,0,0)");
-    // println!("{func}");
 
     // 获取eval实际运行的字符串
     let res = eval(&func).await;
@@ -204,7 +199,6 @@ async fn douyu_do_js(rid: &str, headers: &Option<HashMap<String, String>>) -> Re
         "CryptoJS.MD5(cb).toString();",
         format!("\"{}\";", &rb).as_str(),
     );
-    // println!("{}", res);
     // 运行js获取签名值
     let res = res.trim().trim_matches('"');
     let sign = eval(res).await;
@@ -225,7 +219,6 @@ async fn douyu_do_js(rid: &str, headers: &Option<HashMap<String, String>>) -> Re
         .await?
         .json()
         .await?;
-    // println!("{:?}", json);
     match json["code"].as_i64().unwrap() {
         0 => {
             let url_origin = json["data"]["url"].as_str().unwrap();

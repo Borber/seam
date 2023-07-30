@@ -1,35 +1,19 @@
+use boa_engine::Context;
 use reqwest::header::HeaderMap;
 use reqwest::header::HeaderName;
 
 use crate::live::Format;
 use crate::live::Url;
 use std::collections::HashMap;
-use std::path::PathBuf;
 use std::str::FromStr;
 
 /// js运行时
 pub async fn eval(js: &str) -> String {
-    let plugin_path = get_plugin_path();
-    // 调用命令执行并返回字符串
-    let output = tokio::process::Command::new(plugin_path)
-        .arg(js)
-        .output()
-        .await
-        .unwrap();
-    String::from_utf8(output.stdout).unwrap()
-}
-
-// 获取插件地址
-pub fn get_plugin_path() -> PathBuf {
-    let exe_path = std::env::current_exe().unwrap();
-    let exe_dir = exe_path.parent().unwrap();
-    // 获取插件文件名
-    let plugin_file = if cfg!(target_os = "windows") {
-        "jin.exe"
-    } else {
-        "jin"
-    };
-    exe_dir.join(plugin_file)
+    let mut context = Context::default();
+    match context.eval(js) {
+        Ok(result) => result.display().to_string(),
+        Err(e) => e.display().to_string(),
+    }
 }
 
 pub fn match_format(url: &str) -> Format {
