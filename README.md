@@ -35,7 +35,7 @@
 
 使用中出现任何问题都可以提 issue, 或加入 TG 群进行反馈: [Telegram](https://t.me/seam_rust)
 
-下载链接: [Releases · seam]()
+下载链接: [Releases · seam GUI 预览版 v0.1.0](https://github.com/Borber/seam/releases/tag/pre-gui-v0.1.0)
 
 # 使用样例
 
