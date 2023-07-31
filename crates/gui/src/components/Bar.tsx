@@ -53,17 +53,21 @@ const Bar = (props: BarProps) => {
                     <Show when={setting.minimize}>
                         <div
                             class="top-bar-button"
+                            title="最小化"
                             onClick={() => appWindow.minimize()}>
                             {Minimize}
                         </div>
                     </Show>
                     <Show when={setting.maximize}>
-                        <div class="top-bar-button">{Maximize}</div>
+                        <div class="top-bar-button" title="最大化">
+                            {Maximize}
+                        </div>
                     </Show>
                     <Show when={setting.close}>
                         <div
                             class="top-bar-button top-bar-close"
-                            onClick={() => appWindow.close()}>
+                            onClick={() => appWindow.close()}
+                            title="关闭">
                             {Close}
                         </div>
                     </Show>
