@@ -167,7 +167,7 @@ legend {
 }
 
 body {
-  background: #fff;
+  background: #1e1e1e;
 }
 
 a,
@@ -185,4 +185,12 @@ input:-webkit-autofill {
 
 #root {
   height: 100%;
+}
+
+/*
+  禁止双指滑动滚动反弹效果
+  参考资料: https://developer.mozilla.org/zh-CN/docs/Web/CSS/overscroll-behavior
+*/
+body {
+  overscroll-behavior: none;
 }

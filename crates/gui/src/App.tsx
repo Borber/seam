@@ -93,7 +93,12 @@ const App = () => {
                 <div data-tauri-drag-region class="loader">
                     <Bar maximize={false} />
                     <div data-tauri-drag-region class="release">
-                        <img src={logo} alt="Logo" width={"100px"} />
+                        <img
+                            data-tauri-drag-region
+                            src={logo}
+                            alt="Logo"
+                            width={"100px"}
+                        />
                         <div class="name">Seam</div>
                         <div class="version">0.1.0</div>
                     </div>
