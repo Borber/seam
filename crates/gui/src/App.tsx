@@ -32,10 +32,12 @@ const App = () => {
     const [rid, setRid] = createSignal<string>("");
 
     onMount(async () => {
-        // 全局取消右键菜单;
-        // document.oncontextmenu = (event) => {
-        //     event.preventDefault();
-        // };
+        // 生产环境, 全局取消右键菜单;
+        if (!import.meta.env.DEV) {
+            document.oncontextmenu = (event) => {
+                event.preventDefault();
+            };
+        }
 
         // 避免窗口闪烁, 等待500ms再显示窗口
         // 这个该死的bug什么时候才能修
