@@ -28,6 +28,14 @@ impl Live for Client {
             .await?
             .text()
             .await?;
+
+        // TODO 开播状态需要重新判断
+
+        let re_title = Regex::new(r#"content="【(.+)】"#).unwrap();
+        let title = match re_title.captures(&text) {
+            Some(cap) => cap.get(1).unwrap().as_str().to_owned(),
+            None => "huajiao".to_owned(),
+        };
         let re1 = Regex::new(r#"sn":"([\s\S]*?)""#).unwrap();
         let re2 = Regex::new(r#""replay_status":([0-9]*)"#).unwrap();
         let sn = match re1.captures(&text) {
@@ -51,7 +59,7 @@ impl Live for Client {
                 ))];
                 Ok(Node {
                     rid: rid.to_owned(),
-                    title: "huajiao".to_owned(),
+                    title,
                     urls,
                 })
             }
