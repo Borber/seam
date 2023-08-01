@@ -28,7 +28,6 @@ impl Live for Client {
             .await?
             .text()
             .await?;
-        println!("{}", text);
         let re1 = Regex::new(r#"sn":"([\s\S]*?)""#).unwrap();
         let re2 = Regex::new(r#""replay_status":([0-9]*)"#).unwrap();
         let sn = match re1.captures(&text) {
