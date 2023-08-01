@@ -28,6 +28,7 @@ impl Live for Client {
             .await?
             .text()
             .await?;
+        println!("{}", text);
         let re1 = Regex::new(r#"sn":"([\s\S]*?)""#).unwrap();
         let re2 = Regex::new(r#""replay_status":([0-9]*)"#).unwrap();
         let sn = match re1.captures(&text) {
@@ -36,6 +37,7 @@ impl Live for Client {
         };
         let pls: Vec<&str> = sn.split('_').collect();
         let pl = pls[2].to_lowercase();
+        // TODO 处理 unwarp
         match re2
             .captures(&text)
             .unwrap()
