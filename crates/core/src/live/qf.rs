@@ -28,14 +28,18 @@ impl Live for Client {
             .await?
             .text()
             .await?;
+        let re_title = Regex::new(r"nickName: '(.+)'").unwrap();
+        let title = match re_title.captures(&text) {
+            Some(cap) => cap.get(1).unwrap().as_str().to_owned(),
+            None => "qf".to_owned(),
+        };
         let re = Regex::new(r"flvUrl:'([\s\S]*?)'").unwrap();
-        // TODO title
         match re.captures(&text) {
             Some(cap) => {
                 let urls = vec![parse_url(cap.get(1).unwrap().as_str().to_string())];
                 Ok(Node {
                     rid: rid.to_owned(),
-                    title: "qf".to_owned(),
+                    title,
                     urls,
                 })
             }
