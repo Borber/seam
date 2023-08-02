@@ -8,7 +8,13 @@ pub async fn cli() -> Result<()> {
     let args = Cli::parse();
     let live = args.live;
     let rid = args.id;
-    let node = GLOBAL_CLIENT.get(&live).unwrap().get(&rid, &None).await;
+    let node = match GLOBAL_CLIENT.get(&live) {
+        Some(client) => client.get(&rid, &None).await,
+        None => {
+            println!("目前暂不支持该平台");
+            return Ok(());
+        }
+    };
 
     let node = match node {
         Ok(node) => node,
