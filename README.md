@@ -71,7 +71,7 @@
 |         [虎牙](https://huya.com/)         |    huya    |                         `https://huya.com/<RID>`                         |          |                |
 |    [快手](https://live.kuaishou.com/)     |  kuaishou  |                   `https://live.kuaishou.com/u/<RID>`                    |          |                |
 |         [CC](https://cc.163.com/)         |     cc     |                        `https://cc.163.com/<RID>`                        |          |                |
-|     [花椒](https://www.huajiao.com/)      |  huajiao   |                    `https://www.huajiao.com/l/<RID>`                     |          |                |
+|     [花椒](https://www.huajiao.com/)      |  huajiao   |                    `https://www.huajiao.com/l/<RID>`                     |          |       ✅       |
 |      [艺气山](https://www.173.com/)       |    yqs     |                       `https://www.173.com/<RID>`                        |          |                |
 |      [棉花糖](https://www.2cq.com/)       |    mht     |                       `https://www.2cq.com/<RID>`                        |          |                |
 |       [kk](https://www.kktv5.com/)        |     kk     |                    `https://www.kktv5.com/show/<RID>`                    |          |                |
