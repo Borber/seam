@@ -1,7 +1,7 @@
 #!/bin/bash
 
 CUR_DIR=$(cd $(dirname $0) && pwd)
-VERSION=$(grep -E '^version' ${CUR_DIR}/../seam/Cargo.toml | awk '{print $3}' | sed 's/"//g')
+VERSION=$(grep -E '^version' ${CUR_DIR}/../seam/crates/cli/Cargo.toml | awk '{print $3}' | sed 's/"//g')
 
 ## Disable macos ACL file
 if [[ "$(uname -s)" == "Darwin" ]]; then
@@ -60,13 +60,13 @@ function build() {
     if [[ "${TARGET_FEATURES}" != "" ]]; then
         echo "* Building ${TARGET} package ${VERSION} with features \"${TARGET_FEATURES}\" ..."
 
-        cargo zigbuild --target "${TARGET}" \
+        cargo zigbuild --package seam --target "${TARGET}" \
         --features "${TARGET_FEATURES}" \
         --release
     else
         echo "* Building ${TARGET} package ${VERSION} ..."
 
-        cargo zigbuild --target "${TARGET}" \
+        cargo zigbuild --package seam --target "${TARGET}" \
         --release
     fi
 

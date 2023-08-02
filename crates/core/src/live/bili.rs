@@ -102,4 +102,4 @@ pub async fn get_bili_stream_info(rid: &str, qn: u64) -> Result<serde_json::Valu
 }
 
 #[cfg(test)]
-macros::gen_test!(6);
+macros::gen_test!(13550856);

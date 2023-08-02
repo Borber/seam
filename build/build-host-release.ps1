@@ -18,17 +18,17 @@ $TargetTriple = (rustc -Vv | Select-String -Pattern "host: (.*)" | ForEach-Objec
 Write-Host "Started building release for ${TargetTriple} ..."
 
 if ([string]::IsNullOrEmpty($Features)) {
-    cargo build --release
+    cargo build --package seam --release
 }
 else {
-    cargo build --release --features "${Features}"
+    cargo build --package seam --release --features "${Features}"
 }
 
 if (!$?) {
     exit $LASTEXITCODE
 }
 
-$Version = (Select-String -Pattern '^version *= *"([^"]*)"$' -Path "${PSScriptRoot}\..\seam\Cargo.toml" | ForEach-Object { $_.Matches.Value }).split()[-1]
+$Version = (Select-String -Pattern '^version *= *"([^"]*)"$' -Path "${PSScriptRoot}\..\seam\crates\cli\Cargo.toml" | ForEach-Object { $_.Matches.Value }).split()[-1]
 $Version = $Version -replace '"'
 
 $PackageReleasePath = "${PSScriptRoot}\release"
