@@ -110,7 +110,9 @@ const App = () => {
                         class="rid-input"
                         onInput={(event) => setRid(event.target.value)}
                     />
-                    <button onClick={async () => onFuck()}>获取</button>
+                    <button class="btn-orange" onClick={async () => onFuck()}>
+                        获取
+                    </button>
 
                     <div class="live-item-container">
                         <For each={allLives()}>

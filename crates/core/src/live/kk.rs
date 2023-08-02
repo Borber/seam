@@ -28,6 +28,7 @@ impl Live for Client {
             .await?
             .text()
             .await?;
+        // TODO 需要额外请求获取title
         let re = Regex::new(r"http[\s\S]*?flv").unwrap();
         match re.captures(&text) {
             Some(cap) => {

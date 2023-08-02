@@ -194,3 +194,9 @@ input:-webkit-autofill {
 body {
   overscroll-behavior: none;
 }
+
+/* 选中颜色 */
+::selection {
+  background: #ff8c00;
+  color: #fff;
+}
