@@ -116,6 +116,7 @@ user-agent = "xxxx"
 # 相关项目
 
 -   [seamui](https://github.com/kirito41dd/seamui) 由 [kirito41dd](https://github.com/kirito41dd) 开发的`seam`图形化界面
+-   [SeamPotPlayer](https://github.com/chen310/SeamPotPlayer/) 由[chen310](https://github.com/chen310) 开发, 直接在 PotPlayer 中调用 seam 播放直播
 
 ## 贡献者
 
