@@ -1,8 +1,8 @@
-import { defineConfig } from "vite";
+import { type UserConfigExport, defineConfig } from "vite";
 import solidPlugin from "vite-plugin-solid";
 
 // https://vitejs.dev/config/
-export default defineConfig(async () => ({
+const config: UserConfigExport = async () => ({
   plugins: [solidPlugin()],
 
   // Vite options tailored for Tauri development and only applied in `tauri dev` or `tauri build`
@@ -20,7 +20,7 @@ export default defineConfig(async () => ({
     // Tauri supports es2021
     target: process.env.TAURI_PLATFORM == "windows" ? "chrome105" : "safari13",
     // don't minify for debug builds
-    minify: !process.env.TAURI_DEBUG ? "esbuild" : false,
+    minify: !process.env.TAURI_DEBUG || "esbuild",
     // produce sourcemaps for debug builds
     sourcemap: !!process.env.TAURI_DEBUG,
   },
@@ -32,6 +32,6 @@ export default defineConfig(async () => ({
       // globalModulePaths: ["./componentB.module.css"], // 代表不想参与到css模块化的路径
     }
   }
+});
 
-
-}));
+export default defineConfig(config);
