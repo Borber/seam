@@ -1,7 +1,7 @@
 #!/bin/bash
 
 CUR_DIR=$(cd $(dirname $0) && pwd)
-VERSION=$(grep -E '^version' ${CUR_DIR}/../seam/crates/cli/Cargo.toml | awk '{print $3}' | sed 's/"//g')
+VERSION=$(grep -E '^version' ${CUR_DIR}/../crates/cli/Cargo.toml | awk '{print $3}' | sed 's/"//g')
 
 ## Disable macos ACL file
 if [[ "$(uname -s)" == "Darwin" ]]; then

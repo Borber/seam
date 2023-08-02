@@ -1,1 +1,2 @@
 -   tauri github action build and release support
+-   改进编译脚本, 目前支持 windows, linux, macos
