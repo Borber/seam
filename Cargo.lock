@@ -388,7 +388,7 @@ version = "1.0.81"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6c6b2562119bf28c3439f7f02db99faf0aa1a8cdfe5772a2ee155d32227239f0"
 dependencies = [
-    "libc",
+ "libc",
 ]
 
 [[package]]
@@ -2370,7 +2370,7 @@ dependencies = [
  "line-wrap",
  "quick-xml",
  "serde",
-    "time 0.3.25",
+ "time 0.3.25",
 ]
 
 [[package]]
@@ -2986,7 +2986,7 @@ dependencies = [
  "serde",
  "serde_json",
  "serde_with_macros",
-    "time 0.3.25",
+ "time 0.3.25",
 ]
 
 [[package]]
@@ -3417,7 +3417,7 @@ dependencies = [
  "sha2",
  "tauri-utils",
  "thiserror",
-    "time 0.3.25",
+ "time 0.3.25",
  "uuid",
  "walkdir",
 ]

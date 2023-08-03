@@ -19,7 +19,7 @@ pub async fn cli() -> Result<()> {
     let node = match node {
         Ok(node) => node,
         Err(e) => {
-            println!("直播源获取失败，可能是直播间号错误或者平台不支持该直播间号。直播间号：{}，平台：{}，错误信息：{}", rid, live, e);
+            println!("{}", e.to_string());
             return Ok(());
         }
     };

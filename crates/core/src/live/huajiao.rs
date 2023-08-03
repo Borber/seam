@@ -29,41 +29,37 @@ impl Live for Client {
             .text()
             .await?;
 
-        // TODO 开播状态需要重新判断
-
-        let re_title = Regex::new(r#"content="【(.+)】"#).unwrap();
+        let re_title = Regex::new(r#"content="【(.+)】"#)?;
         let title = match re_title.captures(&text) {
-            Some(cap) => cap.get(1).unwrap().as_str().to_owned(),
-            None => "huajiao".to_owned(),
-        };
-        let re1 = Regex::new(r#"sn":"([\s\S]*?)""#).unwrap();
-        let re2 = Regex::new(r#""replay_status":([0-9]*)"#).unwrap();
-        let sn = match re1.captures(&text) {
-            Some(cap) => cap.get(1).unwrap().as_str(),
+            Some(cap) => match cap.get(1) {
+                Some(title) => title.as_str().to_owned(),
+                None => "Failed to get room name".to_owned(),
+            },
             None => return Err(SeamError::None),
         };
+        let re1 = Regex::new(r#"sn":"([\s\S]*?)""#)?;
+        let re2 = Regex::new(r#""replay_status":([0-9]*)"#)?;
+        let sn = match re1.captures(&text) {
+            Some(cap) => cap.get(1).ok_or(SeamError::None)?.as_str(),
+            None => return Err(SeamError::None),
+        };
+
         let pls: Vec<&str> = sn.split('_').collect();
         let pl = pls[2].to_lowercase();
-        // TODO 处理 unwarp
-        match re2
-            .captures(&text)
-            .unwrap()
-            .get(1)
-            .unwrap()
-            .as_str()
-            .parse::<i32>()?
-        {
-            0 => {
-                let urls = vec![parse_url(format!(
+
+        let captures = re2.captures(&text).ok_or(SeamError::None)?;
+        let code = captures.get(1).ok_or(SeamError::None)?.as_str();
+
+        if code == "0" {
+            Ok(Node {
+                rid: rid.to_owned(),
+                title,
+                urls: vec![parse_url(format!(
                     "https://{pl}-flv.live.huajiao.com/live_huajiao_v2/{sn}.m3u8"
-                ))];
-                Ok(Node {
-                    rid: rid.to_owned(),
-                    title,
-                    urls,
-                })
-            }
-            _ => Err(SeamError::None),
+                ))],
+            })
+        } else {
+            Err(SeamError::None)
         }
     }
 }
