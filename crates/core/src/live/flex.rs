@@ -19,7 +19,7 @@ pub struct Client;
 
 #[async_trait]
 impl Live for Client {
-    async fn get(&self, rid: &str, headers: &Option<HashMap<String, String>>) -> Result<Node> {
+    async fn get(&self, rid: &str, headers: &Option<&HashMap<String, String>>) -> Result<Node> {
         let json: serde_json::Value = CLIENT
             .get(URL.replace("rid", rid))
             .headers(hash2header(headers))

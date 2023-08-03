@@ -19,7 +19,7 @@ pub struct Client;
 
 #[async_trait]
 impl Live for Client {
-    async fn get(&self, rid: &str, headers: &Option<HashMap<String, String>>) -> Result<Node> {
+    async fn get(&self, rid: &str, headers: &Option<&HashMap<String, String>>) -> Result<Node> {
         let mut params = HashMap::new();
         params.insert("roomId", rid);
         let resp: serde_json::Value = CLIENT

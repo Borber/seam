@@ -42,7 +42,7 @@ pub static CONFIG: Lazy<Config> = Lazy::new(|| {
             let danmu = danmu.unwrap_or_else(|| "[rid]-[title]-[date]-[time]".to_string());
             FileNameConfig { video, danmu }
         },
-        cookie: config_file.cookie.unwrap(),
+        cookie: config_file.cookie.unwrap_or_default(),
     }
 });
 

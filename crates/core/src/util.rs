@@ -42,12 +42,19 @@ pub fn get_datetime() -> String {
     chrono::Local::now().format("%Y%m%d-%H%M%S-%3f").to_string()
 }
 
-pub fn hash2header(map: &Option<HashMap<String, String>>) -> HeaderMap {
+pub fn hash2header(map: &Option<&HashMap<String, String>>) -> HeaderMap {
     if let Some(map) = map {
         let mut headers = HeaderMap::new();
-        for (k, v) in map {
+        for (k, v) in map.iter() {
             if let Ok(k) = HeaderName::from_str(k) {
-                headers.insert(k, v.parse().unwrap());
+                match v.parse() {
+                    Ok(v) => {
+                        headers.insert(k, v);
+                    }
+                    Err(_) => {
+                        headers.insert(k, "".parse().unwrap());
+                    }
+                }
             }
         }
         headers
