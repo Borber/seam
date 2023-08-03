@@ -33,13 +33,17 @@ pub struct FileNameOption {
 
 /// 配置文件
 pub static CONFIG: Lazy<Config> = Lazy::new(|| {
-    let config = std::fs::read_to_string(format!("{}config.toml", bin_dir(),)).unwrap();
+    let config =
+        std::fs::read_to_string(format!("{}config.toml", bin_dir(),)).unwrap_or("".to_owned());
     let config_file = basic_toml::from_str::<ConfigOption>(&config).unwrap();
     Config {
         file_name: {
-            let FileNameOption { video, danmu } = config_file.file_name.unwrap();
-            let video = video.unwrap_or_else(|| "[rid]-[title]-[date]-[time]".to_string());
-            let danmu = danmu.unwrap_or_else(|| "[rid]-[title]-[date]-[time]".to_string());
+            let FileNameOption { video, danmu } = config_file.file_name.unwrap_or(FileNameOption {
+                video: None,
+                danmu: None,
+            });
+            let video = video.unwrap_or("[rid]-[title]-[date]-[time]".to_string());
+            let danmu = danmu.unwrap_or("[rid]-[title]-[date]-[time]".to_string());
             FileNameConfig { video, danmu }
         },
         cookie: config_file.cookie.unwrap_or_default(),
