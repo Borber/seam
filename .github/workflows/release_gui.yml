@@ -1,0 +1,45 @@
+name: Build GUI release
+
+permissions:
+  contents: write
+
+on:
+  push:
+    tags:
+      - v_gui.*
+
+jobs:
+  build_seam:
+    strategy:
+      matrix:
+        platform: [macos-latest, ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'yarn'
+          cache-dependency-path: 'crates/gui/yarn.lock'
+      - name: Install Rust stable
+        uses: dtolnay/rust-toolchain@stable
+      - name: install dependencies (ubuntu only)
+        if: matrix.platform == 'ubuntu-latest'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.0-dev libappindicator3-dev librsvg2-dev patchelf
+      - name: install frontend dependencies
+        run: |
+          cd crates/gui
+          yarn install --frozen-lockfile
+      - uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          projectPath: 'crates/gui'
+          tagName: ${{ github.ref_name }}
+          releaseName: 'Seam ${{ github.ref_name }}'
+          releaseBody: 'See the assets to download this version and install.'
+          releaseDraft: false
+          prerelease: false
