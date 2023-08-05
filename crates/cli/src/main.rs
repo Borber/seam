@@ -16,59 +16,71 @@ ________ _______ _______ _______
 |_______|_______|___|___|__|_|__|", long_about = None)]
 struct Cli {
     /// 平台名称
-    #[arg(short = 'l', global = true)]
+    #[arg(short = 'l')]
     live: String,
     /// 直播间号
-    #[arg(short = 'i', global = true)]
-    id: String,
+    #[arg(short = 'i')]
+    id: Option<String>,
     /// 直接录播功能
-    #[arg(short = 'r', global = true)]
+    #[arg(short = 'r')]
     record: bool,
     /// 自动监控录播功能
-    #[arg(short = 'R', global = true)]
+    #[arg(short = 'R')]
     auto_record: bool,
     /// 输出到终端的弹幕功能
-    #[arg(short = 'd', global = true)]
+    #[arg(short = 'd')]
     danmu: bool,
     /// 根据参数指定的文件地址输出弹幕
-    #[arg(short = 'D', global = true)]
+    #[arg(short = 'D')]
     config_danmu: bool,
 }
 
 // 获取直播源的实现
 pub async fn cli() -> Result<()> {
-    let args = Cli::parse();
-    let live = args.live;
-    let rid = args.id;
+    let Cli {
+        live,
+        record,
+        id: rid,
+        danmu,
+        config_danmu,
+        auto_record,
+    } = Cli::parse();
+
+    if live == "list" {
+        println!(
+            "可用平台：{}",
+            GLOBAL_CLIENT.keys().cloned().collect::<Vec<_>>().join(", ")
+        );
+
+        return Ok(());
+    }
 
     let node = GLOBAL_CLIENT
         .get(&live)
         .unwrap()
-        .get(&rid, &CONFIG.cookie.get(&live))
+        .get(&rid.expect("请传递 -i 参数"), &CONFIG.cookie.get(&live))
         .await;
 
     let node = match node {
         Ok(node) => node,
         Err(e) => {
-            println!("{}", e.to_string());
+            println!("{}", e);
             return Ok(());
         }
     };
 
-    let record = args.record;
-
     // 无参数情况下，直接输出直播源信息
-    if !(args.danmu || args.config_danmu || record || args.auto_record) {
+    if !(danmu || config_danmu || record || auto_record) {
         println!("{}", &node.json());
         return Ok(());
     }
 
-    // 收集不同参数功能的异步线程handler
+    // 收集不同参数功能的异步线程 handler
     let mut thread_handlers = vec![];
 
     // 处理参数-d，直接输出弹幕。
     // 由于该函数为cli层，所以出错可以直接panic。
-    if args.danmu {
+    if danmu {
         let h = tokio::spawn(async move {
             // args.command
             //     .danmu(vec![&Terminal::try_new(None).unwrap()])
