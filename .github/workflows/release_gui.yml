@@ -57,7 +57,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           projectPath: 'crates/gui'
-          tagName: ${{ needs.create_release.outputs.version }}
+          tagName: '${{github.ref_name}}'
           releaseName: 'Seam ${{ needs.create_release.outputs.version }}'
           releaseBody: '${{ needs.create_release.outputs.changes }}'
           releaseDraft: false
