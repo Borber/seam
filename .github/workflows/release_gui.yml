@@ -59,6 +59,6 @@ jobs:
           projectPath: 'crates/gui'
           tagName: ${{ needs.create_release.outputs.version }}
           releaseName: 'Seam ${{ needs.create_release.outputs.version }}'
-          releaseBody: '${{ needs.create_release.outputs.changes }}}}'
+          releaseBody: '${{ needs.create_release.outputs.changes }}'
           releaseDraft: false
           prerelease: false
