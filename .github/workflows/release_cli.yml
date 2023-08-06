@@ -6,8 +6,7 @@ permissions:
 on:
   push:
     tags:
-      - v*
-      - '!v_gui*'
+      - v_cli.*
 
 env:
   CARGO_TERM_COLOR: always
@@ -20,7 +19,7 @@ jobs:
       - uses: taiki-e/create-gh-release-action@v1
         with:
           # (optional) Path to changelog.
-          changelog: CHANGELOG.md
+          changelog: ./crates/cli/CHANGELOG.md
           # (required) GitHub token for creating GitHub Releases.
           token: ${{ secrets.GITHUB_TOKEN }}
   build-cross:
