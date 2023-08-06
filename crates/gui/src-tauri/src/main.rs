@@ -21,8 +21,10 @@ async fn url(live: String, rid: String) -> Resp<Node> {
 async fn main() {
     tauri::Builder::default()
         .setup(|app| {
-            let window = app.get_window("main").unwrap();
-            set_shadow(&window, true).expect("Unsupported platform!");
+            if cfg!(any(target_os = "macos", target_os = "windows")) {
+                let window = app.get_window("main").unwrap();
+                set_shadow(&window, true).expect("Unknow error in the macos or windows platform");
+            }
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![url])

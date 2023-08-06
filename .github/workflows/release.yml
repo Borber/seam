@@ -7,6 +7,7 @@ on:
   push:
     tags:
       - v*
+      - '!v_gui*'
 
 env:
   CARGO_TERM_COLOR: always
@@ -89,7 +90,7 @@ jobs:
   build-unix:
     runs-on: ${{ matrix.os }}
     env:
-      BUILD_EXTRA_FEATURES: ""
+      BUILD_EXTRA_FEATURES: ''
       RUST_BACKTRACE: full
     strategy:
       matrix:
@@ -132,7 +133,7 @@ jobs:
   build-windows:
     runs-on: windows-latest
     env:
-      RUSTFLAGS: "-C target-feature=+crt-static"
+      RUSTFLAGS: '-C target-feature=+crt-static'
       RUST_BACKTRACE: full
     steps:
       - uses: actions/checkout@v3
