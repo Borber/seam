@@ -9,7 +9,26 @@ on:
       - v_gui.*
 
 jobs:
+  create_release:
+    runs-on: ubuntu-latest
+    outputs:
+      changes: ${{ steps.changelog_reader.outputs.changes }}
+      version: ${{ steps.changelog_reader.outputs.VERSION }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Get version number
+        run: |
+          VERSION=${{github.ref_name}}
+          echo "VERSION=${VERSION/v_gui\./}" >> $GITHUB_ENV
+      - name: Changelog Reader
+        id: changelog_reader
+        uses: mindsers/changelog-reader-action@v2.2.2
+        with:
+          path: './crates/gui/CHANGELOG.md'
+          version: ${{ env.VERSION }}
+
   build_seam:
+    needs: create_release
     strategy:
       matrix:
         platform: [macos-latest, ubuntu-latest, windows-latest]
@@ -38,8 +57,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           projectPath: 'crates/gui'
-          tagName: ${{ github.ref_name }}
-          releaseName: 'Seam ${{ github.ref_name }}'
-          releaseBody: 'See the assets to download this version and install.'
+          tagName: ${{ needs.create_release.outputs.version }}
+          releaseName: 'Seam ${{ needs.create_release.outputs.version }}'
+          releaseBody: '${{ needs.create_release.outputs.changes }}}}'
           releaseDraft: false
           prerelease: false
