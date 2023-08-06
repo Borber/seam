@@ -3,7 +3,7 @@ mod config;
 mod util;
 
 use crate::{common::GLOBAL_CLIENT, config::CONFIG};
-use anyhow::Result;
+use anyhow::{anyhow, Result};
 use clap::Parser;
 
 /// 获取直播源
@@ -20,7 +20,7 @@ struct Cli {
     live: String,
     /// 直播间号
     #[arg(short = 'i')]
-    id: Option<String>,
+    rid: Option<String>,
     /// 直接录播功能
     #[arg(short = 'r')]
     record: bool,
@@ -40,7 +40,7 @@ pub async fn cli() -> Result<()> {
     let Cli {
         live,
         record,
-        id: rid,
+        rid,
         danmu,
         config_danmu,
         auto_record,
@@ -51,27 +51,23 @@ pub async fn cli() -> Result<()> {
             "可用平台：{}",
             GLOBAL_CLIENT.keys().cloned().collect::<Vec<_>>().join(", ")
         );
-
         return Ok(());
     }
 
-    let node = GLOBAL_CLIENT
-        .get(&live)
-        .unwrap()
-        .get(&rid.expect("请传递 -i 参数"), &CONFIG.cookie.get(&live))
-        .await;
-
-    let node = match node {
-        Ok(node) => node,
-        Err(e) => {
-            println!("{}", e);
-            return Ok(());
+    let node = match (GLOBAL_CLIENT.get(&live), &rid) {
+        (Some(client), Some(rid)) => client.get(rid, &CONFIG.cookie.get(&live)).await,
+        (Some(_), None) => return Err(anyhow!("请传递 -i 参数")),
+        (None, _) => {
+            return Err(anyhow!(
+                "请检查 {} 是否为可用平台, 或前往 https://github.com/Borber/seam/issues 申请支持",
+                live
+            ))
         }
     };
 
     // 无参数情况下，直接输出直播源信息
     if !(danmu || config_danmu || record || auto_record) {
-        println!("{}", &node.json());
+        println!("{}", node?.json());
         return Ok(());
     }
 
