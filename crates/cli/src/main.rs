@@ -20,7 +20,7 @@ struct Cli {
     live: String,
     /// 直播间号
     #[arg(short = 'i')]
-    rid: Option<String>,
+    rid: String,
     /// 直接录播功能
     #[arg(short = 'r')]
     record: bool,
@@ -54,10 +54,9 @@ pub async fn cli() -> Result<()> {
         return Ok(());
     }
 
-    let node = match (GLOBAL_CLIENT.get(&live), &rid) {
-        (Some(client), Some(rid)) => client.get(rid, &CONFIG.cookie.get(&live)).await,
-        (Some(_), None) => return Err(anyhow!("请传递 -i 参数")),
-        (None, _) => {
+    let node = match GLOBAL_CLIENT.get(&live) {
+        Some(client) => client.get(&rid, &CONFIG.cookie.get(&live)).await,
+        None => {
             return Err(anyhow!(
                 "请检查 {} 是否为可用平台, 或前往 https://github.com/Borber/seam/issues 申请支持",
                 live
