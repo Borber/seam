@@ -1,3 +1,0 @@
--   tauri github action build and release support
--   改进编译脚本, 支持 windows, linux, macos 的 GUI 编译
--   有时候 当正则没法匹配到时, 具体是未开播还是算法出错没法判断

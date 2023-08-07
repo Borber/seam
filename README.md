@@ -13,31 +13,29 @@
 [Release]: https://github.com/Borber/seam/releases/latest
 [License]: https://img.shields.io/github/license/borber/seam?color=%2398cbed&logo=rust&style=for-the-badge
 
-原 `SBtream` 项目, 经历 python 不成熟的模仿, Java 重构烂尾, 目前使用 rust 进行重构开发
+> 原 `SBtream` 项目, 经历 python 不成熟的模仿, Java 重构烂尾, 目前使用 rust 进行重构开发
 
 多平台直播源地址获取
 
--   目前直播录制需要自行放置 ffmpeg 到 `seam` 可执行文件所在目录下, 未正式支持, 后续将优化此模块
+# 待办
 
-# 当前聚焦 - GUI
+欢迎各位大佬 PR , 积极响应, 友善沟通, 快速 CR, 给您最好的开源体验
+
+-   [ ] cookie 模块
+    -   [ ] 完善 cookie 模块
+    -   [ ] 添加强制需要 cookie 的平台,其方法上的注释
+    -   [ ] 添加对于 global cookie 的支持
+-   [ ] 拆分`解析失败错误返回`与`未开播错误`返回
+    -   在解析 `api`/`html` 时出错应该返回解析失败, 而不是未开播,以提醒用户, 以便在平台修改了 api 后能够及时修复
+-   [ ] GUI action 添加便携版本, 方便已经安装了 WebView2 的用户使用
+
+# GUI
 
 ![GUI](assets/gui.png)
 
-目前提供了简单的 GUI 界面, 进一步降低使用门槛
+[详情](crates/gui/README.md)
 
-基于 tauri 开发. 目前仅支持 Windows 平台 ,只是单纯的还没写 linux, macos 的 打包脚本, 有能力的小伙伴可以 `clone` 项目后自行打包.
-
-如果你是 win11, 或 win10 以下但安装过 webview2 可以直接使用, 否则你应该安装它, 下载链接: [WebView2](https://developer.microsoft.com/zh-cn/microsoft-edge/webview2/#download-section)
-
-**注意事项: 目前抖音和快手因为 cookie 模块的加入进行了较大修改, 所以目前请不要使用 GUI 获取这两个平台的直播源, 以及 目前仅 B 站和斗鱼支持直播间标题获取, 其他平台还需要后续更新提供支持**
-
-当前 GUI 界面 仅为早期版本, 后期会进行较大修改, 主播头像，直播封面，主播名称，全平台订阅，开播通知，自动录播 都会有的.
-
-使用中出现任何问题都可以提 issue, 或加入 TG 群进行反馈: [Telegram](https://t.me/seam_rust)
-
-下载链接: [Releases · seam GUI 预览版 v0.1.0](https://github.com/Borber/seam/releases/tag/pre-gui-v0.1.0)
-
-# 使用样例
+# CLI
 
 ```bash
 ❯ .\seam.exe -l douyu -i 88080
@@ -52,10 +50,7 @@
 ]
 ```
 
--   `-l` 代表平台, 目前支持的平台见下表
--   `-i` 代表直播间号, 也就是直播间链接中的 `rid`
-
-> 因为数据具有时效性, 所以具体链接使用 `url` 进行替换
+[详情](crates/cli/README.md)
 
 # 使用
 
