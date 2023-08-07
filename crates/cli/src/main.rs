@@ -14,13 +14,15 @@ ________ _______ _______ _______
 |     __|    ___|   _   |   |   |
 |__     |    ___|       |       |
 |_______|_______|___|___|__|_|__|", long_about = None)]
+#[command(subcommand_negates_reqs = true)]
+#[command(arg_required_else_help = true)]
 struct Cli {
     /// 平台名称
-    #[arg(short = 'l')]
-    live: String,
+    #[arg(short = 'l', required = true)]
+    live: Option<String>,
     /// 直播间号
-    #[arg(short = 'i')]
-    rid: String,
+    #[arg(short = 'i', required = true)]
+    rid: Option<String>,
     /// 直接录播功能
     #[arg(short = 'r')]
     record: bool,
@@ -33,25 +35,45 @@ struct Cli {
     /// 根据参数指定的文件地址输出弹幕
     #[arg(short = 'D')]
     config_danmu: bool,
+
+    #[command(subcommand)]
+    command: Option<Commands>,
+}
+
+#[derive(Parser, Debug)]
+enum Commands {
+    /// 显示所有平台
+    List,
 }
 
 // 获取直播源的实现
 pub async fn cli() -> Result<()> {
     let Cli {
         live,
-        record,
         rid,
+        record,
+        auto_record,
         danmu,
         config_danmu,
-        auto_record,
+        command,
     } = Cli::parse();
 
-    if live == "list" {
-        println!(
-            "可用平台：{}",
-            GLOBAL_CLIENT.keys().cloned().collect::<Vec<_>>().join(", ")
-        );
-        return Ok(());
+    // 获取参数
+    let live = live.ok_or(anyhow!("请指定平台名称"))?;
+    let rid = rid.ok_or(anyhow!("请指定直播间号"))?;
+
+    // 处理子命令
+    match command {
+        Some(Commands::List) => {
+            println!(
+                "可用平台：{}",
+                GLOBAL_CLIENT.keys().cloned().collect::<Vec<_>>().join(", ")
+            );
+            return Ok(());
+        }
+        _ => {
+            println!("欢迎使用 seam, 输入 seam --help 查看帮助");
+        }
     }
 
     let node = match GLOBAL_CLIENT.get(&live) {
