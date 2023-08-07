@@ -1,8 +1,10 @@
-<img src="icon.png" style="width: 100px;" alt="Seam" />
+<p align="center">
+    <img src="../../assets/icon.png" style="width: 150px;" alt="Seam" />
+</p>
 
-# Seam
-
-![GUI](../../assets/gui.png)
+<h2 align="center">
+  Seam
+</h2>
 
 目前提供了简单的 GUI 界面, 进一步降低使用门槛
 

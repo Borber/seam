@@ -1,17 +1,20 @@
-```
- _______ _______ _______ _______
-|     __|    ___|   _   |   |   |
-|__     |    ___|       |       |
-|_______|_______|___|___|__|_|__|
-```
+<p align="center">
+    <img src="./assets/icon.png" style="width: 150px;" alt="Seam" />
+</p>
 
-[![Github]][Repo] [![License]][Repo] [![Downloads]][Release]
+<h2 align="center">
+  Seam
+</h2>
 
-[Repo]: https://github.com/Borber/seam
-[Github]: https://img.shields.io/badge/github-Borber/seam-8da0cb.svg?style=for-the-badge&logo=github
-[Downloads]: https://img.shields.io/github/downloads/Borber/seam/total.svg?style=for-the-badge&color=82E0AA&logo=github
-[Release]: https://github.com/Borber/seam/releases/latest
-[License]: https://img.shields.io/github/license/borber/seam?color=%2398cbed&logo=rust&style=for-the-badge
+<h2 align="center">
+  <a href="https://github.com/Borber/seam">
+    <img src="https://img.shields.io/badge/github-Borber/seam-8da0cb.svg?style=for-the-badge&logo=github" alt="Github"/>
+  </a>
+  <a href="https://github.com/Borber/seam/releases/latest">
+    <img src="https://img.shields.io/github/downloads/Borber/seam/total.svg?style=for-the-badge&color=82E0AA&logo=github" alt="Downloads"/>
+  </a>
+  <img src="https://img.shields.io/github/license/borber/seam?color=%2398cbed&logo=rust&style=for-the-badge" alt="LICENSE"/>
+</h2>
 
 > 原 `SBtream` 项目, 经历 python 不成熟的模仿, Java 重构烂尾, 目前使用 rust 进行重构开发
 
@@ -34,7 +37,7 @@
 
 ![GUI](assets/gui.png)
 
-[详情](crates/gui/README.md)
+## [详情](crates/gui/README.md)
 
 # CLI
 
@@ -51,13 +54,13 @@
 ]
 ```
 
-[详情](crates/cli/README.md)
+## [详情](crates/cli/README.md)
+
+# 下载
+
+[Releases · seam](https://github.com/Borber/seam/releases) 下载 `GUI`/`CLI`可执行文件
 
 # 使用
-
--   [Releases · seam](https://github.com/Borber/seam/releases) 下载你对应平台的压缩包
-
--   解压后
 
 |                 **平台**                  | **子命令** |                             **`<RID>` 位置**                             | **弹幕** | **房间名获取** |
 | :---------------------------------------: | :--------: | :----------------------------------------------------------------------: | :------: | :------------: |
