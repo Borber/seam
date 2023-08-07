@@ -33,7 +33,10 @@ impl Live for Client {
         match re.captures(&text) {
             Some(cap) => {
                 let urls = vec![parse_url(
-                    cap.get(0).ok_or(SeamError::None)?.as_str().to_string(),
+                    cap.get(0)
+                        .ok_or(SeamError::NeedFix("captures"))?
+                        .as_str()
+                        .to_string(),
                 )];
                 Ok(Node {
                     rid: rid.to_owned(),

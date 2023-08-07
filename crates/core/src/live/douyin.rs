@@ -46,16 +46,16 @@ impl Live for Client {
             Regex::new(r#"<script id="RENDER_DATA" type="application/json">([\s\S]*?)</script>"#)?;
         let json = decode(
             re.captures(&resp_text)
-                .ok_or(SeamError::None)?
+                .ok_or(SeamError::NeedFix("captures"))?
                 .get(1)
-                .ok_or(SeamError::None)?
+                .ok_or(SeamError::NeedFix("json"))?
                 .as_str(),
         )?;
         let json: serde_json::Value = serde_json::from_str(&json)?;
 
         let room_info = &json["app"]["initialState"]["roomStore"]["roomInfo"];
         match room_info["anchor"] {
-            // 主播不存在
+            // TODO 主播不存在 这种需要额外判断吗?
             serde_json::Value::Null => Err(SeamError::None),
             _ => match &room_info["room"]["stream_url"] {
                 // 未开播
@@ -70,13 +70,13 @@ impl Live for Client {
                         parse_url(
                             stream_url["flv_pull_url"]["FULL_HD1"]
                                 .as_str()
-                                .ok_or(SeamError::None)?
+                                .ok_or(SeamError::NeedFix("flv_pull_url"))?
                                 .to_owned(),
                         ),
                         parse_url(
                             stream_url["hls_pull_url_map"]["FULL_HD1"]
                                 .as_str()
-                                .ok_or(SeamError::None)?
+                                .ok_or(SeamError::NeedFix("hls_pull_url_map"))?
                                 .to_owned(),
                         ),
                     ];

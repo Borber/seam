@@ -29,7 +29,7 @@ impl Live for Client {
             .await?;
         match &json["result"]["is_on_live"]
             .as_bool()
-            .ok_or(SeamError::None)?
+            .ok_or(SeamError::NeedFix("result"))?
         {
             true => {
                 let mut urls = vec![];

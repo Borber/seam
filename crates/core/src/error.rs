@@ -10,9 +10,9 @@ pub enum SeamError {
     Type(String),
     #[error("Serde json error: {0}")]
     Json(#[from] serde_json::Error),
-    #[error("regex error: {0}")]
+    #[error("Regex error: {0}")]
     Regex(#[from] regex::Error),
-    #[error("urlencoding error: {0}")]
+    #[error("Urlencoding error: {0}")]
     Decode(#[from] std::string::FromUtf8Error),
     #[error("InvalidHeaderValue error: {0}")]
     InvalidHeaderValue(#[from] reqwest::header::InvalidHeaderValue),
@@ -20,6 +20,8 @@ pub enum SeamError {
     ParseInt(#[from] std::num::ParseIntError),
     #[error("{0}")]
     Plugin(String),
+    #[error("Need fix {0}")]
+    NeedFix(&'static str),
     #[error("Not on")]
     None,
     #[error("Error msg: {0}")]

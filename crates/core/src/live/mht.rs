@@ -40,14 +40,14 @@ impl Live for Client {
                         let urls = vec![parse_url(
                             result["pullUrl"]
                                 .as_str()
-                                .ok_or(SeamError::None)?
+                                .ok_or(SeamError::NeedFix("pull url"))?
                                 .to_owned(),
                         )];
                         Ok(Node {
                             rid: rid.to_owned(),
                             title: result["roomName"]
                                 .as_str()
-                                .ok_or(SeamError::None)?
+                                .ok_or(SeamError::NeedFix("room name"))?
                                 .to_owned(),
                             urls,
                         })

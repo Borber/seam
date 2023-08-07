@@ -35,15 +35,16 @@ impl Live for Client {
         let rid = match resp["data"]["live_status"].as_i64() {
             Some(1) => resp["data"]["room_id"]
                 .as_u64()
-                .ok_or(SeamError::None)?
+                .ok_or(SeamError::NeedFix("room_id"))?
                 .to_string(),
             _ => return Err(SeamError::None),
         };
+
         let mut stream_info = get_bili_stream_info(&rid, 10000).await?;
 
         let max = stream_info
             .as_array()
-            .ok_or(SeamError::None)?
+            .ok_or(SeamError::NeedFix("stream_info"))?
             .iter()
             .map(|data| {
                 data["format"][0]["codec"][0]["accept_qn"]
@@ -55,18 +56,33 @@ impl Live for Client {
                     .unwrap()
             })
             .max()
-            .ok_or(SeamError::None)?;
+            .ok_or(SeamError::NeedFix("max"))?;
         if max != 10000 {
             stream_info = get_bili_stream_info(&rid, max).await?;
         }
         let mut urls = vec![];
-        for obj in stream_info.as_array().ok_or(SeamError::None)? {
-            for format in obj["format"].as_array().ok_or(SeamError::None)? {
-                for codec in format["codec"].as_array().ok_or(SeamError::None)? {
-                    let base_url = codec["base_url"].as_str().ok_or(SeamError::None)?;
-                    for url_info in codec["url_info"].as_array().ok_or(SeamError::None)? {
-                        let host = url_info["host"].as_str().ok_or(SeamError::None)?;
-                        let extra = url_info["extra"].as_str().ok_or(SeamError::None)?;
+        for obj in stream_info.as_array().ok_or(SeamError::NeedFix("obj"))? {
+            for format in obj["format"]
+                .as_array()
+                .ok_or(SeamError::NeedFix("format"))?
+            {
+                for codec in format["codec"]
+                    .as_array()
+                    .ok_or(SeamError::NeedFix("codec"))?
+                {
+                    let base_url = codec["base_url"]
+                        .as_str()
+                        .ok_or(SeamError::NeedFix("base_url"))?;
+                    for url_info in codec["url_info"]
+                        .as_array()
+                        .ok_or(SeamError::NeedFix("url_info"))?
+                    {
+                        let host = url_info["host"]
+                            .as_str()
+                            .ok_or(SeamError::NeedFix("host"))?;
+                        let extra = url_info["extra"]
+                            .as_str()
+                            .ok_or(SeamError::NeedFix("extra"))?;
                         urls.push(parse_url(format!("{host}{base_url}{extra}")));
                     }
                 }

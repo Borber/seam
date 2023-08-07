@@ -30,7 +30,7 @@ impl Live for Client {
             r#"<script id="__NEXT_DATA__" type="application/json" crossorigin="anonymous">([\s\S]*?)</script>"#,
         )?;
         let json = match re.captures(&text) {
-            Some(rap) => rap.get(1).ok_or(SeamError::None)?.as_str(),
+            Some(rap) => rap.get(1).ok_or(SeamError::NeedFix("json re"))?.as_str(),
             None => {
                 return Err(SeamError::None);
             }
@@ -39,7 +39,7 @@ impl Live for Client {
         let resolution = match &json["props"]["pageProps"]["roomInfoInitData"]["live"]["quickplay"]
             ["resolution"]
         {
-            serde_json::Value::Null => return Err(SeamError::None),
+            serde_json::Value::Null => return Err(SeamError::NeedFix("resolution")),
             v => v,
         };
         let title = json["props"]["pageProps"]["roomInfoInitData"]["live"]["title"]
@@ -53,7 +53,7 @@ impl Live for Client {
                     urls.push(parse_url(
                         resolution[vbr]["cdn"]["ali"]
                             .as_str()
-                            .ok_or(SeamError::None)?
+                            .ok_or(SeamError::NeedFix("cdn ali"))?
                             .to_string(),
                     ));
                 }
@@ -61,7 +61,7 @@ impl Live for Client {
                     urls.push(parse_url(
                         resolution[vbr]["cdn"]["ks"]
                             .as_str()
-                            .ok_or(SeamError::None)?
+                            .ok_or(SeamError::NeedFix("cdn ks"))?
                             .to_string(),
                     ));
                 }

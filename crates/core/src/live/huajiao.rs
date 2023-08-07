@@ -29,26 +29,27 @@ impl Live for Client {
             .text()
             .await?;
 
+        let re1 = Regex::new(r#"sn":"([\s\S]*?)""#)?;
+        let re2 = Regex::new(r#""replay_status":([0-9]*)"#)?;
+        let sn = match re1.captures(&text) {
+            Some(cap) => cap.get(1).ok_or(SeamError::NeedFix("sn"))?.as_str(),
+            None => return Err(SeamError::None),
+        };
+
         let re_title = Regex::new(r#"content="【(.+)】"#)?;
         let title = match re_title.captures(&text) {
             Some(cap) => match cap.get(1) {
                 Some(title) => title.as_str().to_owned(),
-                None => "Failed to get room name".to_owned(),
+                None => "获取失败".to_owned(),
             },
-            None => return Err(SeamError::None),
-        };
-        let re1 = Regex::new(r#"sn":"([\s\S]*?)""#)?;
-        let re2 = Regex::new(r#""replay_status":([0-9]*)"#)?;
-        let sn = match re1.captures(&text) {
-            Some(cap) => cap.get(1).ok_or(SeamError::None)?.as_str(),
-            None => return Err(SeamError::None),
+            None => "获取失败".to_owned(),
         };
 
         let pls: Vec<&str> = sn.split('_').collect();
         let pl = pls[2].to_lowercase();
 
         let captures = re2.captures(&text).ok_or(SeamError::None)?;
-        let code = captures.get(1).ok_or(SeamError::None)?.as_str();
+        let code = captures.get(1).ok_or(SeamError::NeedFix("code"))?.as_str();
 
         if code == "0" {
             Ok(Node {

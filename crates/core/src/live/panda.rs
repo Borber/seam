@@ -40,7 +40,7 @@ impl Live for Client {
                         urls.push(parse_url(
                             list[item][0]["url"]
                                 .as_str()
-                                .ok_or(SeamError::None)?
+                                .ok_or(SeamError::NeedFix("list"))?
                                 .to_string(),
                         ));
                     }

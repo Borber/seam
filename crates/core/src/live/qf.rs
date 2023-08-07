@@ -30,14 +30,21 @@ impl Live for Client {
             .await?;
         let re_title = Regex::new(r"nickName: '(.+)'")?;
         let title = match re_title.captures(&text) {
-            Some(cap) => cap.get(1).ok_or(SeamError::None)?.as_str().to_owned(),
+            Some(cap) => cap
+                .get(1)
+                .ok_or(SeamError::NeedFix("title"))?
+                .as_str()
+                .to_owned(),
             None => "qf".to_owned(),
         };
         let re = Regex::new(r"flvUrl:'([\s\S]*?)'")?;
         match re.captures(&text) {
             Some(cap) => {
                 let urls = vec![parse_url(
-                    cap.get(1).ok_or(SeamError::None)?.as_str().to_string(),
+                    cap.get(1)
+                        .ok_or(SeamError::NeedFix("captures"))?
+                        .as_str()
+                        .to_string(),
                 )];
                 Ok(Node {
                     rid: rid.to_owned(),
