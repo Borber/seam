@@ -44,7 +44,13 @@ impl Live for Client {
 
         let re =
             Regex::new(r#"<script id="RENDER_DATA" type="application/json">([\s\S]*?)</script>"#)?;
-        let json = decode(re.captures(&resp_text).unwrap().get(1).unwrap().as_str())?;
+        let json = decode(
+            re.captures(&resp_text)
+                .ok_or(SeamError::None)?
+                .get(1)
+                .ok_or(SeamError::None)?
+                .as_str(),
+        )?;
         let json: serde_json::Value = serde_json::from_str(&json)?;
 
         let room_info = &json["app"]["initialState"]["roomStore"]["roomInfo"];
@@ -64,13 +70,13 @@ impl Live for Client {
                         parse_url(
                             stream_url["flv_pull_url"]["FULL_HD1"]
                                 .as_str()
-                                .unwrap()
+                                .ok_or(SeamError::None)?
                                 .to_owned(),
                         ),
                         parse_url(
                             stream_url["hls_pull_url_map"]["FULL_HD1"]
                                 .as_str()
-                                .unwrap()
+                                .ok_or(SeamError::None)?
                                 .to_owned(),
                         ),
                     ];

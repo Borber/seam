@@ -29,10 +29,12 @@ impl Live for Client {
             .text()
             .await?;
         // TODO 需要额外请求获取title
-        let re = Regex::new(r"http[\s\S]*?flv").unwrap();
+        let re = Regex::new(r"http[\s\S]*?flv")?;
         match re.captures(&text) {
             Some(cap) => {
-                let urls = vec![parse_url(cap.get(0).unwrap().as_str().to_string())];
+                let urls = vec![parse_url(
+                    cap.get(0).ok_or(SeamError::None)?.as_str().to_string(),
+                )];
                 Ok(Node {
                     rid: rid.to_owned(),
                     title: "kk".to_owned(),

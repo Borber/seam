@@ -37,10 +37,18 @@ impl Live for Client {
                 match result["liveState"].to_string().parse::<usize>()? {
                     // 开播状态
                     1 => {
-                        let urls = vec![parse_url(result["pullUrl"].as_str().unwrap().to_owned())];
+                        let urls = vec![parse_url(
+                            result["pullUrl"]
+                                .as_str()
+                                .ok_or(SeamError::None)?
+                                .to_owned(),
+                        )];
                         Ok(Node {
                             rid: rid.to_owned(),
-                            title: result["roomName"].as_str().unwrap().to_owned(),
+                            title: result["roomName"]
+                                .as_str()
+                                .ok_or(SeamError::None)?
+                                .to_owned(),
                             urls,
                         })
                     }

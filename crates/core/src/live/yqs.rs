@@ -33,7 +33,9 @@ impl Live for Client {
         let data = &resp["data"];
         match data["status"].as_i64() {
             Some(2) => {
-                let urls = vec![parse_url(data["url"].as_str().unwrap().to_owned())];
+                let urls = vec![parse_url(
+                    data["url"].as_str().ok_or(SeamError::None)?.to_owned(),
+                )];
                 Ok(Node {
                     rid: rid.to_owned(),
                     title: "yqs".to_owned(),

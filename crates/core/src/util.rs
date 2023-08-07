@@ -1,6 +1,7 @@
 use boa_engine::Context;
 use reqwest::header::HeaderMap;
 use reqwest::header::HeaderName;
+use reqwest::header::HeaderValue;
 
 use crate::live::Format;
 use crate::live::Url;
@@ -52,7 +53,7 @@ pub fn hash2header(map: &Option<&HashMap<String, String>>) -> HeaderMap {
                         headers.insert(k, v);
                     }
                     Err(_) => {
-                        headers.insert(k, "".parse().unwrap());
+                        headers.insert(k, HeaderValue::from_static(""));
                     }
                 }
             }

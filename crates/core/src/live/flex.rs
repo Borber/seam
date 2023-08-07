@@ -30,7 +30,7 @@ impl Live for Client {
         match &json["sources"][0]["url"] {
             serde_json::Value::Null => Err(SeamError::None),
             url => {
-                let urls = vec![parse_url(url.as_str().unwrap().to_string())];
+                let urls = vec![parse_url(url.as_str().ok_or(SeamError::None)?.to_string())];
                 Ok(Node {
                     rid: rid.to_owned(),
                     title: "flex".to_owned(),

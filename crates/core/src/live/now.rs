@@ -27,7 +27,10 @@ impl Live for Client {
             .await?
             .json()
             .await?;
-        match &json["result"]["is_on_live"].as_bool().unwrap() {
+        match &json["result"]["is_on_live"]
+            .as_bool()
+            .ok_or(SeamError::None)?
+        {
             true => {
                 let mut urls = vec![];
                 for f in ["raw_flv_url", "raw_hls_url", "raw_rtmp_url"] {

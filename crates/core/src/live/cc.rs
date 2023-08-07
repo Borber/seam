@@ -26,9 +26,11 @@ impl Live for Client {
             .await?
             .text()
             .await?;
-        let re = Regex::new(r#"<script id="__NEXT_DATA__" type="application/json" crossorigin="anonymous">([\s\S]*?)</script>"#).unwrap();
+        let re = Regex::new(
+            r#"<script id="__NEXT_DATA__" type="application/json" crossorigin="anonymous">([\s\S]*?)</script>"#,
+        )?;
         let json = match re.captures(&text) {
-            Some(rap) => rap.get(1).unwrap().as_str(),
+            Some(rap) => rap.get(1).ok_or(SeamError::None)?.as_str(),
             None => {
                 return Err(SeamError::None);
             }
@@ -42,19 +44,25 @@ impl Live for Client {
         };
         let title = json["props"]["pageProps"]["roomInfoInitData"]["live"]["title"]
             .as_str()
-            .unwrap()
+            .unwrap_or("获取失败")
             .to_owned();
         let mut urls = vec![];
         for vbr in ["blueray", "ultra", "high", "standard"] {
             if resolution[vbr] != serde_json::Value::Null {
                 if resolution[vbr]["cdn"]["ali"] != serde_json::Value::Null {
                     urls.push(parse_url(
-                        resolution[vbr]["cdn"]["ali"].as_str().unwrap().to_string(),
+                        resolution[vbr]["cdn"]["ali"]
+                            .as_str()
+                            .ok_or(SeamError::None)?
+                            .to_string(),
                     ));
                 }
                 if resolution[vbr]["cdn"]["ks"] != serde_json::Value::Null {
                     urls.push(parse_url(
-                        resolution[vbr]["cdn"]["ks"].as_str().unwrap().to_string(),
+                        resolution[vbr]["cdn"]["ks"]
+                            .as_str()
+                            .ok_or(SeamError::None)?
+                            .to_string(),
                     ));
                 }
                 break;

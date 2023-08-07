@@ -47,20 +47,22 @@ impl Live for Client {
             .await?
             .text()
             .await?;
-        let re = Regex::new(r"<script>window.__INITIAL_STATE__=([\s\S]*?);\(function").unwrap();
+        let re = Regex::new(r"<script>window.__INITIAL_STATE__=([\s\S]*?);\(function")?;
         let stream = match re.captures(&text) {
-            Some(caps) => caps.get(1).unwrap().as_str(),
+            Some(caps) => caps.get(1).ok_or(SeamError::None)?.as_str(),
             None => {
                 return Err(SeamError::None);
             }
         };
-        let json: serde_json::Value = serde_json::from_str(stream).unwrap();
+        let json: serde_json::Value = serde_json::from_str(stream)?;
         // TODO 更改其他逻辑 多用Null
         match &json["liveroom"]["liveStream"]["playUrls"][0]["adaptationSet"]["representation"] {
             serde_json::Value::Null => Err(SeamError::None),
             reps => {
-                let list = reps.as_array().unwrap();
-                let url = list[list.len() - 1]["url"].as_str().unwrap();
+                let list = reps.as_array().ok_or(SeamError::None)?;
+                let url = list[list.len() - 1]["url"]
+                    .as_str()
+                    .ok_or(SeamError::None)?;
                 let urls = vec![parse_url(url.to_string())];
                 // TODO 实现标题获取
                 Ok(Node {

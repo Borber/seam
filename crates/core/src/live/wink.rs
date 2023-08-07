@@ -38,7 +38,10 @@ impl Live for Client {
                 for item in ["hls", "hls2", "hls3", "rtmp"] {
                     if list.get(item).is_some() {
                         urls.push(parse_url(
-                            list[item][0]["url"].as_str().unwrap().to_string(),
+                            list[item][0]["url"]
+                                .as_str()
+                                .ok_or(SeamError::None)?
+                                .to_string(),
                         ));
                     }
                 }

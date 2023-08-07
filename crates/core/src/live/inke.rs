@@ -40,7 +40,7 @@ impl Live for Client {
                         urls.push(parse_url(
                             json["data"]["live_addr"][0][s]
                                 .as_str()
-                                .unwrap()
+                                .ok_or(SeamError::None)?
                                 .to_string(),
                         ));
                     }

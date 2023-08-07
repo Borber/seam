@@ -30,9 +30,9 @@ impl Live for Client {
             .await?
             .text()
             .await?;
-        let re = Regex::new(r#"var nBroadNo = ([0-9]{9})"#).unwrap();
+        let re = Regex::new(r#"var nBroadNo = ([0-9]{9})"#)?;
         let bno = match re.captures(&text) {
-            Some(rap) => rap.get(1).unwrap().as_str(),
+            Some(rap) => rap.get(1).ok_or(SeamError::None)?.as_str(),
             None => {
                 return Err(SeamError::None);
             }
@@ -55,7 +55,7 @@ impl Live for Client {
             .await?;
         let urls = vec![parse_url(format!(
             "{CDN}{}",
-            json["CHANNEL"]["AID"].as_str().unwrap()
+            json["CHANNEL"]["AID"].as_str().ok_or(SeamError::None)?
         ))];
         Ok(Node {
             rid: rid.to_owned(),

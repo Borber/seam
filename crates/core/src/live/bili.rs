@@ -30,15 +30,20 @@ impl Live for Client {
             .await?
             .json()
             .await?;
+
         // 获取真实房间号
         let rid = match resp["data"]["live_status"].as_i64() {
-            Some(1) => resp["data"]["room_id"].as_u64().unwrap().to_string(),
+            Some(1) => resp["data"]["room_id"]
+                .as_u64()
+                .ok_or(SeamError::None)?
+                .to_string(),
             _ => return Err(SeamError::None),
         };
         let mut stream_info = get_bili_stream_info(&rid, 10000).await?;
+
         let max = stream_info
             .as_array()
-            .unwrap()
+            .ok_or(SeamError::None)?
             .iter()
             .map(|data| {
                 data["format"][0]["codec"][0]["accept_qn"]
@@ -50,18 +55,18 @@ impl Live for Client {
                     .unwrap()
             })
             .max()
-            .unwrap();
+            .ok_or(SeamError::None)?;
         if max != 10000 {
             stream_info = get_bili_stream_info(&rid, max).await?;
         }
         let mut urls = vec![];
-        for obj in stream_info.as_array().unwrap() {
-            for format in obj["format"].as_array().unwrap() {
-                for codec in format["codec"].as_array().unwrap() {
-                    let base_url = codec["base_url"].as_str().unwrap();
-                    for url_info in codec["url_info"].as_array().unwrap() {
-                        let host = url_info["host"].as_str().unwrap();
-                        let extra = url_info["extra"].as_str().unwrap();
+        for obj in stream_info.as_array().ok_or(SeamError::None)? {
+            for format in obj["format"].as_array().ok_or(SeamError::None)? {
+                for codec in format["codec"].as_array().ok_or(SeamError::None)? {
+                    let base_url = codec["base_url"].as_str().ok_or(SeamError::None)?;
+                    for url_info in codec["url_info"].as_array().ok_or(SeamError::None)? {
+                        let host = url_info["host"].as_str().ok_or(SeamError::None)?;
+                        let extra = url_info["extra"].as_str().ok_or(SeamError::None)?;
                         urls.push(parse_url(format!("{host}{base_url}{extra}")));
                     }
                 }
@@ -75,7 +80,10 @@ impl Live for Client {
             .await?
             .json()
             .await?;
-        let title = json["data"]["title"].as_str().unwrap().to_owned();
+        let title = json["data"]["title"]
+            .as_str()
+            .unwrap_or("获取失败")
+            .to_owned();
         Ok(Node { rid, title, urls })
     }
 }

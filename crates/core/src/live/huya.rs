@@ -28,33 +28,43 @@ impl Live for Client {
             .await?
             .text()
             .await?;
-        let re = Regex::new(r"stream:([\s\S]*)window.TT_LIVE_TIMING").unwrap();
+        let re = Regex::new(r"stream:([\s\S]*)window.TT_LIVE_TIMING")?;
         let stream = match re.captures(&text) {
-            Some(caps) => caps.get(1).unwrap().as_str().rsplit_once('}').unwrap().0,
+            Some(caps) => {
+                caps.get(1)
+                    .ok_or(SeamError::None)?
+                    .as_str()
+                    .rsplit_once('}')
+                    .ok_or(SeamError::None)?
+                    .0
+            }
             None => return Err(SeamError::None),
         };
-        let re = Regex::new(r#"class="host-title" title="[\s\S]*?>([\s\S]*?)</h1>"#).unwrap();
+        let re = Regex::new(r#"class="host-title" title="[\s\S]*?>([\s\S]*?)</h1>"#)?;
         let title = match re.captures(&text) {
-            Some(caps) => caps.get(1).unwrap().as_str(),
+            Some(caps) => caps.get(1).ok_or(SeamError::None)?.as_str(),
             None => "huya",
         };
-        let json: serde_json::Value = serde_json::from_str(stream).unwrap();
+        let json: serde_json::Value = serde_json::from_str(stream)?;
         let mut urls = vec![];
-        match json["data"][0]["gameStreamInfoList"].as_array().unwrap() {
+        match json["data"][0]["gameStreamInfoList"]
+            .as_array()
+            .ok_or(SeamError::None)?
+        {
             list if list.is_empty() => return Err(SeamError::None),
             list => {
                 for cdn in list {
                     urls.push(parse_url(format!(
                         "{}/{}.flv?{}",
-                        cdn["sFlvUrl"].as_str().unwrap(),
-                        cdn["sStreamName"].as_str().unwrap(),
-                        cdn["sFlvAntiCode"].as_str().unwrap()
+                        cdn["sFlvUrl"].as_str().ok_or(SeamError::None)?,
+                        cdn["sStreamName"].as_str().ok_or(SeamError::None)?,
+                        cdn["sFlvAntiCode"].as_str().ok_or(SeamError::None)?
                     )));
                     urls.push(parse_url(format!(
                         "{}/{}.m3u8?{}",
-                        cdn["sHlsUrl"].as_str().unwrap(),
-                        cdn["sStreamName"].as_str().unwrap(),
-                        cdn["sHlsAntiCode"].as_str().unwrap()
+                        cdn["sHlsUrl"].as_str().ok_or(SeamError::None)?,
+                        cdn["sStreamName"].as_str().ok_or(SeamError::None)?,
+                        cdn["sHlsAntiCode"].as_str().ok_or(SeamError::None)?
                     )));
                 }
             }
