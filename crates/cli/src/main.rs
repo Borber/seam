@@ -63,17 +63,16 @@ pub async fn cli() -> Result<()> {
     let rid = rid.ok_or(anyhow!("请指定直播间号"))?;
 
     // 处理子命令
-    match command {
-        Some(Commands::List) => {
-            println!(
-                "可用平台：{}",
-                GLOBAL_CLIENT.keys().cloned().collect::<Vec<_>>().join(", ")
-            );
-            return Ok(());
-        }
-        _ => {
-            println!("欢迎使用 seam, 输入 seam --help 查看帮助");
-        }
+    if let Some(command) = command {
+        return match command {
+            Commands::List => {
+                println!(
+                    "可用平台：{}",
+                    GLOBAL_CLIENT.keys().cloned().collect::<Vec<_>>().join(", ")
+                );
+                Ok(())
+            }
+        };
     }
 
     let node = match GLOBAL_CLIENT.get(&live) {
