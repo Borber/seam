@@ -91,7 +91,7 @@ button:hover {
 }
 
 .live-item.is-checked,
-.btn-orange {
+.orange {
   background-color: #ff8c00;
   box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, .3),
     7px 7px 20px 0px rgba(0, 0, 0, .3),
@@ -99,7 +99,7 @@ button:hover {
 }
 
 .live-item.is-checked:hover,
-.btn-orange:hover {
+.orange:hover {
   filter: brightness(1.2);
 }
 
@@ -118,4 +118,21 @@ button:hover {
 
 ::-webkit-scrollbar-thumb {
   background-color: #555;
+}
+
+.loading {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+/* 水平垂直居中 */
+.controller {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn {
+  width: 60px;
+  height: 30px;
 }

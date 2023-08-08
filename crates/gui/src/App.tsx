@@ -2,6 +2,7 @@ import "./App.css";
 
 import { invoke } from "@tauri-apps/api/tauri";
 import { createSignal, For, onMount } from "solid-js";
+import { Rings } from "solid-spinner";
 import toast, { Toaster } from "solid-toast";
 
 import logo from "./assets/logo.png";
@@ -30,6 +31,7 @@ const App = () => {
     const [repos, setRepos] = createSignal<SilderItemProps[]>([]);
     const [live, setLive] = createSignal<string>("bili");
     const [rid, setRid] = createSignal<string>("");
+    const [loading, setLoading] = createSignal<boolean>(false);
 
     onMount(async () => {
         // 生产环境, 全局取消右键菜单;
@@ -67,6 +69,7 @@ const App = () => {
     };
 
     const onFuck = async () => {
+        setLoading(true);
         if (rid() == "") {
             toast.error("房间号不能为空");
         } else {
@@ -82,6 +85,7 @@ const App = () => {
                 toast.error(result.msg);
             }
         }
+        setLoading(false);
     };
 
     return (
@@ -104,15 +108,23 @@ const App = () => {
                         <div class="name">Seam</div>
                         <div class="version">0.1.0</div>
                     </div>
-
-                    <input
-                        placeholder="房间号"
-                        class="rid-input"
-                        onInput={(event) => setRid(event.target.value)}
-                    />
-                    <button class="btn-orange" onClick={async () => onFuck()}>
-                        获取
-                    </button>
+                    <div class="controller">
+                        <input
+                            placeholder="房间号"
+                            class="rid-input"
+                            onInput={(event) => setRid(event.target.value)}
+                        />
+                        <button
+                            class="btn orange"
+                            classList={{ loading: loading() }}
+                            onClick={async () => onFuck()}>
+                            {loading() ? (
+                                <Rings width={"25px"} height={"25px"} />
+                            ) : (
+                                "获取"
+                            )}
+                        </button>
+                    </div>
 
                     <div class="live-item-container">
                         <For each={allLives()}>

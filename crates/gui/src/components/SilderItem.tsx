@@ -28,9 +28,7 @@ const SilderItem = (props: SilderItemProps) => {
                 </div>
             </div>
             <div class="sider-item-button">
-                <button class="btn-orange" onClick={() => copy(props.url)}>
-                    复制
-                </button>
+                <button onClick={() => copy(props.url)}>复制</button>
             </div>
         </div>
     );
