@@ -2783,12 +2783,14 @@ name = "seam_core"
 version = "0.1.20"
 dependencies = [
  "async-trait",
+ "base64 0.21.2",
  "boa_engine",
  "chrono",
  "hex",
  "md-5",
  "once_cell",
  "openssl",
+ "rand 0.8.5",
  "regex",
  "reqwest",
  "seam_marcos",
