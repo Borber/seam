@@ -18,6 +18,10 @@ pub enum SeamError {
     InvalidHeaderValue(#[from] reqwest::header::InvalidHeaderValue),
     #[error("ParseInt error: {0}")]
     ParseInt(#[from] std::num::ParseIntError),
+    #[error("Base64 error: {0}")]
+    Base64Error(#[from] base64::DecodeError),
+    #[error("SystemTime error: {0}")]
+    SystemTimeError(#[from] std::time::SystemTimeError),
     #[error("{0}")]
     Plugin(String),
     #[error("Need fix {0}")]

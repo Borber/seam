@@ -26,13 +26,10 @@ pub struct Client;
 #[async_trait]
 impl Live for Client {
     async fn get(&self, rid: &str, headers: &Option<&HashMap<String, String>>) -> Result<Node> {
-        let now = SystemTime::now()
-            .duration_since(UNIX_EPOCH)
-            .unwrap()
-            .as_millis();
+        let now = SystemTime::now().duration_since(UNIX_EPOCH)?.as_millis();
         let rand = rand::thread_rng().gen_range(0..1000);
 
-        let uid = get_anonymous_uid().await;
+        let uid = get_anonymous_uid().await?;
 
         let text = CLIENT
             .get(format!("{URL}{rid}"))
@@ -81,32 +78,48 @@ impl Live for Client {
                 .ok_or(SeamError::NeedFix("sHlsUrl"))?;
 
             let anti_code = process_anticode(
-                stream["sFlvAntiCode"].as_str().unwrap(),
-                stream["sStreamName"].as_str().unwrap(),
+                stream["sFlvAntiCode"]
+                    .as_str()
+                    .ok_or(SeamError::NeedFix("sFlvAntiCode"))?,
+                stream["sStreamName"]
+                    .as_str()
+                    .ok_or(SeamError::NeedFix("sStreamName"))?,
                 uid,
                 now,
                 rand,
-            );
+            )?;
             urls.push(parse_url(format!(
                 "{}/{}.{}?{}",
                 flv,
-                stream["sStreamName"].as_str().unwrap(),
-                stream["sFlvUrlSuffix"].as_str().unwrap(),
+                stream["sStreamName"]
+                    .as_str()
+                    .ok_or(SeamError::NeedFix("sStreamName"))?,
+                stream["sFlvUrlSuffix"]
+                    .as_str()
+                    .ok_or(SeamError::NeedFix("sFlvUrlSuffix"))?,
                 anti_code
             )));
 
             let anti_code = process_anticode(
-                stream["sHlsAntiCode"].as_str().unwrap(),
-                stream["sStreamName"].as_str().unwrap(),
+                stream["sHlsAntiCode"]
+                    .as_str()
+                    .ok_or(SeamError::NeedFix("sHlsAntiCode"))?,
+                stream["sStreamName"]
+                    .as_str()
+                    .ok_or(SeamError::NeedFix("sStreamName"))?,
                 uid,
                 now,
                 rand,
-            );
+            )?;
             urls.push(parse_url(format!(
                 "{}/{}.{}?{}",
                 hls,
-                stream["sStreamName"].as_str().unwrap(),
-                stream["sHlsUrlSuffix"].as_str().unwrap(),
+                stream["sStreamName"]
+                    .as_str()
+                    .ok_or(SeamError::NeedFix("sStreamName"))?,
+                stream["sHlsUrlSuffix"]
+                    .as_str()
+                    .ok_or(SeamError::NeedFix("sHlsUrlSuffix"))?,
                 anti_code
             )));
         }
@@ -123,7 +136,7 @@ fn get_uuid(now: u128, rand: u32) -> u128 {
     (now % 10000000000 * 1000 + rand as u128) % 4294967295
 }
 
-async fn get_anonymous_uid() -> u128 {
+async fn get_anonymous_uid() -> Result<u128> {
     let resp: HashMap<String, serde_json::Value> = CLIENT
         .post("https://udblgn.huya.com/web/anonymousLogin")
         .json(&json!({
@@ -134,24 +147,28 @@ async fn get_anonymous_uid() -> u128 {
             "data": {}
         }))
         .send()
-        .await
-        .unwrap()
+        .await?
         .json()
-        .await
-        .unwrap();
+        .await?;
 
-    resp["data"]["uid"]
+    let uid = resp["data"]["uid"]
         .as_str()
-        .unwrap()
+        .ok_or(SeamError::NeedFix("uid"))?
         .to_string()
-        .parse()
-        .unwrap()
+        .parse()?;
+    Ok(uid)
 }
 
-fn process_anticode(anticode: &str, stream_name: &str, uid: u128, now: u128, rand: u32) -> String {
-    let anticode = urlencoding::decode(anticode).unwrap().to_string();
+fn process_anticode(
+    anticode: &str,
+    stream_name: &str,
+    uid: u128,
+    now: u128,
+    rand: u32,
+) -> Result<String> {
+    let anticode = urlencoding::decode(anticode)?.to_string();
     let mut anti_map = anticode.split('&').fold(HashMap::new(), |mut map, s| {
-        let (k, v) = s.split_once('=').unwrap();
+        let (k, v) = s.split_once('=').unwrap_or_default();
         map.insert(k.to_owned(), v.to_owned());
         map
     });
@@ -174,8 +191,8 @@ fn process_anticode(anticode: &str, stream_name: &str, uid: u128, now: u128, ran
 
     let fm = anti_map["fm"].as_str();
 
-    let fm = general_purpose::STANDARD.decode(fm).unwrap();
-    let fm = String::from_utf8(fm).unwrap();
+    let fm = general_purpose::STANDARD.decode(fm)?;
+    let fm = String::from_utf8(fm)?;
 
     let fm = fm.replace("$0", &anti_map["uid"]);
     let fm = fm.replace("$1", stream_name);
@@ -188,7 +205,9 @@ fn process_anticode(anticode: &str, stream_name: &str, uid: u128, now: u128, ran
         hex::encode(h.finalize())
     };
 
-    anti_map.insert("wsSecret".to_string(), secret).unwrap();
+    anti_map
+        .insert("wsSecret".to_string(), secret)
+        .ok_or(SeamError::NeedFix("wsSecret"))?;
 
     anti_map.remove("fm");
 
@@ -196,7 +215,7 @@ fn process_anticode(anticode: &str, stream_name: &str, uid: u128, now: u128, ran
     for (k, v) in anti_map {
         s = format!("{}&{}={}", s, k, v);
     }
-    s
+    Ok(s)
 }
 
 #[cfg(test)]
