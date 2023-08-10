@@ -1,4 +1,4 @@
-name: Build Releases
+name: Build CLI Releases
 
 permissions:
   contents: write
@@ -12,17 +12,26 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  create-release:
+  create_release:
     runs-on: ubuntu-latest
+    outputs:
+      changes: ${{ steps.changelog_reader.outputs.changes }}
+      version: ${{ steps.changelog_reader.outputs.VERSION }}
     steps:
       - uses: actions/checkout@v3
-      - uses: taiki-e/create-gh-release-action@v1
+      - name: Get version number
+        run: |
+          VERSION=${{github.ref_name}}
+          echo "VERSION=${VERSION/v_cli\./}" >> $GITHUB_ENV
+      - name: Changelog Reader
+        id: changelog_reader
+        uses: mindsers/changelog-reader-action@v2.2.2
         with:
-          # (optional) Path to changelog.
-          changelog: ./crates/cli/CHANGELOG.md
-          # (required) GitHub token for creating GitHub Releases.
-          token: ${{ secrets.GITHUB_TOKEN }}
+          path: './crates/cli/CHANGELOG.md'
+          version: ${{ env.VERSION }}
+
   build-cross:
+    needs: create_release
     runs-on: ubuntu-latest
     env:
       RUST_BACKTRACE: full
@@ -83,8 +92,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
+          name: Seam CLI ${{ needs.create_release.outputs.version }}
+          body: |
+            ${{ needs.create_release.outputs.changes }}
           files: build/release/*
-          prerelease: ${{ contains(github.ref, '-') }}
+          draft: false
+          prerelease: false
 
   build-unix:
     runs-on: ${{ matrix.os }}
@@ -126,8 +139,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
+          name: Seam CLI ${{ needs.create_release.outputs.version }}
+          body: |
+            ${{ needs.create_release.outputs.changes }}
           files: build/release/*
-          prerelease: ${{ contains(github.ref, '-') }}
+          draft: false
+          prerelease: false
 
   build-windows:
     runs-on: windows-latest
@@ -154,5 +171,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
+          name: Seam CLI ${{ needs.create_release.outputs.version }}
+          body: |
+            ${{ needs.create_release.outputs.changes }}
           files: build/release/*
-          prerelease: ${{ contains(github.ref, '-') }}
+          draft: false
+          prerelease: false
