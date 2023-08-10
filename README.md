@@ -24,12 +24,6 @@
 
 欢迎各位大佬 PR , 积极响应, 友善沟通, 快速 CR, 给您最好的开源体验
 
--   [ ] cookie 模块
-    -   [ ] 完善 cookie 模块
-    -   [ ] 添加强制需要 cookie 的平台,其方法上的注释
-    -   [ ] 添加对于 global cookie 的支持
--   [ ] 拆分`解析失败错误返回`与`未开播错误`返回
-    -   在解析 `api`/`html` 时出错应该返回解析失败, 而不是未开播,以提醒用户, 以便在平台修改了 api 后能够及时修复
 -   [ ] GUI action 添加便携版本, 方便已经安装了 WebView2 的用户使用
 -   [ ] 添加日志模块, 以便于用户反馈问题
 -   [ ] 链接识别
@@ -65,25 +59,25 @@
 
 # 使用
 
-| **平台**                                    | **子命令**  | **`<RID>` 位置**                                                          | **弹幕** | **房间号获取** | **设置** |
-|:-----------------------------------------:|:--------:|:-----------------------------------------------------------------------:|:------:|:---------:|:------:|
-| [B 站](https://live.bilibili.com/)         | Bili     | `https://live.bilibili.com/<RID>`                                       | ✅      | ✅         |        |
-| [斗鱼](https://www.douyu.com/)              | Douyu    | `https://www.douyu.com/<RID>` 或 `https://www.douyu.com/xx/xx?rid=<RID>` |        | ✅         |        |
-| [抖音](https://live.douyin.com/)            | Douyin   | `https://live.douyin.com/<RID>`                                         |        |           | [详情]() |
-| [虎牙](https://huya.com/)                   | Huya     | `https://huya.com/<RID>`                                                |        |           |        |
-| [快手](https://live.kuaishou.com/)          | Kuaishou | `https://live.kuaishou.com/u/<RID>`                                     |        |           | [详情]() |
-| [CC](https://cc.163.com/)                 | Cc       | `https://cc.163.com/<RID>`                                              |        |           |        |
-| [花椒](https://www.huajiao.com/)            | Huajiao  | `https://www.huajiao.com/l/<RID>`                                       |        |           |        |
-| [艺气山](https://www.173.com/)               | Yqs      | `https://www.173.com/<RID>`                                             |        |           |        |
-| [棉花糖](https://www.2cq.com/)               | Mht      | `https://www.2cq.com/<RID>`                                             |        |           |        |
-| [kk](https://www.kktv5.com/)              | Kk       | `https://www.kktv5.com/show/<RID>`                                      |        |           |        |
-| [千帆直播](https://qf.56.com/)                | Qf       | `https://qf.56.com/<RID>`                                               |        | ✅         |        |
-| [Now 直播](https://now.qq.com/)             | Now      | `https://now.qq.com/pcweb/story.html?roomid=<RID>`                      |        |           |        |
-| [映客](https://www.inke.cn/)                | Inke     | `https://www.inke.cn/liveroom/index.html?uid=<RID>`                     |        | ✅         |        |
-| [afreeca](https://afreecatv.com/)         | Afreeca  | `https://bj.afreecatv.com/<RID>`                                        |        |           |        |
-| [pandalive](https://www.pandalive.co.kr/) | Panda    | `https://www.pandalive.co.kr/channel/<RID>`                             |        |           |        |
-| [flex](https://www.flextv.co.kr/)         | Flex     | `https://www.flextv.co.kr/channels/<RID>`                               |        |           |        |
-| [wink](https://www.winktv.co.kr/)         | Wink     | `https://www.winktv.co.kr/channel/<RID>`                                |        |           |        |
+|                 **平台**                  | **代号** |                             **`<RID>` 位置**                             | **弹幕** | **房间号获取** |
+| :---------------------------------------: | :------: | :----------------------------------------------------------------------: | :------: | :------------: |
+|    [B 站](https://live.bilibili.com/)     |   Bili   |                    `https://live.bilibili.com/<RID>`                     |    ✅    |       ✅       |
+|      [斗鱼](https://www.douyu.com/)       |  Douyu   | `https://www.douyu.com/<RID>` 或 `https://www.douyu.com/xx/xx?rid=<RID>` |          |       ✅       |
+|     [抖音](https://live.douyin.com/)      |  Douyin  |                     `https://live.douyin.com/<RID>`                      |          |                |
+|         [虎牙](https://huya.com/)         |   Huya   |                         `https://huya.com/<RID>`                         |          |                |
+|    [快手](https://live.kuaishou.com/)     | Kuaishou |                   `https://live.kuaishou.com/u/<RID>`                    |          |                |
+|         [CC](https://cc.163.com/)         |    Cc    |                        `https://cc.163.com/<RID>`                        |          |                |
+|     [花椒](https://www.huajiao.com/)      | Huajiao  |                    `https://www.huajiao.com/l/<RID>`                     |          |                |
+|      [艺气山](https://www.173.com/)       |   Yqs    |                       `https://www.173.com/<RID>`                        |          |                |
+|      [棉花糖](https://www.2cq.com/)       |   Mht    |                       `https://www.2cq.com/<RID>`                        |          |                |
+|       [kk](https://www.kktv5.com/)        |    Kk    |                    `https://www.kktv5.com/show/<RID>`                    |          |                |
+|      [千帆直播](https://qf.56.com/)       |    Qf    |                        `https://qf.56.com/<RID>`                         |          |       ✅       |
+|      [Now 直播](https://now.qq.com/)      |   Now    |            `https://now.qq.com/pcweb/story.html?roomid=<RID>`            |          |                |
+|       [映客](https://www.inke.cn/)        |   Inke   |           `https://www.inke.cn/liveroom/index.html?uid=<RID>`            |          |       ✅       |
+|     [afreeca](https://afreecatv.com/)     | Afreeca  |                     `https://bj.afreecatv.com/<RID>`                     |          |                |
+| [pandalive](https://www.pandalive.co.kr/) |  Panda   |               `https://www.pandalive.co.kr/channel/<RID>`                |          |                |
+|     [flex](https://www.flextv.co.kr/)     |   Flex   |                `https://www.flextv.co.kr/channels/<RID>`                 |          |                |
+|     [wink](https://www.winktv.co.kr/)     |   Wink   |                 `https://www.winktv.co.kr/channel/<RID>`                 |          |                |
 
 # 设置
 
@@ -112,6 +106,22 @@ cookie = "xxxx"
 cookie = "xxxx"
 
 ```
+
+## 平台说明
+
+| **平台** | **代号** | **必须** |
+| :------: | :------: | :------: |
+|   抖音   |  douyin  |  cookie  |
+|   快手   |    ks    |  cookie  |
+
+## 解释
+
+-   headers 固定字段, 不能更改
+-   \[headers.xxxx\] xxxx 为支持平台的 子命令, 可在 [README](../README.md) 中找到
+-   支持所有合法 headers 字段
+-   headers.global 全局生效, 但会被平台单独设置覆盖
+
+[额外说明](./doc/配置说明.md)
 
 # 路线
 
