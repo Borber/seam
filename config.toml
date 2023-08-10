@@ -9,11 +9,12 @@ video = "[rid]-[title]-[date]-[time]"
 # danmu文件标题
 danmu = "[rid]-[title]-[date]-[time]"
 
-# 各平台cookie
-[cookie.bili]
-cookie = "xxxx"
-user-agent = "xxxx"
 
-[cookie.huya]
+[headers.global]
+user-agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36 Edg/115.0.1901.200"
+# 各平台
+[headers.douyin]
 cookie = "xxxx"
-user-agent = "xxxx"
+
+[headers.kuaishou]
+cookie = "xxxx"

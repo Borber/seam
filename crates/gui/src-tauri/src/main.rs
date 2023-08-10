@@ -7,11 +7,17 @@ use tauri::Manager;
 use window_shadows::set_shadow;
 
 mod common;
+mod config;
 mod resp;
+mod util;
 
 #[tauri::command]
 async fn url(live: String, rid: String) -> Resp<Node> {
-    match GLOBAL_CLIENT.get(&live).unwrap().get(&rid, None).await {
+    let cli = match GLOBAL_CLIENT.get(&live) {
+        Some(cli) => cli,
+        None => return Resp::fail(0, "No such live"),
+    };
+    match cli.get(&rid, Some(config::headers(&live))).await {
         Ok(node) => Resp::success(node),
         Err(e) => match e {
             SeamError::None => Resp::fail(1, "Not on"),

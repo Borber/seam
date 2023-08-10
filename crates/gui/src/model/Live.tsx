@@ -23,7 +23,7 @@ const allLives = (): LiveItem[] => {
         },
         {
             name: "快手",
-            cmd: "kuaishou",
+            cmd: "ks",
         },
         {
             name: "CC",
