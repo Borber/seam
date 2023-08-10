@@ -79,7 +79,7 @@
 |     [flex](https://www.flextv.co.kr/)     |   Flex   |                `https://www.flextv.co.kr/channels/<RID>`                 |          |                |
 |     [wink](https://www.winktv.co.kr/)     |   Wink   |                 `https://www.winktv.co.kr/channel/<RID>`                 |          |                |
 
-# 设置
+# 配置
 
 `config.toml` 放置在 `seam` 可执行文件所在目录下
 
@@ -117,7 +117,7 @@ cookie = "xxxx"
 ## 解释
 
 -   headers 固定字段, 不能更改
--   \[headers.xxxx\] xxxx 为支持平台的 子命令, 可在 [README](../README.md) 中找到
+-   [headers.xxxx] xxxx 为支持平台的 子命令
 -   支持所有合法 headers 字段
 -   headers.global 全局生效, 但会被平台单独设置覆盖
 
