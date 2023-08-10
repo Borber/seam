@@ -29,7 +29,7 @@ pub struct Client;
 #[async_trait]
 impl Live for Client {
     // TODO 说明所需 cookie
-    async fn get(&self, rid: &str, headers: &Option<&HashMap<String, String>>) -> Result<Node> {
+    async fn get(&self, rid: &str, headers: Option<HashMap<String, String>>) -> Result<Node> {
         let rid = real_rid(rid).await?;
         douyu_do_js(&rid, headers).await
     }
@@ -150,7 +150,7 @@ async fn douyu_do_js_pc(rid: &str) -> Result<Node> {
     }
 }
 
-async fn douyu_do_js(rid: &str, headers: &Option<&HashMap<String, String>>) -> Result<Node> {
+async fn douyu_do_js(rid: &str, headers: Option<HashMap<String, String>>) -> Result<Node> {
     // 构造时间戳
     let binding = Local::now().timestamp_millis().to_string();
     let dt = &binding.as_str()[0..10];

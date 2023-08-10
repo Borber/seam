@@ -25,7 +25,7 @@ pub struct Client;
 
 #[async_trait]
 impl Live for Client {
-    async fn get(&self, rid: &str, headers: &Option<&HashMap<String, String>>) -> Result<Node> {
+    async fn get(&self, rid: &str, headers: Option<HashMap<String, String>>) -> Result<Node> {
         let now = SystemTime::now().duration_since(UNIX_EPOCH)?.as_millis();
         let rand = rand::thread_rng().gen_range(0..1000);
 

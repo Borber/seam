@@ -11,7 +11,7 @@ mod resp;
 
 #[tauri::command]
 async fn url(live: String, rid: String) -> Resp<Node> {
-    match GLOBAL_CLIENT.get(&live).unwrap().get(&rid, &None).await {
+    match GLOBAL_CLIENT.get(&live).unwrap().get(&rid, None).await {
         Ok(node) => Resp::success(node),
         Err(e) => match e {
             SeamError::None => Resp::fail(1, "Not on"),

@@ -50,7 +50,16 @@ pub static CONFIG: Lazy<Config> = Lazy::new(|| {
     }
 });
 
-// TODO 默认配置文件
+pub fn headers(live: &str) -> HashMap<String, String> {
+    let global = CONFIG
+        .cookie
+        .get("global")
+        .unwrap_or(&HashMap::new())
+        .clone();
+    let mut live = CONFIG.cookie.get(live).unwrap_or(&HashMap::new()).clone();
+    live.extend(global);
+    live
+}
 
 #[cfg(test)]
 mod tests {

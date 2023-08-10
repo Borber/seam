@@ -2,9 +2,10 @@ mod common;
 mod config;
 mod util;
 
-use crate::{common::GLOBAL_CLIENT, config::CONFIG};
+use crate::common::GLOBAL_CLIENT;
 use anyhow::{anyhow, Result};
 use clap::Parser;
+use seam_core::error::SeamError;
 
 /// 获取直播源
 #[derive(Parser)]
@@ -76,7 +77,7 @@ pub async fn cli() -> Result<()> {
     }
 
     let node = match GLOBAL_CLIENT.get(&live) {
-        Some(client) => client.get(&rid, &CONFIG.cookie.get(&live)).await,
+        Some(client) => client.get(&rid, Some(config::headers(&live))).await,
         None => {
             return Err(anyhow!(
                 "请检查 {} 是否为可用平台, 或前往 https://github.com/Borber/seam/issues 申请支持",
@@ -87,7 +88,11 @@ pub async fn cli() -> Result<()> {
 
     // 无参数情况下，直接输出直播源信息
     if !(danmu || config_danmu || record || auto_record) {
-        println!("{}", node?.json());
+        match node {
+            Ok(node) => println!("{}", node.json()),
+            Err(SeamError::None) => println!("未开播"),
+            Err(e) => println!("{}", e),
+        }
         return Ok(());
     }
 
