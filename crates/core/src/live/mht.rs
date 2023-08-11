@@ -34,6 +34,7 @@ impl Live for Client {
             Value::Null => {
                 // 不报错的情况必然有结果返回 直接提取
                 let result = &resp["result"];
+                let title = result["roomName"].as_str().unwrap_or("获取失败");
                 match result["liveState"].to_string().parse::<usize>()? {
                     // 开播状态
                     1 => {
@@ -45,10 +46,7 @@ impl Live for Client {
                         )];
                         Ok(Node {
                             rid: rid.to_owned(),
-                            title: result["roomName"]
-                                .as_str()
-                                .ok_or(SeamError::NeedFix("room name"))?
-                                .to_owned(),
+                            title: title.to_owned(),
                             urls,
                         })
                     }
