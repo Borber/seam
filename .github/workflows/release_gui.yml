@@ -1,4 +1,4 @@
-name: Build GUI release
+name: Build GUI Release
 
 permissions:
   contents: write
