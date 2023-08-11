@@ -17,15 +17,17 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Get version number
+        id: get_version
         run: |
-          VERSION=${{github.ref_name}}
-          echo "VERSION=${VERSION/v_gui\./}" >> $GITHUB_ENV
+          VERSION=${GITHUB_REF#refs/tags/}
+          VERSION=${VERSION/v_gui./}
+          echo "::set-output name=version::$VERSION"
       - name: Changelog Reader
         id: changelog_reader
         uses: mindsers/changelog-reader-action@v2.2.2
         with:
-          path: './crates/gui/CHANGELOG.md'
-          version: ${{ env.VERSION }}
+          path: './crates/cli/CHANGELOG.md'
+          version: ${{ steps.get_version.outputs.version }}
 
   build_seam:
     needs: create_release
