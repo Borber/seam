@@ -65,23 +65,23 @@
 
 |                 **平台**                  | **代号** |                             **`<RID>` 位置**                             | **弹幕** | **房间名** |
 | :---------------------------------------: | :------: | :----------------------------------------------------------------------: | :------: | :--------: |
-|    [B 站](https://live.bilibili.com/)     |   Bili   |                    `https://live.bilibili.com/<RID>`                     |    ✅    |     ✅     |
-|      [斗鱼](https://www.douyu.com/)       |  Douyu   | `https://www.douyu.com/<RID>` 或 `https://www.douyu.com/xx/xx?rid=<RID>` |          |     ✅     |
-|     [抖音](https://live.douyin.com/)      |  Douyin  |                     `https://live.douyin.com/<RID>`                      |          |     ✅     |
-|         [虎牙](https://huya.com/)         |   Huya   |                         `https://huya.com/<RID>`                         |          |     ✅     |
-|    [快手](https://live.kuaishou.com/)     | Kuaishou |                   `https://live.kuaishou.com/u/<RID>`                    |          |            |
-|         [CC](https://cc.163.com/)         |    Cc    |                        `https://cc.163.com/<RID>`                        |          |            |
-|     [花椒](https://www.huajiao.com/)      | Huajiao  |                    `https://www.huajiao.com/l/<RID>`                     |          |            |
-|      [艺气山](https://www.173.com/)       |   Yqs    |                       `https://www.173.com/<RID>`                        |          |            |
-|      [棉花糖](https://www.2cq.com/)       |   Mht    |                       `https://www.2cq.com/<RID>`                        |          |            |
-|       [kk](https://www.kktv5.com/)        |    Kk    |                    `https://www.kktv5.com/show/<RID>`                    |          |            |
-|      [千帆直播](https://qf.56.com/)       |    Qf    |                        `https://qf.56.com/<RID>`                         |          |     ✅     |
-|      [Now 直播](https://now.qq.com/)      |   Now    |            `https://now.qq.com/pcweb/story.html?roomid=<RID>`            |          |            |
-|       [映客](https://www.inke.cn/)        |   Inke   |           `https://www.inke.cn/liveroom/index.html?uid=<RID>`            |          |     ✅     |
-|     [afreeca](https://afreecatv.com/)     | Afreeca  |                     `https://bj.afreecatv.com/<RID>`                     |          |            |
-| [pandalive](https://www.pandalive.co.kr/) |  Panda   |               `https://www.pandalive.co.kr/channel/<RID>`                |          |            |
-|     [flex](https://www.flextv.co.kr/)     |   Flex   |                `https://www.flextv.co.kr/channels/<RID>`                 |          |            |
-|     [wink](https://www.winktv.co.kr/)     |   Wink   |                 `https://www.winktv.co.kr/channel/<RID>`                 |          |            |
+|    [B 站](https://live.bilibili.com/)     |   bili   |                    `https://live.bilibili.com/<RID>`                     |    ✅    |     ✅     |
+|      [斗鱼](https://www.douyu.com/)       |  douyu   | `https://www.douyu.com/<RID>` 或 `https://www.douyu.com/xx/xx?rid=<RID>` |          |     ✅     |
+|     [抖音](https://live.douyin.com/)      |  douyin  |                     `https://live.douyin.com/<RID>`                      |          |     ✅     |
+|         [虎牙](https://huya.com/)         |   huya   |                         `https://huya.com/<RID>`                         |          |     ✅     |
+|    [快手](https://live.kuaishou.com/)     |    ks    |                   `https://live.kuaishou.com/u/<RID>`                    |          |            |
+|         [CC](https://cc.163.com/)         |    cc    |                        `https://cc.163.com/<RID>`                        |          |            |
+|     [花椒](https://www.huajiao.com/)      | huajiao  |                    `https://www.huajiao.com/l/<RID>`                     |          |            |
+|      [艺气山](https://www.173.com/)       |   yqs    |                       `https://www.173.com/<RID>`                        |          |            |
+|      [棉花糖](https://www.2cq.com/)       |   mht    |                       `https://www.2cq.com/<RID>`                        |          |            |
+|       [kk](https://www.kktv5.com/)        |    kk    |                    `https://www.kktv5.com/show/<RID>`                    |          |            |
+|      [千帆直播](https://qf.56.com/)       |    qf    |                        `https://qf.56.com/<RID>`                         |          |     ✅     |
+|      [Now 直播](https://now.qq.com/)      |   now    |            `https://now.qq.com/pcweb/story.html?roomid=<RID>`            |          |            |
+|       [映客](https://www.inke.cn/)        |   inke   |           `https://www.inke.cn/liveroom/index.html?uid=<RID>`            |          |     ✅     |
+|     [afreeca](https://afreecatv.com/)     | afreeca  |                     `https://bj.afreecatv.com/<RID>`                     |          |            |
+| [pandalive](https://www.pandalive.co.kr/) |  panda   |               `https://www.pandalive.co.kr/channel/<RID>`                |          |            |
+|     [flex](https://www.flextv.co.kr/)     |   flex   |                `https://www.flextv.co.kr/channels/<RID>`                 |          |            |
+|     [wink](https://www.winktv.co.kr/)     |   wink   |                 `https://www.winktv.co.kr/channel/<RID>`                 |          |            |
 
 # 配置
 
