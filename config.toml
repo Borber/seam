@@ -1,5 +1,7 @@
 # 播放器路径或命令
 [play]
+# potplayer 样例
+# bin = "C:\\Program Files (x86)\\Pure Codec\\x64\\PotPlayerMini64.exe"
 bin = "mpv"
 # 播放器参数
 args = []
