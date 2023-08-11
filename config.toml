@@ -1,4 +1,5 @@
 # 播放器路径或命令
+# 请自行安装播放器, 请确认它可以通过命令行+链接打开视频文件
 [play]
 # potplayer 样例
 # bin = "C:\\Program Files (x86)\\Pure Codec\\x64\\PotPlayerMini64.exe"
