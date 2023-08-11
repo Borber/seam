@@ -26,12 +26,9 @@
 }
 
 /* 垂直居中 */
-.sider-item-button {
+.sider-item-button button {
     display: flex;
     align-items: center;
-}
-
-.sider-item-button button {
     padding: 8px;
 }
 
