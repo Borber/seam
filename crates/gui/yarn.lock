@@ -2063,10 +2063,10 @@ slash@^3.0.0:
   resolved "https://registry.npmmirror.com/slash/-/slash-3.0.0.tgz"
   integrity sha512-g9Q1haeby36OSStwb4ntCGGGaKsaVSjQ68fBxoQcutl5fS1vuY18H3wSt3jFyFtrkx+Kz0V1G85A4MyAdDMi2Q==
 
-solid-js@^1.7.10:
-  version "1.7.10"
-  resolved "https://registry.yarnpkg.com/solid-js/-/solid-js-1.7.10.tgz#3c6b51a9e038e07f4230736caaf55737161105f3"
-  integrity sha512-myc4UeC1DeQl4jfcA1bF0X4fUn3tDfHz7QGFMN9PJ77ldG7zzD0CtDz1a2u27gPBSFNjyNL/mJ0N9/6uCuh63A==
+solid-js@^1.7.11:
+  version "1.7.11"
+  resolved "https://registry.yarnpkg.com/solid-js/-/solid-js-1.7.11.tgz#c37706382bcfd563459810434b1382b550c27867"
+  integrity sha512-JkuvsHt8jqy7USsy9xJtT18aF9r2pFO+GB8JQ2XGTvtF49rGTObB46iebD25sE3qVNvIbwglXOXdALnJq9IHtQ==
   dependencies:
     csstype "^3.1.0"
     seroval "^0.5.0"

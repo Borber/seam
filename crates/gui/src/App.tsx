@@ -9,6 +9,7 @@ import logo from "./assets/logo.png";
 import Bar from "./components/Bar";
 import SilderItem, { SilderItemProps } from "./components/SilderItem";
 import allLives from "./model/Live";
+import { Resp } from "./model/Resp";
 
 interface Node {
     rid: string;
@@ -19,12 +20,6 @@ interface Node {
 interface Url {
     format: string;
     url: string;
-}
-
-interface Resp<T> {
-    code: number;
-    msg: string;
-    data: T;
 }
 
 const App = () => {

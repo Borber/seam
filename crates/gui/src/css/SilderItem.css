@@ -30,3 +30,11 @@
     display: flex;
     align-items: center;
 }
+
+.sider-item-button button {
+    padding: 8px;
+}
+
+.sider-item-button:not(:last-child) {
+    margin-right: 3px;
+}

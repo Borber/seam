@@ -27,6 +27,11 @@ async fn url(live: String, rid: String) -> Resp<Node> {
     }
 }
 
+#[tauri::command]
+async fn play(url: String) -> Resp<bool> {
+    util::play(&url).into()
+}
+
 #[tokio::main]
 async fn main() {
     tauri::Builder::default()
@@ -37,7 +42,7 @@ async fn main() {
             }
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![url])
+        .invoke_handler(tauri::generate_handler![url, play])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

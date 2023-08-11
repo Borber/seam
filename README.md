@@ -84,26 +84,34 @@
 `config.toml` 放置在 `seam` 可执行文件所在目录下
 
 ```toml
-# [rid]: 房间号
-# [title]: 标题
-# [time]: 时间戳
-# [date]: 日期
+# 播放器路径或命令
+[play]
+bin = "mpv"
+# 播放器参数
+args = []
 
-[file_name]
-# 录制文件标题
-video = "[rid]-[title]-[date]-[time]"
-# danmu文件标题
-danmu = "[rid]-[title]-[date]-[time]"
-
-
+# headers 支持所有合法 http 请求头字段
+# global 为全局请求头, 会被各平台请求头覆盖
 [headers.global]
 user-agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36 Edg/115.0.1901.200"
 # 各平台
 [headers.douyin]
 cookie = "xxxx"
 
-[headers.kuaishou]
+[headers.ks]
 cookie = "xxxx"
+
+
+# [rid]: 房间号
+# [title]: 标题
+# [time]: 时间戳
+# [date]: 日期
+[file_name]
+# 录制文件标题
+video = "[rid]-[title]-[date]-[time]"
+# danmu文件标题
+danmu = "[rid]-[title]-[date]-[time]"
+
 
 ```
 
@@ -113,13 +121,6 @@ cookie = "xxxx"
 | :------: | :------: | :------: |
 |   抖音   |  douyin  |  cookie  |
 |   快手   |    ks    |  cookie  |
-
-## 解释
-
--   headers 固定字段, 不能更改
--   [headers.xxxx] xxxx 为支持平台的 子命令
--   支持所有合法 headers 字段
--   headers.global 全局生效, 但会被平台单独设置覆盖
 
 [额外说明](./doc/配置说明.md)
 
