@@ -101,8 +101,9 @@ args = []
 
 # headers 支持所有合法 http 请求头字段
 # global 为全局请求头, 会被各平台请求头覆盖
+# 请注意 不要覆盖虎牙的 user-agent, 否则会导致获取失败
 [headers.global]
-user-agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36 Edg/115.0.1901.200"
+# user-agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36 Edg/115.0.1901.200"
 # 各平台
 [headers.douyin]
 cookie = "xxxx"

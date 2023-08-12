@@ -219,4 +219,4 @@ fn process_anticode(
 }
 
 #[cfg(test)]
-macros::gen_test!(880201);
+macros::gen_test!(660000);
