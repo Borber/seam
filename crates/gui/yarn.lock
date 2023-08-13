@@ -531,6 +531,11 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
+"@solidjs/router@^0.8.3":
+  version "0.8.3"
+  resolved "https://registry.npmmirror.com/@solidjs/router/-/router-0.8.3.tgz#4623cda699c4f47b3520222529b72e3cb77ec415"
+  integrity sha512-oJuqQo10rVTiQYhe1qXIG1NyZIZ2YOwHnlLc8Xx+g/iJhFCJo1saLOIrD/Dkh2fpIaIny5ZMkz1cYYqoTYGJbg==
+
 "@tauri-apps/api@^1.4.0":
   version "1.4.0"
   resolved "https://registry.npmmirror.com/@tauri-apps/api/-/api-1.4.0.tgz"

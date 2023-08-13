@@ -45,8 +45,8 @@
                 "fullscreen": false,
                 "resizable": false,
                 "title": "Seam",
-                "width": 666,
-                "height": 412,
+                "width": 1000,
+                "height": 600,
                 "decorations": false,
                 "center": true,
                 "visible": false
