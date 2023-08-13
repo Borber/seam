@@ -18,7 +18,7 @@ button {
   font-weight: 500;
   font-family: inherit;
   color: #ffffff;
-  background-color: #0f0f0f98;
+  background-color: #0f0f0fc9;
   transition: all 0.3s ease;
   box-shadow: inset 0.3px 0.3px 3px 0.3px rgba(160, 160, 160, 0.6), 2px 2px 5px 0px rgba(0, 0, 0, 0.7);
 }

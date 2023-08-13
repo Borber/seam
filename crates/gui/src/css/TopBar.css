@@ -18,3 +18,13 @@
     justify-content: center;
     align-items: center;
 }
+
+.slide-fade-enter-active,
+.slide-fade-exit-active {
+    transition: opacity 0.3s, transform 0.3s;
+}
+
+.slide-fade-enter,
+.slide-fade-exit-to {
+    opacity: 0;
+}
