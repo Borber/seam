@@ -4,19 +4,12 @@
     align-items: center;
 }
 
-@keyframes box {
-    0% {
-        transform: rotate(0);
-    }
-
-    100% {
-        transform: rotate(360deg);
-    }
-}
-
 .refresh {
-    animation: box 2s linear infinite;
-    will-change: transform;
+    height: 20px;
+    width: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .top-bar-input {
