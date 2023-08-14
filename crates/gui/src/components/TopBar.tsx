@@ -6,6 +6,7 @@ import { AddIcon, SyncIcon } from '../icon/icon'
 import Panel from './Panel'
 
 const TopBar = () => {
+    const [refresh, setRefresh] = createSignal(false)
     const [rid, setRid] = createSignal('')
     const [onInput, setInput] = createSignal(false)
     const [onPanel, setPanel] = createSignal(false)
@@ -13,7 +14,9 @@ const TopBar = () => {
     return (
         <div data-tauri-drag-region class="top-bar">
             <button class="top-bar-btn">
-                <SyncIcon size={18} />
+                <div class={`refreshdiv ${refresh() ? 'refresh' : ''}`} onClick={() => {
+                    setRefresh(!refresh())
+                }}><SyncIcon size={18} /></div>
             </button>
             <input
                 placeholder="房间号"

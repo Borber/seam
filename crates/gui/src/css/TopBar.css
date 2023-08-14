@@ -4,6 +4,24 @@
     align-items: center;
 }
 
+@keyframes box {
+    0% {
+        transform: rotate(0);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.refreshdiv {
+    height: 18px;
+}
+
+.refresh {
+    animation: box 2s linear infinite;
+}
+
 .top-bar-input {
     width: 400px;
     height: 30px;
