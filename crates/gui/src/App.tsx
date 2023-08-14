@@ -44,6 +44,7 @@ const App = () => {
     const routes = [
         { path: '/', component: lazy(() => import('./pages/Home')) },
         { path: '/good', component: lazy(() => import('./pages/Good')) },
+        { path: '/chart', component: lazy(() => import('./pages/Chart')) },
         { path: '/setting', component: lazy(() => import('./pages/Setting')) },
     ]
 

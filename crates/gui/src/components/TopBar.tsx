@@ -1,8 +1,8 @@
 import { createSignal } from 'solid-js'
+import { Spinner, SpinnerType } from 'solid-spinner'
 import toast from 'solid-toast'
 import { Transition } from 'solid-transition-group'
 
-import { Spinner, SpinnerType } from 'solid-spinner';
 import { AddIcon, SyncIcon } from '../icon/icon'
 import Panel from './Panel'
 
@@ -15,10 +15,16 @@ const TopBar = () => {
     return (
         <div data-tauri-drag-region class="top-bar">
             <button class="top-bar-btn">
-                <div class='refresh'
-                    onClick={() => setRefresh(!refresh())}
-                >
-                    {refresh() ? (<Spinner type={SpinnerType.oval} width={16} height={16} />) : (<SyncIcon size={20} />)}
+                <div class="refresh" onClick={() => setRefresh(!refresh())}>
+                    {refresh() ? (
+                        <Spinner
+                            type={SpinnerType.oval}
+                            width={16}
+                            height={16}
+                        />
+                    ) : (
+                        <SyncIcon size={20} />
+                    )}
                 </div>
             </button>
             <input

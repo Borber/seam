@@ -8,6 +8,7 @@ interface Url {
 }
 
 interface LiveProps {
+    live: string
     rid: string
     title: string
     anchor: string
