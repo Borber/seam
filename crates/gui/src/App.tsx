@@ -66,7 +66,7 @@ const App = () => {
                     className: '',
                     duration: 5000,
                     style: {
-                        background: '#363636',
+                        background: '#0f0f0fc9',
                         color: '#fff',
                     },
                 }}
