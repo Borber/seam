@@ -14,9 +14,10 @@ const TopBar = () => {
     return (
         <div data-tauri-drag-region class="top-bar">
             <button class="top-bar-btn">
-                <div class={`refreshdiv ${refresh() ? 'refresh' : ''}`} onClick={() => {
-                    setRefresh(!refresh())
-                }}><SyncIcon size={18} /></div>
+                <div
+                    classList={{ 'refresh': refresh() }}
+                    onClick={() => setRefresh(!refresh())}
+                ><SyncIcon size={18} /></div>
             </button>
             <input
                 placeholder="房间号"

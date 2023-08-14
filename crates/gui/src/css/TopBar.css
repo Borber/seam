@@ -14,12 +14,9 @@
     }
 }
 
-.refreshdiv {
-    height: 18px;
-}
-
 .refresh {
     animation: box 2s linear infinite;
+    will-change: transform;
 }
 
 .top-bar-input {
