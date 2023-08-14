@@ -2,10 +2,12 @@ import { createSignal } from 'solid-js'
 import toast from 'solid-toast'
 import { Transition } from 'solid-transition-group'
 
+import { Spinner, SpinnerType } from 'solid-spinner';
 import { AddIcon, SyncIcon } from '../icon/icon'
 import Panel from './Panel'
 
 const TopBar = () => {
+    const [refresh, setRefresh] = createSignal(false)
     const [rid, setRid] = createSignal('')
     const [onInput, setInput] = createSignal(false)
     const [onPanel, setPanel] = createSignal(false)
@@ -13,7 +15,11 @@ const TopBar = () => {
     return (
         <div data-tauri-drag-region class="top-bar">
             <button class="top-bar-btn">
-                <SyncIcon size={18} />
+                <div class='refresh'
+                    onClick={() => setRefresh(!refresh())}
+                >
+                    {refresh() ? (<Spinner type={SpinnerType.oval} width={16} height={16} />) : (<SyncIcon size={20} />)}
+                </div>
             </button>
             <input
                 placeholder="房间号"
