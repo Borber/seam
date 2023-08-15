@@ -17,7 +17,7 @@
     bottom: 0;
     width: 100%;
     height: 100px;
-    background: #2f2f2f4f;
+    background: #1d1d1d6d;
     backdrop-filter: blur(10px);
     box-shadow: inset 0.3px 0.3px 3px 0.3px rgba(160, 160, 160, 0.6);
 }

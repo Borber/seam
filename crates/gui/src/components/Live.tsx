@@ -13,13 +13,13 @@ interface LiveProps {
     title: string
     anchor: string
     urls: Url[]
-    img: string
+    img?: string
 }
 
 const Live = (props: LiveProps) => {
     return (
         <div class="live">
-            <img class="live-img" src={props.img} />
+            <img class="live-img" src={props.img ?? '/src/assets/no_img.png'} />
             <div class="live-panel">
                 <div class="live-title">{props.title}</div>
                 <div class="live-control">

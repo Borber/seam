@@ -13,13 +13,13 @@ interface GoodItemProps {
     title: string
     anchor: string
     urls: Url[]
-    img: string
+    img?: string
 }
 
 const GoodItem = (props: GoodItemProps) => {
     return (
         <div class="good-item">
-            <img class="good-img" src={props.img} />
+            <img class="good-img" src={props.img ?? '/src/assets/no_img.png'} />
             <div class="good-panel">
                 <div class="good-title">{props.title}</div>
                 <div class="good-info">快来看</div>
