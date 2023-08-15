@@ -78,7 +78,7 @@
 |      [棉花糖](https://www.2cq.com/)       |   mht    |                       `https://www.2cq.com/<RID>`                        |          |     ✅     |
 |       [kk](https://www.kktv5.com/)        |    kk    |                    `https://www.kktv5.com/show/<RID>`                    |          |     ✅     |
 |      [千帆直播](https://qf.56.com/)       |    qf    |                        `https://qf.56.com/<RID>`                         |          |     ✅     |
-|      [Now 直播](https://now.qq.com/)      |   now    |            `https://now.qq.com/pcweb/story.html?roomid=<RID>`            |          |            |
+|      [Now 直播](https://now.qq.com/)      |   now    |            `https://now.qq.com/pcweb/story.html?roomid=<RID>`            |          |     ✅     |
 |       [映客](https://www.inke.cn/)        |   inke   |           `https://www.inke.cn/liveroom/index.html?uid=<RID>`            |          |     ✅     |
 |     [afreeca](https://afreecatv.com/)     | afreeca  |                     `https://bj.afreecatv.com/<RID>`                     |          |            |
 | [pandalive](https://www.pandalive.co.kr/) |  panda   |               `https://www.pandalive.co.kr/channel/<RID>`                |          |            |
