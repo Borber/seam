@@ -60,6 +60,7 @@ impl Live for Client {
         if max != 10000 {
             stream_info = get_bili_stream_info(&rid, max).await?;
         }
+
         let mut urls = vec![];
         for obj in stream_info.as_array().ok_or(SeamError::NeedFix("obj"))? {
             for format in obj["format"]

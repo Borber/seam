@@ -80,6 +80,7 @@ mod test {
 pub struct Node {
     pub rid: String,
     pub title: String,
+    // pub anchor: String,
     pub urls: Vec<Url>,
 }
 
