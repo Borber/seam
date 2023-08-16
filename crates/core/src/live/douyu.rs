@@ -60,6 +60,16 @@ async fn douyu_do_js_pc(rid: &str, headers: Option<HashMap<String, String>>) -> 
         .text()
         .await?;
 
+    let re = Regex::new(r#"<h3 class="Title-header">([\s\S]*?)</h3>"#)?;
+    // TODO 修改为默认值, 而非错误返回
+    let title = match re.captures(&text) {
+        Some(caps) => match caps.get(1) {
+            Some(t) => t.as_str().to_owned(),
+            None => "获取失败".to_owned(),
+        },
+        None => "获取失败".to_owned(),
+    };
+
     // 正则匹配固定位置的js代码
     let re = Regex::new(r#"<script type="text/javascript">([\s\S]*?)</script>"#)?;
     let mut func = String::new();
@@ -180,7 +190,7 @@ async fn douyu_do_js_pc(rid: &str, headers: Option<HashMap<String, String>>) -> 
 
             Ok(Node {
                 rid: rid.to_owned(),
-                title: "douyu".to_owned(),
+                title,
                 urls: nodes,
             })
         }

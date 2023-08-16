@@ -12,11 +12,17 @@ args = []
 # 请注意 不要覆盖虎牙的 user-agent, 否则会导致获取失败
 [headers.global]
 # user-agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36 Edg/115.0.1901.200"
-# 各平台
+
+# 抖音 cookie 必须
 [headers.douyin]
 cookie = "xxxx"
 
+# 快手 cookie 必须
 [headers.ks]
+cookie = "xxxx"
+
+# 斗鱼设置登录账户 cookie 情况下可以获取到备用线路高清源
+[headers.douyu]
 cookie = "xxxx"
 
 
