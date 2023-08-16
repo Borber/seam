@@ -81,7 +81,7 @@
 |      [Now](https://now.qq.com/)      |   now    |            `https://now.qq.com/pcweb/story.html?roomid=<RID>`            |          |     ✅     |
 |       [映客](https://www.inke.cn/)        |   inke   |           `https://www.inke.cn/liveroom/index.html?uid=<RID>`            |          |     ✅     |
 |     [afreeca](https://afreecatv.com/)     | afreeca  |                     `https://bj.afreecatv.com/<RID>`                     |          |            |
-| [pandalive](https://www.pandalive.co.kr/) |  panda   |               `https://www.pandalive.co.kr/channel/<RID>`                |          |            |
+| [panda](https://www.pandalive.co.kr/) |  panda   |               `https://www.pandalive.co.kr/channel/<RID>`                |          |            |
 |     [flex](https://www.flextv.co.kr/)     |   flex   |                `https://www.flextv.co.kr/channels/<RID>`                 |          |            |
 |     [wink](https://www.winktv.co.kr/)     |   wink   |                 `https://www.winktv.co.kr/channel/<RID>`                 |          |            |
 
