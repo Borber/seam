@@ -45,9 +45,15 @@ impl Live for Client {
                         ));
                     }
                 }
+
+                let title = match &json["media"]["title"] {
+                    serde_json::Value::Null => "获取失败",
+                    title => title.as_str().unwrap_or("获取失败"),
+                };
+
                 Ok(Node {
                     rid: rid.to_owned(),
-                    title: "wink".to_owned(),
+                    title: title.to_owned(),
                     urls,
                 })
             }
@@ -56,4 +62,4 @@ impl Live for Client {
 }
 
 #[cfg(test)]
-macros::gen_test!(csp1208);
+macros::gen_test!(roeunlove);
