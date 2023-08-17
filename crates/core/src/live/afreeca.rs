@@ -37,6 +37,14 @@ impl Live for Client {
                 return Err(SeamError::None);
             }
         };
+        let re = Regex::new(r#"var szBroadTitle   = "([\s\S]*?)";"#)?;
+        let title = match re.captures(&text) {
+            Some(rap) => match rap.get(1) {
+                Some(rap) => rap.as_str(),
+                None => "获取失败",
+            },
+            None => "获取失败",
+        };
         let mut form = HashMap::new();
         form.insert("bid", rid);
         form.insert("bno", bno);
@@ -61,11 +69,11 @@ impl Live for Client {
         ))];
         Ok(Node {
             rid: rid.to_owned(),
-            title: "afreeca".to_owned(),
+            title: title.to_owned(),
             urls,
         })
     }
 }
 
 #[cfg(test)]
-macros::gen_test!(dasl8121);
+macros::gen_test!(suji0624);
