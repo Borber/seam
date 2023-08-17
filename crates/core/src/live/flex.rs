@@ -33,9 +33,15 @@ impl Live for Client {
                 let urls = vec![parse_url(
                     url.as_str().ok_or(SeamError::NeedFix("url"))?.to_string(),
                 )];
+
+                let title = match &json["stream"]["title"] {
+                    serde_json::Value::Null => "获取失败",
+                    title => title.as_str().unwrap_or("获取失败"),
+                };
+
                 Ok(Node {
                     rid: rid.to_owned(),
-                    title: "flex".to_owned(),
+                    title: title.to_owned(),
                     urls,
                 })
             }
@@ -44,4 +50,4 @@ impl Live for Client {
 }
 
 #[cfg(test)]
-macros::gen_test!(399291);
+macros::gen_test!(437149);
