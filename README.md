@@ -82,7 +82,7 @@
 |     [映客](https://www.inke.cn/)      |   inke   |           `https://www.inke.cn/liveroom/index.html?uid=<RID>`            |          |     ✅     |
 |   [afreeca](https://afreecatv.com/)   | afreeca  |                     `https://bj.afreecatv.com/<RID>`                     |          |     ✅     |
 | [panda](https://www.pandalive.co.kr/) |  panda   |               `https://www.pandalive.co.kr/channel/<RID>`                |          |     ✅     |
-|   [flex](https://www.flextv.co.kr/)   |   flex   |                `https://www.flextv.co.kr/channels/<RID>`                 |          |            |
+|   [flex](https://www.flextv.co.kr/)   |   flex   |                `https://www.flextv.co.kr/channels/<RID>`                 |          |     ✅     |
 |   [wink](https://www.winktv.co.kr/)   |   wink   |                 `https://www.winktv.co.kr/channel/<RID>`                 |          |     ✅     |
 
 # 配置
