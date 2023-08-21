@@ -55,6 +55,9 @@ impl Live for Client {
             Ok(Node {
                 rid: rid.to_owned(),
                 title,
+                cover: "".to_owned(),
+                anchor: "".to_owned(),
+                head: "".to_owned(),
                 urls: vec![parse_url(format!(
                     "https://{pl}-flv.live.huajiao.com/live_huajiao_v2/{sn}.m3u8"
                 ))],

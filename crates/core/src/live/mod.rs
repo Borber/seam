@@ -65,8 +65,6 @@ mod test {
 /// 3. 直播源地址模块
 /// 4. 弹幕模块
 
-// TODO 去除 core 中多余功能, 保持 core 的纯洁性, 去除不相干的字段, 如 rid, title, 在 GUI 阶段返回体中再进行包装
-
 // TODO 整理代码中的注释, 使其更加规范
 
 // TODO title 可以弄成&str吗?
@@ -80,7 +78,9 @@ mod test {
 pub struct Node {
     pub rid: String,
     pub title: String,
-    // pub anchor: String,
+    pub cover: String,
+    pub anchor: String,
+    pub head: String,
     pub urls: Vec<Url>,
 }
 

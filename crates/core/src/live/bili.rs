@@ -1,6 +1,7 @@
 use std::collections::HashMap;
 
 use async_trait::async_trait;
+use serde_json::Value;
 
 use super::{Live, Node};
 use crate::error::{Result, SeamError};
@@ -11,8 +12,9 @@ use crate::{
 };
 
 const INIT_URL: &str = "https://api.live.bilibili.com/room/v1/Room/room_init";
-const INFO_URL: &str = "https://api.live.bilibili.com/room/v1/Room/get_info";
-const URL: &str = "https://api.live.bilibili.com/xlive/web-room/v2/index/getRoomPlayInfo";
+const INFO_URL: &str =
+    "https://api.live.bilibili.com/xlive/web-room/v1/index/getInfoByRoom?room_id=";
+const PLAY_URL: &str = "https://api.live.bilibili.com/xlive/web-room/v2/index/getRoomPlayInfo";
 
 /// bilibili直播
 ///
@@ -22,13 +24,13 @@ pub struct Client;
 #[async_trait]
 impl Live for Client {
     async fn get(&self, rid: &str, headers: Option<HashMap<String, String>>) -> Result<Node> {
-        let resp: serde_json::Value = CLIENT
+        let resp = CLIENT
             .get(INIT_URL)
             .query(&[("id", rid)])
             .headers(hash2header(headers))
             .send()
             .await?
-            .json()
+            .json::<Value>()
             .await?;
 
         // 获取真实房间号
@@ -57,6 +59,7 @@ impl Live for Client {
             })
             .max()
             .ok_or(SeamError::NeedFix("max"))?;
+
         if max != 10000 {
             stream_info = get_bili_stream_info(&rid, max).await?;
         }
@@ -90,25 +93,48 @@ impl Live for Client {
             }
         }
 
-        let json: serde_json::Value = CLIENT
-            .get(INFO_URL)
-            .query(&[("room_id", &rid)])
+        let json = CLIENT
+            .get(format!("{}{}", INFO_URL, rid))
             .send()
             .await?
-            .json()
+            .json::<Value>()
             .await?;
-        let title = json["data"]["title"]
+
+        let title = json["data"]["room_info"]["title"]
             .as_str()
             .unwrap_or("获取失败")
             .to_owned();
-        Ok(Node { rid, title, urls })
+
+        let cover = json["data"]["room_info"]["cover"]
+            .as_str()
+            .unwrap_or("")
+            .to_owned();
+
+        let anchor = json["data"]["anchor_info"]["base_info"]["uname"]
+            .as_str()
+            .unwrap_or("")
+            .to_owned();
+
+        let head = json["data"]["anchor_info"]["base_info"]["face"]
+            .as_str()
+            .unwrap_or("")
+            .to_owned();
+
+        Ok(Node {
+            rid,
+            title,
+            cover,
+            anchor,
+            head,
+            urls,
+        })
     }
 }
 
 /// 通过真实房间号获取直播源信息
 pub async fn get_bili_stream_info(rid: &str, qn: u64) -> Result<serde_json::Value> {
     Ok(CLIENT
-        .get(URL)
+        .get(PLAY_URL)
         .header("User-Agent", USER_AGENT)
         .query(&[
             ("room_id", rid),
@@ -127,4 +153,4 @@ pub async fn get_bili_stream_info(rid: &str, qn: u64) -> Result<serde_json::Valu
 }
 
 #[cfg(test)]
-macros::gen_test!(13550856);
+macros::gen_test!(6);

@@ -191,6 +191,9 @@ async fn douyu_do_js_pc(rid: &str, headers: Option<HashMap<String, String>>) -> 
             Ok(Node {
                 rid: rid.to_owned(),
                 title,
+                cover: "".to_owned(),
+                anchor: "".to_owned(),
+                head: "".to_owned(),
                 urls: nodes,
             })
         }

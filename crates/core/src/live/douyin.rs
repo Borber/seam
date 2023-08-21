@@ -83,6 +83,9 @@ impl Live for Client {
                     Ok(Node {
                         rid: rid.to_string(),
                         title,
+                        cover: "".to_owned(),
+                        anchor: "".to_owned(),
+                        head: "".to_owned(),
                         urls,
                     })
                 }
