@@ -24,6 +24,9 @@ struct Cli {
     /// 直播间号
     #[arg(short = 'i', required = true)]
     rid: Option<String>,
+    /// 显示详细信息
+    #[arg(short = 'a')]
+    all: bool,
     /// 直接录播功能
     #[arg(short = 'r')]
     record: bool,
@@ -43,7 +46,7 @@ struct Cli {
 
 #[derive(Parser, Debug)]
 enum Commands {
-    /// 显示所有平台
+    /// 显示所有支持的平台
     List,
 }
 
@@ -52,6 +55,7 @@ pub async fn cli() -> Result<()> {
     let Cli {
         live,
         rid,
+        all,
         record,
         auto_record,
         danmu,
@@ -89,7 +93,20 @@ pub async fn cli() -> Result<()> {
     // 无参数情况下，直接输出直播源信息
     if !(danmu || config_danmu || record || auto_record) {
         match node {
-            Ok(node) => println!("{}", node.json()),
+            Ok(node) => {
+                if all {
+                    println!("{}", node.json())
+                } else {
+                    println!(
+                        "{}",
+                        node.urls
+                            .into_iter()
+                            .map(|item| item.url)
+                            .collect::<Vec<_>>()
+                            .join("\n\n")
+                    )
+                }
+            }
             Err(SeamError::None) => println!("未开播"),
             Err(e) => println!("{}", e),
         }
