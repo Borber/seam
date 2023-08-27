@@ -26,7 +26,7 @@ jobs:
         id: changelog_reader
         uses: mindsers/changelog-reader-action@v2.2.2
         with:
-          path: './crates/cli/CHANGELOG.md'
+          path: './crates/gui/CHANGELOG.md'
           version: ${{ steps.get_version.outputs.version }}
 
   build_seam:
