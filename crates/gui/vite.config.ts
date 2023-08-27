@@ -1,4 +1,4 @@
-import { type UserConfigExport, defineConfig } from "vite";
+import { defineConfig, type UserConfigExport } from "vite";
 import solidPlugin from "vite-plugin-solid";
 
 // https://vitejs.dev/config/
