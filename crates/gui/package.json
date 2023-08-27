@@ -19,13 +19,13 @@
     },
     "devDependencies": {
         "@tauri-apps/cli": "^1.4.0",
-        "@types/node": "^20.5.0",
-        "@typescript-eslint/eslint-plugin": "^6.4.0",
-        "@typescript-eslint/parser": "^6.4.0",
-        "eslint": "^8.47.0",
+        "@types/node": "^20.5.6",
+        "@typescript-eslint/eslint-plugin": "^6.4.1",
+        "@typescript-eslint/parser": "^6.4.1",
+        "eslint": "^8.48.0",
         "eslint-plugin-simple-import-sort": "^10.0.0",
-        "eslint-plugin-solid": "^0.12.1",
-        "typescript": "^5.1.6",
+        "eslint-plugin-solid": "^0.13.0",
+        "typescript": "^5.2.2",
         "vite": "^4.4.9",
         "vite-plugin-solid": "^2.7.0"
     }

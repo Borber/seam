@@ -22,18 +22,8 @@ pub struct Client;
 
 #[async_trait]
 impl Live for Client {
-    // TODO 说明所需 cookie
+    /// `headers`: cookie 必须
     async fn get(&self, rid: &str, headers: Option<HashMap<String, String>>) -> Result<Node> {
-        // 后续应提取到获取 cookie 的逻辑中
-        // let mut headers = hash2header(headers);
-        // // 更新 cookie
-        // headers.insert("user-agent", USER_AGENT.parse()?);
-        // let resp = CLIENT
-        //     .get(format!("{URL}{rid}"))
-        //     .headers(headers.clone())
-        //     .send()
-        //     .await?;
-        // header_map.insert("cookie", resp.headers().get("set-cookie").unwrap().clone());
         // 通过网页内容获取直播地址
         let resp = CLIENT
             .get(format!("{URL}{rid}"))
@@ -51,7 +41,7 @@ impl Live for Client {
                 .ok_or(SeamError::NeedFix("json"))?
                 .as_str(),
         )?;
-        let json: serde_json::Value = serde_json::from_str(&json)?;
+        let json = serde_json::from_str::<Value>(&json)?;
 
         let room_info = &json["app"]["initialState"]["roomStore"]["roomInfo"];
         match room_info["anchor"] {
@@ -65,16 +55,23 @@ impl Live for Client {
                         .as_str()
                         .unwrap_or("douyin")
                         .to_string();
+
+                    // 获取 json str
+                    let json_str = stream_url["live_core_sdk_data"]["pull_data"]["stream_data"]
+                        .as_str()
+                        .ok_or(SeamError::NeedFix("stream_data"))?;
+
+                    let new_json = serde_json::from_str::<Value>(json_str)?;
                     // 返回最高清晰度的直播地址 flv 和 hls
                     let urls = vec![
                         parse_url(
-                            stream_url["flv_pull_url"]["FULL_HD1"]
+                            new_json["data"]["origin"]["main"]["flv"]
                                 .as_str()
                                 .ok_or(SeamError::NeedFix("flv_pull_url"))?
                                 .to_owned(),
                         ),
                         parse_url(
-                            stream_url["hls_pull_url_map"]["FULL_HD1"]
+                            new_json["data"]["origin"]["main"]["hls"]
                                 .as_str()
                                 .ok_or(SeamError::NeedFix("hls_pull_url_map"))?
                                 .to_owned(),
