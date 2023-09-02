@@ -22,7 +22,7 @@ pub struct Client;
 
 #[async_trait]
 impl Live for Client {
-    /// `headers`: cookie 必须
+    /// `headers`: cookie 必须， 但不需要是登录状态
     async fn get(&self, rid: &str, headers: Option<HashMap<String, String>>) -> Result<Node> {
         // 通过网页内容获取直播地址
         let resp = CLIENT
