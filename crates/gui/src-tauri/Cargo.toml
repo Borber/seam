@@ -40,4 +40,4 @@ seam_core = { path = "../../core" }
 custom-protocol = ["tauri/custom-protocol"]
 
 [target.'cfg(unix)'.dependencies]
-openssl = { version = '0.10', features = ["vendored"] }
+openssl = { version = "0.10", features = ["vendored"] }
