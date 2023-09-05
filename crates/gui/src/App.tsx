@@ -105,7 +105,7 @@ const App = () => {
                             width={'100px'}
                         />
                         <div class="name">Seam</div>
-                        <div class="version">0.1.7</div>
+                        <div class="version">0.1.8</div>
                     </div>
                     <div class="controller">
                         <input
