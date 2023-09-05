@@ -130,7 +130,7 @@ danmu = "[rid]-[title]-[date]-[time]"
 
 ```
 
-[额外说明](./doc/配置说明.md)
+> cookie 获取方法: [额外说明](./doc/配置说明.md)
 
 # 路线
 
