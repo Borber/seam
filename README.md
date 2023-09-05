@@ -46,15 +46,9 @@
 
 ```bash
 ❯ .\seam.exe -l douyu -i 88080
-[  {
-    "rate": "超清1",
-    "url": "http://url1"
-  },
-  {
-    "rate": "超清2",
-    "url": "http://url2"
-  }
-]
+http://url1
+
+http://url2
 ```
 
 ## [详情](crates/cli/README.md)
