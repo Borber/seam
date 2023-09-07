@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, path::PathBuf};
 
 use once_cell::sync::Lazy;
 use serde::Deserialize;
@@ -39,13 +39,13 @@ pub static CONFIG: Lazy<Config> = Lazy::new(|| {
         .play
         .as_ref()
         .and_then(|play| play.bin.clone())
-        .unwrap_or("".to_owned());
+        .unwrap_or_default();
 
     let args = config_file
         .play
         .as_ref()
         .and_then(|play| play.args.clone())
-        .unwrap_or(vec![]);
+        .unwrap_or_default();
 
     let play = Play { bin, args };
 

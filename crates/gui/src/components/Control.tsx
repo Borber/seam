@@ -3,6 +3,8 @@ import '../css/Control.css'
 import { appWindow } from '@tauri-apps/api/window'
 import { Show } from 'solid-js'
 
+// TODO 修复最小化, 隐藏时的渲染bug
+
 const Minimize = () => {
     return (
         <svg aria-hidden="false" width="10" height="10" viewBox="0 0 12 12">

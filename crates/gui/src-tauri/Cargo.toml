@@ -11,7 +11,10 @@ edition = "2021"
 tauri-build = { version = "1.4", features = [] }
 
 [dependencies]
-tauri = { version = "1.4", features = [ "dialog-all",
+seam_core = { path = "../../core" }
+
+tauri = { version = "1.4", features = [
+    "dialog-all",
     "window-show",
     "window-minimize",
     "window-close",
@@ -31,8 +34,11 @@ basic-toml = "0.1"
 
 window-shadows = "0.2"
 
-seam_core = { path = "../../core" }
-
+sea-orm = { version = "0.12", features = [
+    "sqlx-sqlite",
+    "runtime-tokio-native-tls",
+    "macros",
+] }
 
 [features]
 # this feature is used for production builds or when `devPath` points to the filesystem

@@ -1,9 +1,11 @@
+import { invoke } from '@tauri-apps/api'
 import { createSignal } from 'solid-js'
 import { Spinner, SpinnerType } from 'solid-spinner'
 import toast from 'solid-toast'
 import { Transition } from 'solid-transition-group'
 
 import { AddIcon, SyncIcon } from '../icon/icon'
+import { Resp } from '../model/Resp'
 import Panel from './Panel'
 
 const TopBar = () => {
@@ -12,6 +14,21 @@ const TopBar = () => {
     const [onInput, setInput] = createSignal(false)
     const [onPanel, setPanel] = createSignal(false)
     const [live, setLive] = createSignal('bili')
+
+    const add = async () => {
+        await invoke<Resp<boolean>>('add', {
+            live: live(),
+            rid: rid(),
+        }).then((p) => {
+            if (p.code === 0) {
+                console.log(p.data)
+                toast.success('添加成功')
+            } else {
+                toast.error(p.msg)
+            }
+        })
+    }
+
     return (
         <div data-tauri-drag-region class="top-bar">
             <button class="top-bar-btn">
@@ -42,9 +59,8 @@ const TopBar = () => {
             />
             <button
                 class="top-bar-btn"
-                onClick={() => {
-                    console.log(live(), rid())
-                    toast.success('添加成功')
+                onClick={async () => {
+                    await add()
                 }}
             >
                 <AddIcon size={16} />

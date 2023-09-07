@@ -16,6 +16,8 @@ interface LiveProps {
     img?: string
 }
 
+// TODO 减少内阴影的使用, 按钮的样式应该简洁一些
+
 const Live = (props: LiveProps) => {
     return (
         <div class="live">
