@@ -45,7 +45,7 @@ pub static CONFIG: Lazy<Config> = Lazy::new(|| {
         .play
         .as_ref()
         .and_then(|play| play.args.clone())
-        .unwrap_or(vec![]);
+        .unwrap_or_default();
 
     let play = Play { bin, args };
 
