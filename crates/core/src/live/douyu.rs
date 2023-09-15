@@ -68,7 +68,7 @@ impl Live for Client {
         let func = format!("{func}ub98484234(0,0,0)");
 
         // 获取eval实际运行的字符串
-        let res = eval(&func).await;
+        let res = eval(&func);
         let res = res.trim_matches('"');
 
         // 构建函数, 替换数值
@@ -91,8 +91,11 @@ impl Live for Client {
             format!("\"{}\";", &rb).as_str(),
         );
 
+        println!("res: {}", res);
+
         // 运行js获取签名值
-        let sign = eval(&res).await;
+        let sign = eval(&res);
+        println!("sign: {}", sign);
         let sign = sign.trim_matches('"');
         let sign = sign.rsplit_once('=').ok_or(SeamError::NeedFix("sign"))?.1;
 
