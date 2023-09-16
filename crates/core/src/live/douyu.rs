@@ -91,11 +91,8 @@ impl Live for Client {
             format!("\"{}\";", &rb).as_str(),
         );
 
-        println!("res: {}", res);
-
         // 运行js获取签名值
         let sign = eval(&res);
-        println!("sign: {}", sign);
         let sign = sign.trim_matches('"');
         let sign = sign.rsplit_once('=').ok_or(SeamError::NeedFix("sign"))?.1;
 
