@@ -4,10 +4,7 @@
     z-index: 10;
     top: 40px;
     left: 300px;
-    border-radius: 8px;
-    background-color: #0f0f0faf;
-    backdrop-filter: blur(10px);
-    box-shadow: inset 0.3px 0.3px 3px 0.3px rgba(160, 160, 160, 0.6), 2px 2px 5px 0px rgba(0, 0, 0, 0.7);
+    background-color: transparent;
 }
 
 .panel-container {
@@ -20,6 +17,9 @@
 
 .panel-item {
     flex: 1;
+    border-radius: 8px;
+    background-color: #0f0f0faf;
+    backdrop-filter: blur(10px);
     font-size: 16px;
     font-weight: bold;
     color: #fff;
@@ -31,7 +31,7 @@
 }
 
 .panel-item:not(.panel-item-activate):hover {
-    background-color: #5f5f5f;
+    background-color: #49494949;
 }
 
 .panel-item-activate {
