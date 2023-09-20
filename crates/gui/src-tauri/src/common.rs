@@ -29,20 +29,30 @@ pub struct Context {
     pub clients: HashMap<String, Arc<dyn Live>>,
 }
 
-// TODO 需要一个 CONTEXT 防止 conn
-
 pub async fn load() -> Context {
-    let path = Path::new(&bin_dir()).join("data");
+    let path = Path::new(&bin_dir()).join("data.db");
     let flag = path.exists();
     if !flag {
         std::fs::File::create(&path).unwrap();
     }
-    let pool = Database::connect("")
+
+    // TODO 后续需要优化
+    let path = format!("sqlite://{}", path.to_str().unwrap());
+
+    let pool = Database::connect(path)
         .await
         .expect("Connect database failed");
     if !flag {
         // 初始化数据库
-        database::init(&pool).await;
+        // TODO 打印日志
+        match database::init(&pool).await {
+            Ok(_) => {
+                println!("初始化数据库成功");
+            }
+            Err(e) => {
+                panic!("{}", e.to_string());
+            }
+        };
     }
     let clients = live::all();
     Context { pool, clients }

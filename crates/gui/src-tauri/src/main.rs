@@ -1,5 +1,6 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+use common::CONTEXT;
 use resp::Resp;
 use seam_core::{error::SeamError, live::Node};
 use tauri::Manager;
@@ -41,6 +42,8 @@ async fn play(url: String) -> Resp<bool> {
 
 #[tokio::main]
 async fn main() {
+    CONTEXT.get_or_init(common::load).await;
+
     tauri::Builder::default()
         .setup(|app| {
             if cfg!(any(target_os = "macos", target_os = "windows")) {
