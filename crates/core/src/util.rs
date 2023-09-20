@@ -1,4 +1,5 @@
 use boa_engine::Context;
+use boa_engine::Source;
 use reqwest::header::HeaderMap;
 use reqwest::header::HeaderName;
 use reqwest::header::HeaderValue;
@@ -11,9 +12,9 @@ use std::str::FromStr;
 /// js运行时
 pub fn eval(js: &str) -> String {
     let mut context = Context::default();
-    match context.eval(js) {
+    match context.eval(Source::from_bytes(js)) {
         Ok(result) => result.display().to_string(),
-        Err(e) => e.display().to_string(),
+        Err(e) => e.to_string(),
     }
 }
 

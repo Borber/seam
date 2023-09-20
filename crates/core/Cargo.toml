@@ -26,7 +26,7 @@ base64 = "0.21"
 
 reqwest = { version = "0.11", features = ["json", "gzip", "deflate"] }
 
-boa_engine = "0.16"
+boa_engine = { version = "0.17", features = ["annex-b"] }
 
 
 [target.'cfg(unix)'.dependencies]
