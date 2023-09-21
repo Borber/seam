@@ -38,6 +38,7 @@ const Setting = () => {
                 />
             </div>
 
+            {/* TODO 将目前已知需要额外配置的 cookie 写入此处, 让用户知道哪些需要额外配置 */}
             <div class="setting-title">Headers</div>
             <textarea class="setting-textarea" placeholder="按照官网配置" />
             <button class="setting-save" onClick={() => save()}>
