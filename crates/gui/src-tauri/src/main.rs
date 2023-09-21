@@ -31,9 +31,13 @@ async fn url(live: String, rid: String) -> Resp<Node> {
 }
 
 #[tauri::command]
-async fn add(live: String, rid: String) -> Resp<bool> {
-    println!("live: {}, rid: {}", live, rid);
-    Resp::success(false)
+async fn add_subscribe(live: String, rid: String) -> Resp<bool> {
+    service::subscribe::add(live, rid).await.into()
+}
+
+#[tauri::command]
+async fn all_subscribe() -> Resp<Vec<database::subscribe::Model>> {
+    service::subscribe::all().await.into()
 }
 
 #[tauri::command]
@@ -53,7 +57,12 @@ async fn main() {
             }
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![url, add, play,])
+        .invoke_handler(tauri::generate_handler![
+            url,
+            add_subscribe,
+            all_subscribe,
+            play,
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

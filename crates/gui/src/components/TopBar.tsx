@@ -16,7 +16,7 @@ const TopBar = () => {
     const [live, setLive] = createSignal('bili')
 
     const add = async () => {
-        await invoke<Resp<boolean>>('add', {
+        await invoke<Resp<boolean>>('add_subscribe', {
             live: live(),
             rid: rid(),
         }).then((p) => {
