@@ -11,6 +11,7 @@ mod config;
 mod database;
 mod model;
 mod resp;
+mod service;
 mod util;
 
 #[tauri::command]
