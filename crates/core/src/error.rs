@@ -2,6 +2,8 @@ use thiserror::Error;
 
 pub type Result<T> = std::result::Result<T, SeamError>;
 
+
+// 需要添加
 #[derive(Error, Debug)]
 pub enum SeamError {
     #[error("Request error: {0}")]
