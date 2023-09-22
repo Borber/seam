@@ -9,6 +9,7 @@ use window_shadows::set_shadow;
 mod common;
 mod config;
 mod database;
+mod manager;
 mod model;
 mod resp;
 mod service;
