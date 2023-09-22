@@ -25,6 +25,7 @@ impl Live for Client {
         let text = CLIENT
             .get(format!("{URL}{rid}"))
             .headers(hash2header(headers))
+            .header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36 Edg/117.0.2045.31")
             .send()
             .await?
             .text()
@@ -38,12 +39,31 @@ impl Live for Client {
         };
         let json: serde_json::Value = serde_json::from_str(stream)?;
 
-        let title = json["liveroom"]["liveStream"]["caption"]
+        let title = json["liveroom"]["playList"][0]["liveStream"]["caption"]
             .as_str()
             .unwrap_or("获取失败")
             .to_owned();
 
-        match &json["liveroom"]["liveStream"]["playUrls"][0]["adaptationSet"]["representation"] {
+        let cover = json["liveroom"]["playList"][0]["liveStream"]["poster"]
+            .as_str()
+            .unwrap_or("")
+            .to_owned();
+
+        let head = json["liveroom"]["playList"][0]["author"]["avatar"]
+            .as_str()
+            .unwrap_or("")
+            .to_owned();
+
+        let anchor = json["liveroom"]["playList"][0]["author"]["name"]
+            .as_str()
+            .unwrap_or("获取失败")
+            .to_owned();
+
+        println!("title: {}", title);
+
+        match &json["liveroom"]["playList"][0]["liveStream"]["playUrls"][0]["adaptationSet"]
+            ["representation"]
+        {
             serde_json::Value::Null => Err(SeamError::None),
             reps => {
                 let list = reps.as_array().ok_or(SeamError::NeedFix("list"))?;
@@ -54,9 +74,9 @@ impl Live for Client {
                 Ok(Node {
                     rid: rid.to_owned(),
                     title,
-                    cover: "".to_owned(),
-                    anchor: "".to_owned(),
-                    head: "".to_owned(),
+                    cover,
+                    anchor,
+                    head,
                     urls,
                 })
             }
@@ -65,4 +85,4 @@ impl Live for Client {
 }
 
 #[cfg(test)]
-macros::gen_test!(3xgexgpig9gwwi2);
+macros::gen_test!(Bd20210915);
