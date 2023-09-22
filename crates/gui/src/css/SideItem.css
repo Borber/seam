@@ -1,0 +1,24 @@
+.side-link {
+    cursor: default;
+}
+
+.side-item {
+    width: 80px;
+    height: 75px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.side-item:not(.side-item-selected):hover {
+    background-color: #373737;
+}
+
+.side-item-selected {
+    background-color: #575757;
+}
+
+.side-item-bottom {
+    position: absolute;
+    bottom: 0;
+}

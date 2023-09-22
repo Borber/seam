@@ -1,0 +1,40 @@
+.top-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.refresh {
+    height: 20px;
+    width: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.top-bar-input {
+    width: 400px;
+    height: 30px;
+    margin: 5px;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.top-bar-btn {
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.slide-fade-enter-active,
+.slide-fade-exit-active {
+    transition: opacity 0.3s, transform 0.3s;
+}
+
+.slide-fade-enter,
+.slide-fade-exit-to {
+    opacity: 0;
+}

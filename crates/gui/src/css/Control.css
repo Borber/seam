@@ -1,0 +1,28 @@
+.control {
+    position: absolute;
+    right: 0;
+    display: flex;
+    text-align: center;
+    justify-content: center;
+}
+
+.control-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    color: #5b595c;
+    box-sizing: border-box;
+    padding: 10px;
+}
+
+.control-item:hover {
+    color: #fff;
+    background-color: #373737;
+}
+
+.control-item.control-item-close:hover {
+    color: #fff;
+    background-color: #cd1a2b;
+}

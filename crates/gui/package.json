@@ -1,6 +1,6 @@
 {
     "name": "seam",
-    "version": "0.1.8",
+    "version": "0.1.4",
     "description": "",
     "scripts": {
         "start": "vite",
@@ -12,16 +12,18 @@
     },
     "license": "MIT",
     "dependencies": {
+        "@solidjs/router": "^0.8.3",
         "@tauri-apps/api": "^1.4.0",
         "solid-js": "^1.7.11",
         "solid-spinner": "^0.1.9",
-        "solid-toast": "^0.5.0"
+        "solid-toast": "^0.5.0",
+        "solid-transition-group": "^0.2.3"
     },
     "devDependencies": {
         "@tauri-apps/cli": "^1.4.0",
-        "@types/node": "^20.5.9",
-        "@typescript-eslint/eslint-plugin": "^6.6.0",
-        "@typescript-eslint/parser": "^6.6.0",
+        "@types/node": "^20.5.7",
+        "@typescript-eslint/eslint-plugin": "^6.5.0",
+        "@typescript-eslint/parser": "^6.5.0",
         "eslint": "^8.48.0",
         "eslint-plugin-simple-import-sort": "^10.0.0",
         "eslint-plugin-solid": "^0.13.0",

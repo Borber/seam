@@ -39,7 +39,7 @@ pub static CONFIG: Lazy<Config> = Lazy::new(|| {
         .play
         .as_ref()
         .and_then(|play| play.bin.clone())
-        .unwrap_or("".to_owned());
+        .unwrap_or_default();
 
     let args = config_file
         .play
