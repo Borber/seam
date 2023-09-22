@@ -59,8 +59,6 @@ impl Live for Client {
             .unwrap_or("获取失败")
             .to_owned();
 
-        println!("title: {}", title);
-
         match &json["liveroom"]["playList"][0]["liveStream"]["playUrls"][0]["adaptationSet"]
             ["representation"]
         {
