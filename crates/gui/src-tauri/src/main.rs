@@ -3,7 +3,7 @@
 use common::CONTEXT;
 use resp::Resp;
 use seam_core::{error::SeamError, live::Node};
-use tauri::Manager;
+use tauri::{App, Manager};
 use window_shadows::set_shadow;
 
 mod common;
@@ -13,6 +13,7 @@ mod manager;
 mod model;
 mod resp;
 mod service;
+mod setup;
 mod util;
 
 #[tauri::command]
@@ -51,10 +52,12 @@ async fn play(url: String) -> Resp<bool> {
     util::play(&url).into()
 }
 
+
+
 #[tokio::main]
 async fn main() {
     CONTEXT.get_or_init(common::load).await;
-
+    
     tauri::Builder::default()
         .setup(|app| {
             if cfg!(any(target_os = "macos", target_os = "windows")) {
