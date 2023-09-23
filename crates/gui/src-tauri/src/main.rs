@@ -3,7 +3,7 @@
 use common::CONTEXT;
 use resp::Resp;
 use seam_core::{error::SeamError, live::Node};
-use tauri::Manager;
+use tauri::{AppHandle, Manager};
 use window_shadows::set_shadow;
 
 mod common;
@@ -13,6 +13,7 @@ mod manager;
 mod model;
 mod resp;
 mod service;
+mod setup;
 mod util;
 
 #[tauri::command]
@@ -32,18 +33,28 @@ async fn url(live: String, rid: String) -> Resp<Node> {
 }
 
 #[tauri::command]
-async fn add_subscribe(live: String, rid: String) -> Resp<bool> {
-    service::subscribe::add(live, rid).await.into()
-}
-
-#[tauri::command]
 async fn all_subscribe() -> Resp<Vec<database::subscribe::Model>> {
     service::subscribe::all().await.into()
 }
 
 #[tauri::command]
+async fn add_subscribe(live: String, rid: String) -> Resp<bool> {
+    service::subscribe::add(live, rid).await.into()
+}
+
+#[tauri::command]
+async fn remove_subscribe(live: String, rid: String) -> Resp<bool> {
+    service::subscribe::remove(live, rid).await.into()
+}
+
+#[tauri::command]
 async fn play(url: String) -> Resp<bool> {
     util::play(&url).into()
+}
+
+#[tauri::command]
+async fn refresh(app: AppHandle, live: String, rid: String) -> Resp<()> {
+    manager::refresh::refresh(&app, live, rid).await.into()
 }
 
 #[tokio::main]
@@ -60,9 +71,11 @@ async fn main() {
         })
         .invoke_handler(tauri::generate_handler![
             url,
-            add_subscribe,
             all_subscribe,
+            add_subscribe,
+            remove_subscribe,
             play,
+            refresh,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
