@@ -32,13 +32,18 @@ async fn url(live: String, rid: String) -> Resp<Node> {
 }
 
 #[tauri::command]
+async fn all_subscribe() -> Resp<Vec<database::subscribe::Model>> {
+    service::subscribe::all().await.into()
+}
+
+#[tauri::command]
 async fn add_subscribe(live: String, rid: String) -> Resp<bool> {
     service::subscribe::add(live, rid).await.into()
 }
 
 #[tauri::command]
-async fn all_subscribe() -> Resp<Vec<database::subscribe::Model>> {
-    service::subscribe::all().await.into()
+async fn remove_subscribe(live: String, rid: String) -> Resp<bool> {
+    service::subscribe::remove(live, rid).await.into()
 }
 
 #[tauri::command]
@@ -60,8 +65,9 @@ async fn main() {
         })
         .invoke_handler(tauri::generate_handler![
             url,
-            add_subscribe,
             all_subscribe,
+            add_subscribe,
+            remove_subscribe,
             play,
         ])
         .run(tauri::generate_context!())
