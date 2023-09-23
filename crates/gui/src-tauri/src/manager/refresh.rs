@@ -3,24 +3,32 @@ use crate::{clients, config::headers, service};
 use std::collections::HashMap;
 
 use anyhow::Result;
-use tauri::{App, Manager};
+use seam_core::live::Node;
+use serde::Serialize;
+use tauri::{AppHandle, Manager};
+
+#[derive(Clone, Debug, Serialize)]
+pub struct ReFreshMessage {
+    pub live: String,
+    pub node: Node,
+}
 
 // TODO 声明返回类型, 指明所属平台
 // 刷新单个订阅
-pub async fn refresh(app: &App, live: String, rid: String) -> Result<()> {
+pub async fn refresh(app: &AppHandle, live: String, rid: String) -> Result<()> {
     let clients = clients!();
     let node = clients
         .get(&live)
         .unwrap()
         .get(&rid, Some(headers(&live)))
         .await?;
-    
-    app.emit_all("refresh", node)?;
+
+    app.emit_all("refresh", ReFreshMessage { live, node })?;
     Ok(())
 }
 
 /// 刷新所有订阅的直播源
-pub async fn refresh_all(app: &App) -> Result<()> {
+pub async fn refresh_all(app: &AppHandle) -> Result<()> {
     let lives = service::subscribe::all().await?;
     let mut lists = HashMap::new();
     for live in lives {
@@ -30,7 +38,6 @@ pub async fn refresh_all(app: &App) -> Result<()> {
 
     loop {
         if lists.is_empty() {
-            // TODO 发送更新完毕事件
             break;
         }
 

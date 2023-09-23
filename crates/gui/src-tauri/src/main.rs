@@ -3,7 +3,7 @@
 use common::CONTEXT;
 use resp::Resp;
 use seam_core::{error::SeamError, live::Node};
-use tauri::{App, Manager};
+use tauri::{AppHandle, Manager};
 use window_shadows::set_shadow;
 
 mod common;
@@ -52,12 +52,15 @@ async fn play(url: String) -> Resp<bool> {
     util::play(&url).into()
 }
 
-
+#[tauri::command]
+async fn refresh(app: AppHandle, live: String, rid: String) -> Resp<()> {
+    manager::refresh::refresh(&app, live, rid).await.into()
+}
 
 #[tokio::main]
 async fn main() {
     CONTEXT.get_or_init(common::load).await;
-    
+
     tauri::Builder::default()
         .setup(|app| {
             if cfg!(any(target_os = "macos", target_os = "windows")) {
@@ -72,6 +75,7 @@ async fn main() {
             add_subscribe,
             remove_subscribe,
             play,
+            refresh,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
