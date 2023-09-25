@@ -15,7 +15,7 @@ pub struct ReFreshMessage {
 
 // TODO 声明返回类型, 指明所属平台
 // 刷新单个订阅
-pub async fn refresh(app: &AppHandle, live: String, rid: String) -> Result<()> {
+pub async fn one(app: &AppHandle, live: String, rid: String) -> Result<()> {
     let clients = clients!();
     let node = clients
         .get(&live)
@@ -28,7 +28,7 @@ pub async fn refresh(app: &AppHandle, live: String, rid: String) -> Result<()> {
 }
 
 /// 刷新所有订阅的直播源
-pub async fn refresh_all(app: &AppHandle) -> Result<()> {
+pub async fn all(app: &AppHandle) -> Result<()> {
     let lives = service::subscribe::all().await?;
     let mut lists = HashMap::new();
     for live in lives {
@@ -47,7 +47,7 @@ pub async fn refresh_all(app: &AppHandle) -> Result<()> {
             .collect::<Vec<_>>();
 
         for (live, rid) in once.into_iter().flatten() {
-            refresh(app, live, rid).await?;
+            one(app, live, rid).await?;
         }
 
         // 去除所需获取主播为空的平台
