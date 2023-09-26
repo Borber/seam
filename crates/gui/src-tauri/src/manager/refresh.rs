@@ -7,14 +7,14 @@ use seam_core::live::Node;
 use serde::Serialize;
 use tauri::{AppHandle, Manager};
 
+/// 刷新返回结果
 #[derive(Clone, Debug, Serialize)]
 pub struct ReFreshMessage {
     pub live: String,
     pub node: Node,
 }
 
-// TODO 声明返回类型, 指明所属平台
-// 刷新单个订阅
+/// 刷新单个订阅
 pub async fn one(app: &AppHandle, live: String, rid: String) -> Result<()> {
     let clients = clients!();
     let node = clients
