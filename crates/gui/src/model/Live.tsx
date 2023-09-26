@@ -73,8 +73,8 @@ const allLives = (): LiveItem[] => {
             name: "wink",
             cmd: "wink",
         },
-    ];
-    return lives;
-};
+    ]
+    return lives
+}
 
-export default allLives;
+export default allLives

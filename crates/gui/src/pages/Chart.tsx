@@ -1,9 +1,9 @@
-import '../css/Chart.css'
+import "../css/Chart.css"
 
-import { createMemo, createSignal, For } from 'solid-js'
-import toast from 'solid-toast'
+import { createMemo, createSignal, For } from "solid-js"
+import toast from "solid-toast"
 
-import allLives from '../model/Live'
+import allLives from "../model/Live"
 
 interface Record {
     index: number
@@ -13,96 +13,25 @@ interface Record {
 }
 
 const Chart = () => {
-    const [selected, setSelect] = createSignal('all')
-    const [records, setRecords] = createSignal<Record[]>([
-        {
-            index: 1,
-            live: 'douyu',
-            rid: '123',
-            anchor: 'AAAA',
-        },
-        {
-            index: 2,
-            live: 'bili',
-            rid: '123',
-            anchor: 'AAAA',
-        },
-        {
-            index: 3,
-            live: 'bili',
-            rid: '123',
-            anchor: 'AAAA',
-        },
-        {
-            index: 4,
-            live: 'yqs',
-            rid: '123',
-            anchor: 'AAAA',
-        },
-        {
-            index: 5,
-            live: 'cc',
-            rid: '123',
-            anchor: 'AAAA',
-        },
-        {
-            index: 6,
-            live: 'kk',
-            rid: '123',
-            anchor: 'AAAA',
-        },
-        {
-            index: 7,
-            live: 'douyu',
-            rid: '123',
-            anchor: 'AAAA',
-        },
-        {
-            index: 8,
-            live: 'douyu',
-            rid: '123',
-            anchor: 'AAAA',
-        },
-        {
-            index: 9,
-            live: 'douyu',
-            rid: '123',
-            anchor: 'AAAA',
-        },
-        {
-            index: 10,
-            live: 'douyu',
-            rid: '123',
-            anchor: 'AAAA',
-        },
-        {
-            index: 11,
-            live: 'douyu',
-            rid: '123',
-            anchor: 'AAAA',
-        },
-        {
-            index: 12,
-            live: 'douyu',
-            rid: '123',
-            anchor: 'AAAA',
-        },
-        {
-            index: 13,
-            live: 'douyu',
-            rid: '123',
-            anchor: 'AAAA',
-        },
-        {
-            index: 14,
-            live: 'douyu',
-            rid: '123',
-            anchor: 'AAAA',
-        },
-    ])
+    // {
+    //     index: 1,
+    //     live: "douyu",
+    //     rid: "123",
+    //     anchor: "AAAA",
+    // },
+    // {
+    //     index: 2,
+    //     live: "bili",
+    //     rid: "123",
+    //     anchor: "AAAA",
+    // },
+    const [selected, setSelect] = createSignal("all")
+    const [records, setRecords] = createSignal<Record[]>([])
+
+    // 开启页面获取 records 数据
 
     const filterRecords = createMemo(() => {
-        if (selected() === 'all') {
+        if (selected() === "all") {
             return records()
         } else {
             return records().filter((item) => item.live === selected())
@@ -111,7 +40,7 @@ const Chart = () => {
 
     const deleteRecord = (index: number) => {
         setRecords(records().filter((item) => item.index !== index))
-        toast.success('删除成功')
+        toast.success("删除成功")
     }
 
     const liveName = (live: string) => {
@@ -121,18 +50,18 @@ const Chart = () => {
                 return lives[i].name
             }
         }
-        return '未知'
+        return "未知"
     }
+
     return (
         <div class="chart">
             <div class="chart-kind-container">
                 <div
                     class="chart-kind-item"
                     classList={{
-                        'chart-kind-item-activate': selected() === 'all',
+                        "chart-kind-item-activate": selected() === "all",
                     }}
-                    onClick={() => setSelect('all')}
-                >
+                    onClick={() => setSelect("all")}>
                     ALL
                 </div>
                 <For each={allLives()}>
@@ -140,11 +69,10 @@ const Chart = () => {
                         <div
                             class="chart-kind-item"
                             classList={{
-                                'chart-kind-item-activate':
+                                "chart-kind-item-activate":
                                     selected() === item.cmd,
                             }}
-                            onClick={() => setSelect(item.cmd)}
-                        >
+                            onClick={() => setSelect(item.cmd)}>
                             {item.name}
                         </div>
                     )}
@@ -170,8 +98,7 @@ const Chart = () => {
                                     <button
                                         onClick={() => {
                                             deleteRecord(item.index)
-                                        }}
-                                    >
+                                        }}>
                                         删除
                                     </button>
                                 </td>

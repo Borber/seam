@@ -1,25 +1,25 @@
-import '../css/GoodItem.css'
+import "../css/GoodItem.css"
 
-import { AddIcon, CopyIcon, PlayIcon } from '../icon/icon'
+import { AddIcon, CopyIcon, PlayIcon } from "../icon/icon"
 
 interface Url {
-    format: string
-    url: string
+    format: string;
+    url: string;
 }
 
 interface GoodItemProps {
-    live: string
-    rid: string
-    title: string
-    anchor: string
-    urls: Url[]
-    img?: string
+    live: string;
+    rid: string;
+    title: string;
+    anchor: string;
+    urls: Url[];
+    img?: string;
 }
 
 const GoodItem = (props: GoodItemProps) => {
     return (
         <div class="good-item">
-            <img class="good-img" src={props.img ?? '/src/assets/no_img.png'} />
+            <img class="good-img" src={props.img ?? "/src/assets/no_img.png"} />
             <div class="good-panel">
                 <div class="good-title">{props.title}</div>
                 <div class="good-info">快来看</div>

@@ -1,10 +1,10 @@
-import '../css/SideBar.css'
+import "../css/SideBar.css"
 
-import { useLocation } from '@solidjs/router'
-import { createMemo } from 'solid-js'
+import { useLocation } from "@solidjs/router"
+import { createMemo } from "solid-js"
 
-import { ChartIcon, GoodIcon, HomeIcon, SettingIcon } from '../icon/icon'
-import SideItem from './SideItem'
+import { ChartIcon, GoodIcon, HomeIcon, SettingIcon } from "../icon/icon"
+import SideItem from "./SideItem"
 
 const SideBar = () => {
     const pathname = createMemo(() => {

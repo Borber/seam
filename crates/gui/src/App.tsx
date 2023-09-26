@@ -1,24 +1,13 @@
-import './App.css'
-import './css/TopBar.css'
+import "./App.css"
+import "./css/TopBar.css"
 
-import { useRoutes } from '@solidjs/router'
-import { lazy, onMount } from 'solid-js'
-import { Toaster } from 'solid-toast'
+import { useRoutes } from "@solidjs/router"
+import { lazy, onMount } from "solid-js"
+import { Toaster } from "solid-toast"
 
-import Control from './components/Control'
-import SideBar from './components/SideBar'
-import TopBar from './components/TopBar'
-
-// interface Node {
-//     rid: string
-//     title: string
-//     urls: Url[]
-// }
-
-// interface Url {
-//     format: string
-//     url: string
-// }
+import Control from "./components/Control"
+import SideBar from "./components/SideBar"
+import TopBar from "./components/TopBar"
 
 const App = () => {
     onMount(async () => {
@@ -37,15 +26,15 @@ const App = () => {
     })
 
     const setupWindow = async () => {
-        const appWindow = (await import('@tauri-apps/api/window')).appWindow
+        const appWindow = (await import("@tauri-apps/api/window")).appWindow
         appWindow.show()
     }
 
     const routes = [
-        { path: '/', component: lazy(() => import('./pages/Home')) },
-        { path: '/good', component: lazy(() => import('./pages/Good')) },
-        { path: '/chart', component: lazy(() => import('./pages/Chart')) },
-        { path: '/setting', component: lazy(() => import('./pages/Setting')) },
+        { path: "/", component: lazy(() => import("./pages/Home")) },
+        { path: "/good", component: lazy(() => import("./pages/Good")) },
+        { path: "/chart", component: lazy(() => import("./pages/Chart")) },
+        { path: "/setting", component: lazy(() => import("./pages/Setting")) },
     ]
 
     const Routes = useRoutes(routes)
@@ -64,11 +53,11 @@ const App = () => {
                 position="bottom-center"
                 gutter={8}
                 toastOptions={{
-                    className: '',
+                    className: "",
                     duration: 5000,
                     style: {
-                        background: '#0f0f0fc9',
-                        color: '#fff',
+                        background: "#0f0f0fc9",
+                        color: "#fff",
                     },
                 }}
             />

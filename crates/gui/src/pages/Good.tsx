@@ -1,13 +1,13 @@
-import '../css/Good.css'
+import "../css/Good.css"
 
-import GoodItem from '../components/GoodItem'
+import GoodItem from "../components/GoodItem"
 
 const Good = () => {
     const goodDemo = {
-        live: 'douyu',
-        rid: '123',
-        title: '恭喜你发现了我~',
-        anchor: '我是谁',
+        live: "douyu",
+        rid: "123",
+        title: "恭喜你发现了我~",
+        anchor: "我是谁",
         urls: [],
         img: undefined,
     }

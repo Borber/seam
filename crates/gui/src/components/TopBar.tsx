@@ -1,28 +1,28 @@
-import { invoke } from '@tauri-apps/api'
-import { createSignal } from 'solid-js'
-import { Spinner, SpinnerType } from 'solid-spinner'
-import toast from 'solid-toast'
-import { Transition } from 'solid-transition-group'
+import { invoke } from "@tauri-apps/api"
+import { createSignal } from "solid-js"
+import { Spinner, SpinnerType } from "solid-spinner"
+import toast from "solid-toast"
+import { Transition } from "solid-transition-group"
 
-import { AddIcon, SyncIcon } from '../icon/icon'
-import { Resp } from '../model/Resp'
-import Panel from './Panel'
+import { AddIcon, SyncIcon } from "../icon/icon"
+import { Resp } from "../model/Resp"
+import Panel from "./Panel"
 
 const TopBar = () => {
     const [refresh, setRefresh] = createSignal(false)
-    const [rid, setRid] = createSignal('')
+    const [rid, setRid] = createSignal("")
     const [onInput, setInput] = createSignal(false)
     const [onPanel, setPanel] = createSignal(false)
-    const [live, setLive] = createSignal('bili')
+    const [live, setLive] = createSignal("bili")
 
     const add = async () => {
-        await invoke<Resp<boolean>>('add_subscribe', {
+        await invoke<Resp<boolean>>("subscribe_add", {
             live: live(),
             rid: rid(),
         }).then((p) => {
             if (p.code === 0) {
                 console.log(p.data)
-                toast.success('添加成功')
+                toast.success("添加成功")
             } else {
                 toast.error(p.msg)
             }
@@ -61,8 +61,7 @@ const TopBar = () => {
                 class="top-bar-btn"
                 onClick={async () => {
                     await add()
-                }}
-            >
+                }}>
                 <AddIcon size={16} />
             </button>
             <Transition name="slide-fade">

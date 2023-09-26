@@ -1,10 +1,10 @@
 /* @refresh reload */
-import './styles.css'
+import "./styles.css"
 
-import { Router } from '@solidjs/router'
-import { render } from 'solid-js/web'
+import { Router } from "@solidjs/router"
+import { render } from "solid-js/web"
 
-import App from './App'
+import App from "./App"
 
 render(
     () => (
@@ -12,5 +12,5 @@ render(
             <App />
         </Router>
     ),
-    document.getElementById('root') as HTMLElement
+    document.getElementById("root") as HTMLElement
 )

@@ -1,19 +1,19 @@
-import '../css/Live.css'
+import "../css/Live.css"
 
-import { CopyIcon, PlayIcon } from '../icon/icon'
+import { CopyIcon, PlayIcon } from "../icon/icon"
 
 interface Url {
-    format: string
-    url: string
+    format: string;
+    url: string;
 }
 
 interface LiveProps {
-    live: string
-    rid: string
-    title: string
-    anchor: string
-    urls: Url[]
-    img?: string
+    live: string;
+    rid: string;
+    title: string;
+    anchor: string;
+    urls: Url[];
+    img?: string;
 }
 
 // TODO 减少内阴影的使用, 按钮的样式应该简洁一些
@@ -21,7 +21,7 @@ interface LiveProps {
 const Live = (props: LiveProps) => {
     return (
         <div class="live">
-            <img class="live-img" src={props.img ?? '/src/assets/no_img.png'} />
+            <img class="live-img" src={props.img ?? "/src/assets/no_img.png"} />
             <div class="live-panel">
                 <div class="live-title">{props.title}</div>
                 <div class="live-control">

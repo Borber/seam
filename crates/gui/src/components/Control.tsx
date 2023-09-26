@@ -1,7 +1,7 @@
-import '../css/Control.css'
+import "../css/Control.css"
 
-import { appWindow } from '@tauri-apps/api/window'
-import { Show } from 'solid-js'
+import { appWindow } from "@tauri-apps/api/window"
+import { Show } from "solid-js"
 
 // TODO 修复最小化, 隐藏时的渲染bug
 
@@ -61,8 +61,7 @@ const Control = (props: BarProps) => {
                     <div
                         class="control-item"
                         title="最小化"
-                        onClick={() => appWindow.minimize()}
-                    >
+                        onClick={() => appWindow.minimize()}>
                         {Minimize()}
                     </div>
                 </Show>
@@ -75,8 +74,7 @@ const Control = (props: BarProps) => {
                     <div
                         class="control-item control-item-close"
                         onClick={() => appWindow.close()}
-                        title="关闭"
-                    >
+                        title="关闭">
                         {Close()}
                     </div>
                 </Show>

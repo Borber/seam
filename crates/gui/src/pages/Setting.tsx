@@ -1,7 +1,7 @@
-import '../css/Setting.css'
+import "../css/Setting.css"
 
-import { open } from '@tauri-apps/api/dialog'
-import toast from 'solid-toast'
+import { open } from "@tauri-apps/api/dialog"
+import toast from "solid-toast"
 
 // TODO headers 设置分离, 取消 textarea, 列表,
 // 顶部添加, 选择平台, 输入字段, 值, 点击添加
@@ -10,7 +10,7 @@ import toast from 'solid-toast'
 
 const Setting = () => {
     const save = () => {
-        toast.success('保存成功')
+        toast.success("保存成功")
     }
     return (
         <div class="setting">
@@ -24,8 +24,7 @@ const Setting = () => {
                         onClick={async () => {
                             const file = await open()
                             console.log(file)
-                        }}
-                    >
+                        }}>
                         选择
                     </button>
                 </div>

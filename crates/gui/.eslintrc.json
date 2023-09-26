@@ -16,6 +16,7 @@
     },
     "ignorePatterns": ["src/assets", "src/css", "src/*.css"],
     "rules": {
+        "semi": ["error", "never"],
         "simple-import-sort/imports": "error",
         "simple-import-sort/exports": "error"
     }
