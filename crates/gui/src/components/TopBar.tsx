@@ -15,6 +15,9 @@ const TopBar = () => {
     const [onPanel, setPanel] = createSignal(false)
     const [live, setLive] = createSignal("bili")
 
+    // TODO 添加成功后应该发布事件, 让 Chart 页面刷新,
+    // 当然如果Chart没有接收到消息,说明当前并没有打开Chart页面, 那么就不需要刷新了
+
     const add = async () => {
         await invoke<Resp<boolean>>("subscribe_add", {
             live: live(),

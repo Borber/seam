@@ -1,9 +1,11 @@
 import "../css/Chart.css"
 
-import { createMemo, createSignal, For } from "solid-js"
+import { invoke } from "@tauri-apps/api"
+import { createMemo, createSignal, For, onMount } from "solid-js"
 import toast from "solid-toast"
 
 import allLives from "../model/Live"
+import { Resp } from "../model/Resp"
 
 interface Record {
     index: number
@@ -12,23 +14,31 @@ interface Record {
     anchor: string
 }
 
+interface Subscribe {
+    live: string
+    rid: string
+}
+
 const Chart = () => {
-    // {
-    //     index: 1,
-    //     live: "douyu",
-    //     rid: "123",
-    //     anchor: "AAAA",
-    // },
-    // {
-    //     index: 2,
-    //     live: "bili",
-    //     rid: "123",
-    //     anchor: "AAAA",
-    // },
     const [selected, setSelect] = createSignal("all")
     const [records, setRecords] = createSignal<Record[]>([])
 
     // 开启页面获取 records 数据
+
+    onMount(async () => {
+        const subscribes = await invoke<Resp<Subscribe[]>>("subscribe_all")
+        console.log(subscribes)
+        const map = subscribes.data.map((item, index) => {
+            return {
+                index: index,
+                live: item.live,
+                rid: item.rid,
+                anchor: "未知",
+            }
+            setRecords(map)
+        })
+        setRecords(map)
+    })
 
     const filterRecords = createMemo(() => {
         if (selected() === "all") {
@@ -38,9 +48,19 @@ const Chart = () => {
         }
     })
 
-    const deleteRecord = (index: number) => {
+    const deleteRecord = async (index: number) => {
+        const item = records().find((item) => item.index === index)
         setRecords(records().filter((item) => item.index !== index))
-        toast.success("删除成功")
+        await invoke<Resp<Subscribe[]>>("subscribe_remove", {
+            live: item?.live,
+            rid: item?.rid,
+        }).then((resp) => {
+            if (resp.code === 0) {
+                toast.success("删除成功")
+            } else {
+                toast.error(resp.msg)
+            }
+        })
     }
 
     const liveName = (live: string) => {
