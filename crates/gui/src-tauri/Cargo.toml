@@ -13,7 +13,7 @@ tauri-build = { version = "1.4", features = [] }
 [dependencies]
 seam_core = { path = "../../core" }
 
-tauri = { version = "1.4", features = [
+tauri = { version = "1.5", features = [
     "dialog-all",
     "window-show",
     "window-minimize",
