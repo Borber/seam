@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.1.38]
+
+修复 斗鱼部分房间获取不到 [#255](https://github.com/Borber/seam/issues/255)
+
 ## [0.1.37]
 
 清除调试代码
