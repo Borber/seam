@@ -43,6 +43,16 @@ impl Live for Client {
             .text()
             .await?;
 
+        // 获取直播间的真实ID
+        let re = Regex::new(r"\$ROOM\.room_id\s?=\s?(\d+);")?;
+        let rid = match re.captures(&text) {
+            Some(cap) => cap
+                .get(1)
+                .ok_or(SeamError::NeedFix("room_id capture"))?
+                .as_str(),
+            None => return Err(SeamError::NeedFix("room_id")),
+        };
+
         // 正则匹配固定位置的js代码
         let re = Regex::new(r#"<script type="text/javascript">([\s\S]*?)</script>"#)?;
         let mut func = String::new();
