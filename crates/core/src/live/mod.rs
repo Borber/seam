@@ -26,6 +26,7 @@ pub mod mht;
 pub mod now;
 pub mod panda;
 pub mod qf;
+pub mod twitch;
 pub mod wink;
 pub mod yqs;
 
