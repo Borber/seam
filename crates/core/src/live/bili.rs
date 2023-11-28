@@ -42,7 +42,7 @@ impl Live for Client {
             _ => return Err(SeamError::None),
         };
 
-        let mut stream_info = get_bili_stream_info(&rid, 10000).await?;
+        let mut stream_info = get_bili_stream_info(&rid, 10000, headers).await?;
 
         let max = stream_info
             .as_array()
@@ -61,7 +61,7 @@ impl Live for Client {
             .ok_or(SeamError::NeedFix("max"))?;
 
         if max != 10000 {
-            stream_info = get_bili_stream_info(&rid, max).await?;
+            stream_info = get_bili_stream_info(&rid, max, headers).await?;
         }
 
         let mut urls = vec![];
