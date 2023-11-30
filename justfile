@@ -3,7 +3,7 @@ default:
     @just --list
 
 # 编译 CLI
-cd:
+cb:
     cargo build --package seam -r
 
 # 编译 GUI
