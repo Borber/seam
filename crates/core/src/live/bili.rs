@@ -42,7 +42,7 @@ impl Live for Client {
             _ => return Err(SeamError::None),
         };
 
-        let mut stream_info = get_bili_stream_info(&rid, 10000).await?;
+        let mut stream_info = get_bili_stream_info(&rid, 10000, headers).await?;
 
         let max = stream_info
             .as_array()
@@ -61,7 +61,7 @@ impl Live for Client {
             .ok_or(SeamError::NeedFix("max"))?;
 
         if max != 10000 {
-            stream_info = get_bili_stream_info(&rid, max).await?;
+            stream_info = get_bili_stream_info(&rid, max, headers).await?;
         }
 
         let mut urls = vec![];
@@ -132,10 +132,13 @@ impl Live for Client {
 }
 
 /// 通过真实房间号获取直播源信息
-pub async fn get_bili_stream_info(rid: &str, qn: u64) -> Result<serde_json::Value> {
+/// 不带 cookie 只给 480P, 带 cookie 才给原画画质
+pub async fn get_bili_stream_info(rid: &str, qn: u64, headers: Option<HashMap<String, String>>) -> Result<serde_json::Value> {
+    let mut headers = hash2header(headers);
+    headers.append("User-Agent", HeaderValue::from_static(USER_AGENT));
     Ok(CLIENT
         .get(PLAY_URL)
-        .header("User-Agent", USER_AGENT)
+        .headers(headers)
         .query(&[
             ("room_id", rid),
             ("protocol", "0,1"),
