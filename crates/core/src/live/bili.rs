@@ -1,6 +1,7 @@
 use std::collections::HashMap;
 
 use async_trait::async_trait;
+use reqwest::header::HeaderValue;
 use serde_json::Value;
 
 use super::{Live, Node};
@@ -27,7 +28,7 @@ impl Live for Client {
         let resp = CLIENT
             .get(INIT_URL)
             .query(&[("id", rid)])
-            .headers(hash2header(headers))
+            .headers(hash2header(headers.clone()))
             .send()
             .await?
             .json::<Value>()
@@ -42,7 +43,7 @@ impl Live for Client {
             _ => return Err(SeamError::None),
         };
 
-        let mut stream_info = get_bili_stream_info(&rid, 10000, headers).await?;
+        let mut stream_info = get_bili_stream_info(&rid, 10000, headers.clone()).await?;
 
         let max = stream_info
             .as_array()
@@ -61,7 +62,7 @@ impl Live for Client {
             .ok_or(SeamError::NeedFix("max"))?;
 
         if max != 10000 {
-            stream_info = get_bili_stream_info(&rid, max, headers).await?;
+            stream_info = get_bili_stream_info(&rid, max, headers.clone()).await?;
         }
 
         let mut urls = vec![];
@@ -133,7 +134,11 @@ impl Live for Client {
 
 /// 通过真实房间号获取直播源信息
 /// 不带 cookie 只给 480P, 带 cookie 才给原画画质
-pub async fn get_bili_stream_info(rid: &str, qn: u64, headers: Option<HashMap<String, String>>) -> Result<serde_json::Value> {
+pub async fn get_bili_stream_info(
+    rid: &str,
+    qn: u64,
+    headers: Option<HashMap<String, String>>,
+) -> Result<serde_json::Value> {
     let mut headers = hash2header(headers);
     headers.append("User-Agent", HeaderValue::from_static(USER_AGENT));
     Ok(CLIENT
