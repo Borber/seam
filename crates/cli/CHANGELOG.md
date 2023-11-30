@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.1.39]
+
+修复 bili 无法获取原画 [#277](https://github.com/Borber/seam/issues/277)
+
 ## [0.1.38]
 
 修复 斗鱼部分房间获取不到 [#255](https://github.com/Borber/seam/issues/255)
